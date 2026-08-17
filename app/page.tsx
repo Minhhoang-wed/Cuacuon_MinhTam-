@@ -93,9 +93,9 @@ export default async function HomePage() {
             {products.map((product, index) => (
               <article className="lovable-product-card" key={product.id}>
                 <Link href={`/san-pham/${product.slug}`} className="lovable-product-card-link">
-                  <div className="lovable-product-image">
+                  <div className={`lovable-product-image${product.images[1]?.url ? " has-alt" : ""}`}>
                     <img src={product.images[0]?.url || projectImages[index % projectImages.length]} alt={product.images[0]?.altText || product.name} />
-                    <img className="lovable-product-alt" src={product.images[1]?.url || projectImages[(index + 1) % projectImages.length]} alt="" />
+                    {product.images[1]?.url && <img className="lovable-product-alt" src={product.images[1].url} alt="" />}
                     {product.featured && <span>Nổi bật</span>}
                     <i>Xem chi tiết</i>
                   </div>

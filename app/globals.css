@@ -1216,10 +1216,14 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
 .lovable-product-image { height: auto; margin-bottom: 20px; aspect-ratio: 4 / 5; background: #eef1f4; }
 .lovable-product-image img { position: absolute; inset: 0; }
 .lovable-product-image .lovable-product-alt { opacity: 0; transform: scale(1.05); }
-.lovable-product-card:hover .lovable-product-image img:first-child { opacity: 0; transform: scale(1.05); }
-.lovable-product-card:hover .lovable-product-image .lovable-product-alt { opacity: 1; transform: scale(1); }
+.lovable-product-card:hover .lovable-product-image.has-alt img:first-child,
+.lovable-product-card:focus-within .lovable-product-image.has-alt img:first-child { opacity: 0; transform: scale(1.05); }
+.lovable-product-card:hover .lovable-product-image.has-alt .lovable-product-alt,
+.lovable-product-card:focus-within .lovable-product-image.has-alt .lovable-product-alt { opacity: 1; transform: scale(1); }
 .lovable-product-image > span { top: 20px; left: 20px; padding: 6px 12px; color: #fff; background: var(--lovable-navy); font-size: 10px; letter-spacing: .2em; }
-.lovable-product-image > i { right: 20px; bottom: 20px; left: 20px; padding: 10px 24px; color: var(--lovable-ink); background: rgba(255,255,255,.94); font-size: 12px; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; }
+.lovable-product-image > i { right: 20px; bottom: 20px; left: 20px; padding: 10px 24px; visibility: hidden; opacity: 0; color: var(--lovable-ink); background: rgba(255,255,255,.94); font-size: 12px; font-weight: 500; letter-spacing: .15em; text-transform: uppercase; pointer-events: none; transform: translateY(calc(100% + 24px)); transition: opacity .2s ease, transform .25s ease, visibility .25s; }
+.lovable-product-card:hover .lovable-product-image > i,
+.lovable-product-card:focus-within .lovable-product-image > i { visibility: visible; opacity: 1; transform: translateY(0); }
 .lovable-product-body { padding: 0; border: 0; }
 .lovable-product-body > span { font-size: 11px; font-weight: 500; letter-spacing: .2em; }
 .lovable-product-body h3 { margin: 8px 0 0; color: var(--lovable-ink); font-size: 20px; font-weight: 700; line-height: 1.375; }
