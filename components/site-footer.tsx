@@ -1,7 +1,6 @@
-import { Clock3, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { Clock3, Mail, MapPin, Phone } from "lucide-react";
 import Link from "next/link";
 import { Logo } from "@/components/logo";
-import { mainNavigation } from "@/data/site";
 import type { ManagedSiteConfig } from "@/lib/catalog";
 
 export function SiteFooter({ site }: { site: ManagedSiteConfig }) {
@@ -11,16 +10,7 @@ export function SiteFooter({ site }: { site: ManagedSiteConfig }) {
         <div className="footer-navy-brand">
           <Logo name={site.name} shortName={site.shortName} />
           <p>{site.description}</p>
-          <a className="footer-zalo" href={site.zaloHref} target="_blank" rel="noreferrer"><MessageCircle size={16} /> Tư vấn qua Zalo</a>
-        </div>
-
-        <div>
-          <h3>Điều hướng</h3>
-          <div className="footer-navy-links">
-            {mainNavigation.map((item) => (
-              <Link key={item.href} href={item.href}>{item.label}</Link>
-            ))}
-          </div>
+          <span className="footer-license">Phục vụ: {site.serviceArea}</span>
         </div>
 
         <div>
@@ -28,9 +18,21 @@ export function SiteFooter({ site }: { site: ManagedSiteConfig }) {
           <div className="footer-navy-links">
             <Link href="/san-pham">Cửa cuốn khe thoáng</Link>
             <Link href="/san-pham">Cửa cuốn tấm liền</Link>
+            <Link href="/san-pham">Cửa cuốn trong suốt</Link>
+            <Link href="/san-pham">Cửa cuốn công nghiệp</Link>
             <Link href="/san-pham">Motor cửa cuốn</Link>
-            <Link href="/san-pham">Bộ lưu điện</Link>
             <Link href="/san-pham">Phụ kiện & linh kiện</Link>
+          </div>
+        </div>
+
+        <div>
+          <h3>Dịch vụ</h3>
+          <div className="footer-navy-links">
+            <Link href="/dich-vu">Lắp đặt cửa cuốn trọn gói</Link>
+            <Link href="/dich-vu">Sửa chữa cửa cuốn 24/7</Link>
+            <Link href="/dich-vu">Thay motor & remote</Link>
+            <Link href="/dich-vu">Bảo trì định kỳ</Link>
+            <Link href="/dich-vu">Thay nan, thay ray dẫn hướng</Link>
           </div>
         </div>
 
@@ -47,7 +49,7 @@ export function SiteFooter({ site }: { site: ManagedSiteConfig }) {
 
       <div className="container footer-navy-bottom">
         <span>© {new Date().getFullYear()} {site.name}. Bảo lưu mọi quyền.</span>
-        <div><Link href="/lien-he">Chính sách bảo hành</Link><Link href="/lien-he">Chính sách bảo mật</Link><Link href="/admin/login">Quản trị</Link></div>
+        <div><Link href="/lien-he">Chính sách bảo hành</Link><Link href="/lien-he">Chính sách bảo mật</Link><Link href="/lien-he">Điều khoản sử dụng</Link></div>
       </div>
     </footer>
   );

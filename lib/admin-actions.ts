@@ -8,7 +8,7 @@ import { getSupabaseConfig, supabaseFetch } from "@/lib/supabase-rest";
 function value(form: FormData, key: string) { return String(form.get(key) || "").trim(); }
 function optional(form: FormData, key: string) { const item = value(form, key); return item || null; }
 function slugify(input: string) { return input.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/đ/g, "d").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""); }
-function numberOrNull(input: string) { if (!input) return null; const parsed = Number(input.replace(/[^0-9.]/g, "")); return Number.isFinite(parsed) ? parsed : null; }
+function numberOrNull(input: string) { if (!input) return null; const parsed = Number(input.replace(/\D/g, "")); return Number.isFinite(parsed) ? parsed : null; }
 function adminHeaders(token: string, contentType = "application/json") { const config = getSupabaseConfig()!; return { apikey: config.key, Authorization: `Bearer ${token}`, "Content-Type": contentType }; }
 
 async function uploadObject(file: File, folder: string, token: string) {
@@ -77,7 +77,9 @@ export async function deleteProduct(form: FormData) {
 
 export async function deleteProductImage(productId: string, id: string, path: string) {
   await requireAdmin(); const token = await getAdminAccessToken();
-  await supabaseFetch(`/rest/v1/product_images?id=eq.${encodeURIComponent(id)}`, { method: "DELETE", headers: { Prefer: "return=minimal" } }, token); await deleteObject(path, token);
+  await supabaseFetch(`/rest/v1/product_images?id=eq.${encodeURIComponent(id)}`, { method: "DELETE", headers: { Prefer: "return=minimal" } }, token);
+  await supabaseFetch(`/rest/v1/media_assets?storage_path=eq.${encodeURIComponent(path)}`, { method: "DELETE", headers: { Prefer: "return=minimal" } }, token);
+  await deleteObject(path, token);
   refreshCatalog(); revalidatePath(`/admin/products/${productId}`);
 }
 
@@ -89,7 +91,9 @@ export async function uploadMedia(form: FormData) {
 
 export async function deleteMedia(form: FormData) {
   await requireAdmin(); const token = await getAdminAccessToken(); const id = value(form, "id"); const path = value(form, "path");
-  await supabaseFetch(`/rest/v1/media_assets?id=eq.${encodeURIComponent(id)}`, { method: "DELETE", headers: { Prefer: "return=minimal" } }, token); await deleteObject(path, token); revalidatePath("/admin/media");
+  await supabaseFetch(`/rest/v1/product_images?storage_path=eq.${encodeURIComponent(path)}`, { method: "DELETE", headers: { Prefer: "return=minimal" } }, token);
+  await supabaseFetch(`/rest/v1/media_assets?id=eq.${encodeURIComponent(id)}`, { method: "DELETE", headers: { Prefer: "return=minimal" } }, token);
+  await deleteObject(path, token); refreshCatalog(); revalidatePath("/admin/media");
 }
 
 export async function saveSettings(form: FormData) {

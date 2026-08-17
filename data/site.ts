@@ -1,6 +1,6 @@
 export const siteConfig = {
-  name: "Cửa Cuốn An Tâm 24H",
-  shortName: "AN TÂM 24H",
+  name: "Minh Tâm MITADOOR",
+  shortName: "MINH TÂM MITADOOR",
   description:
     "Dịch vụ sửa chữa, bảo trì và lắp đặt cửa cuốn tận nơi tại TP.HCM. Tiếp nhận yêu cầu 24/7, khảo sát rõ ràng, bảo hành minh bạch.",
   hotline: "0909 123 456",
@@ -16,10 +16,6 @@ export const siteConfig = {
 
 export const mainNavigation = [
   { label: "Trang chủ", href: "/" },
-  { label: "Giới thiệu", href: "/ve-chung-toi" },
-  { label: "Dịch vụ", href: "/dich-vu" },
   { label: "Sản phẩm", href: "/san-pham" },
-  { label: "Dự án", href: "/du-an" },
-  { label: "Tin tức", href: "/tin-tuc" },
-  { label: "Liên hệ", href: "/lien-he" },
+  { label: "Giới thiệu", href: "/ve-chung-toi" },
 ] as const;

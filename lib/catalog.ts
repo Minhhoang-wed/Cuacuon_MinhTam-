@@ -47,7 +47,7 @@ export function formatPrice(product: Pick<CatalogProduct, "priceMode" | "priceAm
 export async function getCategories(): Promise<CatalogCategory[]> {
   if (!getSupabaseConfig()) return demoCategories;
   try { const rows = await supabaseFetch<DbCategory[]>("/rest/v1/categories?select=id,name,slug,description,image_path,sort_order&is_active=eq.true&order=sort_order.asc", { next: { revalidate: 300, tags: ["categories"] } }); return rows.map(mapCategory); }
-  catch { return demoCategories; }
+  catch (error) { console.error("Không thể tải danh mục từ Supabase", error); return []; }
 }
 
 export async function getProducts(filters: { category?: string; search?: string; featured?: boolean } = {}): Promise<CatalogProduct[]> {
@@ -59,7 +59,7 @@ export async function getProducts(filters: { category?: string; search?: string;
     const rows = await supabaseFetch<DbProduct[]>(path, { next: { revalidate: 300, tags: ["products"] } });
     const mapped = rows.map(mapProduct);
     return filters.category ? mapped.filter((product) => product.category.slug === filters.category) : mapped;
-  } catch { return demoCatalog; }
+  } catch (error) { console.error("Không thể tải sản phẩm từ Supabase", error); return []; }
 }
 
 export async function getProductBySlug(slug: string): Promise<CatalogProduct | null> {

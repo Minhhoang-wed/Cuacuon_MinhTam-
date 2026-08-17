@@ -1,12 +1,21 @@
 "use client";
 
-import { Clock3, Mail, MapPin, Menu, MessageCircle, Phone, X } from "lucide-react";
+import { ChevronDown, Mail, MapPin, Menu, Phone, ShoppingBag, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Logo } from "@/components/logo";
 import { mainNavigation } from "@/data/site";
 import type { ManagedSiteConfig } from "@/lib/catalog";
+
+const productNavigation = [
+  { label: "Cửa cuốn khe thoáng", href: "/san-pham?category=cua-cuon-khe-thoang" },
+  { label: "Cửa cuốn tấm liền", href: "/san-pham?category=cua-cuon-tam-lien" },
+  { label: "Cửa cuốn trong suốt", href: "/san-pham?category=cua-cuon-trong-suot" },
+  { label: "Cửa cuốn công nghiệp", href: "/san-pham?category=cua-cuon-cong-nghiep" },
+  { label: "Motor cửa cuốn", href: "/san-pham?category=motor-cua-cuon" },
+  { label: "Phụ kiện & linh kiện", href: "/san-pham" },
+];
 
 export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
   const [open, setOpen] = useState(false);
@@ -22,7 +31,7 @@ export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
             <a href={`mailto:${site.email}`}><Mail size={13} /> {site.email}</a>
           </div>
           <div className="top-strip-right">
-            <span><Clock3 size={13} /> {site.hours} · Sửa chữa khẩn cấp 24/7</span>
+            <span>{site.hours} · Sửa chữa khẩn cấp 24/7</span>
           </div>
         </div>
       </div>
@@ -31,21 +40,20 @@ export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
         <Logo name={site.name} shortName={site.shortName} />
 
         <nav className="desktop-nav-navy" aria-label="Điều hướng chính">
-          {mainNavigation.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={isActive(item.href) ? "active" : ""}
-            >
-              {item.label}
-            </Link>
-          ))}
+          <Link href="/" className={isActive("/") ? "active" : ""}>Trang chủ</Link>
+          <div className="product-nav-group">
+            <Link href="/san-pham" className={isActive("/san-pham") || isActive("/danh-muc") ? "active" : ""}>Sản phẩm <ChevronDown size={14} /></Link>
+            <div className="product-nav-dropdown">
+              {productNavigation.map((item) => <Link href={item.href} key={item.href}>{item.label}</Link>)}
+            </div>
+          </div>
+          <Link href="/ve-chung-toi" className={isActive("/ve-chung-toi") ? "active" : ""}>Giới thiệu</Link>
         </nav>
 
         <div className="header-contact">
           <a href={site.hotlineHref} className="header-phone-icon" aria-label={`Gọi ${site.hotline}`}><Phone size={18} /></a>
           <a href={site.hotlineHref} className="header-phone-copy"><small>HOTLINE 24/7</small><b>{site.hotline}</b></a>
-          <a href={site.zaloHref} target="_blank" rel="noreferrer" className="header-zalo" aria-label="Chat Zalo"><MessageCircle size={19} /></a>
+          <Link href="/san-pham" className="header-zalo" aria-label="Xem sản phẩm"><ShoppingBag size={20} /></Link>
         </div>
 
         <button
