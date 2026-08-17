@@ -10,7 +10,7 @@ export default async function ContactPage() {
   const site = await getSiteSettings();
   return (
     <>
-      <PageHero eyebrow="Liên hệ nhanh" title="Một yêu cầu rõ ràng giúp xử lý nhanh hơn." description="Nếu tình trạng có nguy cơ rơi cửa, chập điện hoặc kẹt người, hãy gọi hotline và giữ khoảng cách an toàn." />
+      <PageHero eyebrow="Liên hệ nhanh" title="Một yêu cầu rõ ràng giúp xử lý nhanh hơn." description="Nếu tình trạng có nguy cơ mất an toàn, hãy gọi hotline và giữ khoảng cách phù hợp." image="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=1600&q=82" />
       <section className="section" id="dat-lich">
         <div className="container contact-grid">
           <div className="contact-aside">

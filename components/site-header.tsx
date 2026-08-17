@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock3, Menu, Phone, X } from "lucide-react";
+import { Clock3, Mail, MapPin, Menu, MessageCircle, Phone, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -11,30 +11,22 @@ import type { ManagedSiteConfig } from "@/lib/catalog";
 export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const isActive = (href: string) => href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
     <header className="site-header-navy">
-      {/* Top Strip */}
       <div className="top-strip-navy">
         <div className="container top-strip-navy-inner">
           <div className="top-strip-left">
-            <a href={site.hotlineHref}>
-              <Phone size={13} />
-              Hotline 24/7: <b>{site.hotline}</b>
-            </a>
-            <span><Clock3 size={13} /> Hỗ trợ nhanh - Có mặt sau 15 phút</span>
+            <a href={site.mapsHref} target="_blank" rel="noreferrer"><MapPin size={13} /> {site.address}</a>
+            <a href={`mailto:${site.email}`}><Mail size={13} /> {site.email}</a>
           </div>
           <div className="top-strip-right">
-            <Link href="/ve-chung-toi">Giới thiệu</Link>
-            <span className="separator">|</span>
-            <Link href="/tin-tuc">Tin tức</Link>
-            <span className="separator">|</span>
-            <Link href="/lien-he">Liên hệ</Link>
+            <span><Clock3 size={13} /> {site.hours} · Sửa chữa khẩn cấp 24/7</span>
           </div>
         </div>
       </div>
 
-      {/* Main Nav */}
       <div className="container nav-row-navy">
         <Logo name={site.name} shortName={site.shortName} />
 
@@ -43,16 +35,18 @@ export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
             <Link
               key={item.href}
               href={item.href}
-              className={pathname === item.href ? "active" : ""}
+              className={isActive(item.href) ? "active" : ""}
             >
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <a href={site.hotlineHref} className="btn-hotline-outline desktop-cta-navy">
-          <Phone size={15} /> {site.hotline}
-        </a>
+        <div className="header-contact">
+          <a href={site.hotlineHref} className="header-phone-icon" aria-label={`Gọi ${site.hotline}`}><Phone size={18} /></a>
+          <a href={site.hotlineHref} className="header-phone-copy"><small>HOTLINE 24/7</small><b>{site.hotline}</b></a>
+          <a href={site.zaloHref} target="_blank" rel="noreferrer" className="header-zalo" aria-label="Chat Zalo"><MessageCircle size={19} /></a>
+        </div>
 
         <button
           className="menu-button-navy"
@@ -65,7 +59,6 @@ export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
         </button>
       </div>
 
-      {/* Mobile Nav */}
       {open && (
         <nav id="mobile-menu" className="mobile-nav-navy" aria-label="Điều hướng di động">
           {mainNavigation.map((item) => (
@@ -73,7 +66,7 @@ export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
               key={item.href}
               href={item.href}
               onClick={() => setOpen(false)}
-              className={pathname === item.href ? "active" : ""}
+              className={isActive(item.href) ? "active" : ""}
             >
               {item.label}
             </Link>

@@ -5,3 +5,7 @@ node_modules/
 *.log
 *.tsbuildinfo
 .DS_Store
+
+# Local Lovable design source (not part of the deployed app)
+Cuacuon_MinhTam_Lovable_Design/
+Cuacuon_MinhTam_Lovable_Design.zip

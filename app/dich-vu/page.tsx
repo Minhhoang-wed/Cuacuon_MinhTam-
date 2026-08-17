@@ -11,7 +11,7 @@ export const metadata: Metadata = { title: "Dịch vụ sửa cửa cuốn", des
 export default function ServicesPage() {
   return (
     <>
-      <PageHero eyebrow="Dịch vụ tận nơi" title="Đúng lỗi. Đúng giải pháp. Đúng phần cần sửa." description="Giá dưới đây mang tính tham khảo. Mọi hạng mục chỉ được thực hiện sau khi khảo sát và có xác nhận của khách hàng." />
+      <PageHero eyebrow="Dịch vụ tận nơi" title="Đúng lỗi. Đúng giải pháp. Đúng phần cần sửa." description="Giá dưới đây mang tính tham khảo. Mọi hạng mục chỉ được thực hiện sau khi khảo sát và có xác nhận của khách hàng." image="https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=1600&q=82" />
       <section className="section">
         <div className="container listing-grid">
           {services.map((service, index) => (

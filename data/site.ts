@@ -16,6 +16,7 @@ export const siteConfig = {
 
 export const mainNavigation = [
   { label: "Trang chủ", href: "/" },
+  { label: "Giới thiệu", href: "/ve-chung-toi" },
   { label: "Dịch vụ", href: "/dich-vu" },
   { label: "Sản phẩm", href: "/san-pham" },
   { label: "Dự án", href: "/du-an" },

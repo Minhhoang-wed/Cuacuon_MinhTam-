@@ -1,15 +1,34 @@
-import { ArrowRight, CheckCircle2, Clock3, Settings, ShieldCheck, Phone, BadgeCheck, Wrench, Package, Cpu } from "lucide-react";
+import {
+  ArrowRight,
+  BadgeCheck,
+  CheckCircle2,
+  Clock3,
+  Headphones,
+  PackageCheck,
+  Phone,
+  ShieldCheck,
+  Wrench,
+} from "lucide-react";
 import Link from "next/link";
-import { articles, projects } from "@/data/content";
-import { getHomepageContent, getProducts, getSiteSettings } from "@/lib/catalog";
+import { services, projects } from "@/data/content";
+import { formatPrice, getCategories, getHomepageContent, getProducts, getSiteSettings } from "@/lib/catalog";
+
+const projectImages = [
+  "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1000&q=82",
+  "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1000&q=82",
+  "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1000&q=82",
+  "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1000&q=82",
+];
 
 export default async function HomePage() {
-  const [site, homepage, featuredProducts] = await Promise.all([
+  const [site, homepage, featuredProducts, categories] = await Promise.all([
     getSiteSettings(),
     getHomepageContent(),
     getProducts({ featured: true }),
+    getCategories(),
   ]);
 
+  const products = featuredProducts.slice(0, 8);
   const localBusiness = {
     "@context": "https://schema.org",
     "@type": "HomeAndConstructionBusiness",
@@ -25,220 +44,141 @@ export default async function HomePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusiness) }} />
 
-      {/* ========== HERO ========== */}
-      <section className="hero-navy">
-        <div className="container hero-navy-grid">
-          <div className="hero-navy-copy">
-            <span className="hero-navy-eyebrow">UY TÍN - CHẤT LƯỢNG - TẬN TÂM</span>
-            <h1>
-              SỬA CHỮA - LẮP ĐẶT<br />
-              <span className="accent">CỬA CUỐN</span> CHUYÊN NGHIỆP
-            </h1>
-            <p>Chúng tôi cung cấp giải pháp cửa cuốn toàn diện, đáp ứng mọi nhu cầu của khách hàng với chất lượng tốt nhất và giá cả hợp lý.</p>
-
-            <div className="hero-navy-checks">
-              <span><Clock3 /> Có mặt 15-30 phút</span>
-              <span><ShieldCheck /> Bảo hành dài hạn</span>
-              <span><BadgeCheck /> Giá cả minh bạch</span>
+      <section className="lovable-hero">
+        <div className="container lovable-hero-grid">
+          <div className="lovable-hero-copy">
+            <span className="hero-badge"><ShieldCheck size={15} /> {homepage.heroEyebrow || "15 năm kinh nghiệm thi công"}</span>
+            <h1>{homepage.heroTitle || "Lắp đặt & sửa chữa cửa cuốn"}<span>{homepage.heroEmphasis || "chuyên nghiệp, uy tín"}</span></h1>
+            <p>{homepage.heroDescription || site.description}</p>
+            <div className="lovable-hero-actions">
+              <a href={site.hotlineHref} className="button button-primary"><Phone size={18} /> Gọi ngay {site.hotline}</a>
+              <Link href="/san-pham" className="button button-light">Xem sản phẩm <ArrowRight size={17} /></Link>
             </div>
-
-            <div className="hero-navy-actions">
-              <a href={site.hotlineHref} className="btn-hero-primary"><Phone size={17} /> {site.hotline}</a>
-              <Link href="/san-pham" className="btn-hero-outline">XEM SẢN PHẨM</Link>
+            <div className="lovable-hero-points">
+              <span><CheckCircle2 /> Khảo sát miễn phí</span>
+              <span><CheckCircle2 /> Báo giá minh bạch</span>
+              <span><CheckCircle2 /> Thi công tận nơi</span>
             </div>
           </div>
-
-          <div className="hero-navy-visual">
-            <div className="hero-img-main">
-              <Wrench size={60} style={{ opacity: 0.3 }} />
-            </div>
-            <div className="hero-img-circle-1"></div>
-            <div className="hero-img-circle-2"></div>
+          <div className="lovable-hero-media">
+            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1400&q=84" alt="Công trình cửa cuốn do đội ngũ thi công" />
+            <div className="hero-stat"><b>8.000+</b><span>Công trình bàn giao</span></div>
           </div>
         </div>
       </section>
 
-      {/* ========== TRUST BAR ========== */}
-      <div className="trust-bar-navy">
-        <div className="container">
-          <div className="trust-navy-grid">
-            <div className="trust-item">
-              <div className="trust-item-icon"><Wrench /></div>
-              <div className="trust-item-text"><b>SỬA CHỮA 24/7</b><span>Hỗ trợ mọi lúc, mọi nơi</span></div>
-            </div>
-            <div className="trust-item">
-              <div className="trust-item-icon"><Settings /></div>
-              <div className="trust-item-text"><b>LẮP ĐẶT CHUYÊN NGHIỆP</b><span>Đội ngũ kỹ thuật lành nghề</span></div>
-            </div>
-            <div className="trust-item">
-              <div className="trust-item-icon"><Package /></div>
-              <div className="trust-item-text"><b>LINH KIỆN CHÍNH HÃNG</b><span>Cam kết 100% chính hãng</span></div>
-            </div>
-            <div className="trust-item">
-              <div className="trust-item-icon"><ShieldCheck /></div>
-              <div className="trust-item-text"><b>BẢO HÀNH DÀI HẠN</b><span>Lên đến 36 tháng</span></div>
-            </div>
-          </div>
+      <section className="lovable-trust-strip" aria-label="Cam kết dịch vụ">
+        <div className="container lovable-trust-grid">
+          <article><Clock3 /><div><b>Sửa chữa 24/7</b><span>Có mặt nhanh chóng</span></div></article>
+          <article><Wrench /><div><b>Lắp đặt chuyên nghiệp</b><span>Đội thợ tay nghề cao</span></div></article>
+          <article><PackageCheck /><div><b>Linh kiện chính hãng</b><span>Đầy đủ tem bảo hành</span></div></article>
+          <article><ShieldCheck /><div><b>Bảo hành dài hạn</b><span>Chính sách minh bạch</span></div></article>
         </div>
-      </div>
+      </section>
 
-      {/* ========== PRODUCTS ========== */}
-      <section className="section-navy-products">
+      <section className="section lovable-products-section">
         <div className="container">
-          <div className="navy-section-header">
-            <span className="kicker">SẢN PHẨM</span>
-            <h2>CÁC LOẠI CỬA CUỐN CHẤT LƯỢNG CAO</h2>
-            <p>Đa dạng mẫu mã - Chất lượng vượt trội - Giá tốt nhất thị trường</p>
+          <div className="lovable-section-heading">
+            <span>Sản phẩm</span>
+            <h2>Các dòng cửa cuốn & phụ kiện</h2>
+            <p>Đa dạng giải pháp cho nhà phố, cửa hàng và nhà xưởng — thông số, giá và bảo hành được quản lý tập trung.</p>
           </div>
-          <div className="navy-product-grid">
-            {featuredProducts.slice(0, 5).map((product) => (
-              <article className="navy-product-card" key={product.slug}>
-                <div className="navy-product-image">
-                  {product.images[0]?.url ? (
-                    <img src={product.images[0].url} alt={product.images[0]?.altText || product.name} />
-                  ) : (
-                    <div style={{ width: "100%", height: "100%", background: "#dde1e6", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <Package size={40} style={{ color: "#9ca3af" }} />
-                    </div>
-                  )}
-                </div>
-                <div className="navy-product-card-body">
-                  <h3>{product.name}</h3>
+          <div className="lovable-product-grid">
+            {products.map((product, index) => (
+              <article className="lovable-product-card" key={product.id}>
+                <Link href={`/san-pham/${product.slug}`} className="lovable-product-image">
+                  <img src={product.images[0]?.url || projectImages[index % projectImages.length]} alt={product.images[0]?.altText || product.name} />
+                  {product.featured && <span>Nổi bật</span>}
+                  <i>Xem chi tiết</i>
+                </Link>
+                <div className="lovable-product-body">
+                  <span>{product.category.name}</span>
+                  <h3><Link href={`/san-pham/${product.slug}`}>{product.name}</Link></h3>
                   <p>{product.shortDescription}</p>
-                  <Link href={`/san-pham/${product.slug}`} className="navy-link">
-                    XEM CHI TIẾT <ArrowRight size={12} />
-                  </Link>
+                  <div><b>{formatPrice(product)}</b><small>{product.warranty}</small></div>
                 </div>
               </article>
             ))}
           </div>
-          <div className="navy-view-all">
-            <Link href="/san-pham" className="btn-navy-solid">XEM TẤT CẢ SẢN PHẨM</Link>
-          </div>
+          <div className="lovable-center-action"><Link href="/san-pham" className="button button-primary">Xem tất cả sản phẩm <ArrowRight size={17} /></Link></div>
         </div>
       </section>
 
-      {/* ========== SERVICES ========== */}
-      <section className="section-navy-services">
+      <section className="section lovable-services-section">
         <div className="container">
-          <div className="navy-section-header">
-            <span className="kicker">DỊCH VỤ</span>
-            <h2>DỊCH VỤ CỦA CHÚNG TÔI</h2>
-            <p>Chúng tôi cung cấp dịch vụ toàn diện cho mọi nhu cầu về cửa cuốn</p>
+          <div className="lovable-section-heading">
+            <span>Dịch vụ</span>
+            <h2>Dịch vụ chúng tôi cung cấp</h2>
+            <p>Tư vấn đúng hiện trạng, xác nhận chi phí trước khi thực hiện và bàn giao rõ ràng.</p>
           </div>
-          <div className="navy-service-grid">
-            <article className="navy-service-card">
-              <div className="service-icon-wrap"><Wrench /></div>
-              <h3>SỬA CHỮA CỬA CUỐN</h3>
-              <p>Khắc phục mọi sự cố cửa cuốn nhanh chóng, hiệu quả</p>
-              <Link href="/dich-vu" className="navy-link">XEM CHI TIẾT <ArrowRight size={12} /></Link>
-            </article>
-            <article className="navy-service-card">
-              <div className="service-icon-wrap"><Settings /></div>
-              <h3>LẮP ĐẶT CỬA CUỐN</h3>
-              <p>Lắp đặt mới cửa cuốn chính hãng, đúng kỹ thuật</p>
-              <Link href="/dich-vu" className="navy-link">XEM CHI TIẾT <ArrowRight size={12} /></Link>
-            </article>
-            <article className="navy-service-card">
-              <div className="service-icon-wrap"><Cpu /></div>
-              <h3>BẢO TRÌ CỬA CUỐN</h3>
-              <p>Bảo trì định kỳ giúp cửa hoạt động bền bỉ, an toàn</p>
-              <Link href="/dich-vu" className="navy-link">XEM CHI TIẾT <ArrowRight size={12} /></Link>
-            </article>
-            <article className="navy-service-card">
-              <div className="service-icon-wrap"><Package /></div>
-              <h3>THAY THẾ PHỤ KIỆN</h3>
-              <p>Cung cấp và thay thế phụ kiện cửa cuốn chính hãng</p>
-              <Link href="/dich-vu" className="navy-link">XEM CHI TIẾT <ArrowRight size={12} /></Link>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== WHY US + STATS ========== */}
-      <section className="section-navy-stats">
-        <div className="container">
-          <div className="navy-stats-layout">
-            <div className="navy-stats-content">
-              <span className="navy-kicker-left">VÌ SAO CHỌN CHÚNG TÔI</span>
-              <h2>UY TÍN TẠO NÊN THƯƠNG HIỆU</h2>
-              <p>Với nhiều năm kinh nghiệm trong lĩnh vực cửa cuốn, chúng tôi cam kết mang đến dịch vụ tốt nhất cho khách hàng.</p>
-              <ul className="navy-check-list">
-                <li><CheckCircle2 /> Đội ngũ kỹ thuật giàu kinh nghiệm</li>
-                <li><CheckCircle2 /> Sản phẩm chính hãng, chất lượng cao</li>
-                <li><CheckCircle2 /> Giá cả cạnh tranh, minh bạch</li>
-                <li><CheckCircle2 /> Bảo hành dài hạn, hỗ trợ tận tâm</li>
-              </ul>
-              <Link href="/lien-he" className="btn-yellow-solid">TÌM HIỂU THÊM</Link>
-            </div>
-            <div className="navy-stats-grid">
-              <div className="stat-box">
-                <span className="stat-icon"><Clock3 /></span>
-                <span className="stat-num">10+</span>
-                <span className="stat-label">NĂM KINH NGHIỆM</span>
-              </div>
-              <div className="stat-box">
-                <span className="stat-icon"><ShieldCheck /></span>
-                <span className="stat-num">5000+</span>
-                <span className="stat-label">KHÁCH HÀNG HÀI LÒNG</span>
-              </div>
-              <div className="stat-box">
-                <span className="stat-icon"><Settings /></span>
-                <span className="stat-num">10000+</span>
-                <span className="stat-label">CÔNG TRÌNH THỰC HIỆN</span>
-              </div>
-              <div className="stat-box">
-                <span className="stat-icon"><Phone /></span>
-                <span className="stat-num">24/7</span>
-                <span className="stat-label">HỖ TRỢ KHÁCH HÀNG</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ========== PROJECTS ========== */}
-      <section className="section-navy-projects">
-        <div className="container">
-          <div className="navy-section-header">
-            <span className="kicker">DỰ ÁN TIÊU BIỂU</span>
-            <h2>MỘT SỐ CÔNG TRÌNH ĐÃ THỰC HIỆN</h2>
-          </div>
-          <div className="navy-project-strip">
-            {projects.slice(0, 5).map((project) => (
-              <Link href={`/du-an/${project.slug}`} key={project.slug} className="navy-project-item">
-                <div className="navy-project-image">
-                  <div className="placeholder-image"></div>
-                </div>
-                <div className="navy-project-label">{project.name} - {project.location}</div>
+          <div className="lovable-service-grid">
+            {services.slice(0, 6).map((service, index) => (
+              <Link href={`/dich-vu/${service.slug}`} className="lovable-service-card" key={service.slug}>
+                <span className="service-number">0{index + 1}</span>
+                <Wrench />
+                <h3>{service.name}</h3>
+                <p>{service.summary}</p>
+                <span className="service-arrow"><ArrowRight /></span>
               </Link>
             ))}
           </div>
-          <div className="navy-view-all">
-            <Link href="/du-an" className="btn-navy-outline">XEM THÊM DỰ ÁN</Link>
+        </div>
+      </section>
+
+      <section className="section lovable-why-section">
+        <div className="container lovable-why-grid">
+          <div className="lovable-why-copy">
+            <span className="kicker">Vì sao chọn chúng tôi</span>
+            <h2>Cam kết chất lượng trên từng công trình</h2>
+            <p>Quy trình rõ ràng từ khảo sát, báo giá, thi công đến nghiệm thu và bảo hành. Mọi hạng mục đều được thống nhất trước khi bắt đầu.</p>
+            <ul>
+              <li><CheckCircle2 /> Báo giá minh bạch, không tự ý phát sinh</li>
+              <li><CheckCircle2 /> Kỹ thuật viên giàu kinh nghiệm</li>
+              <li><CheckCircle2 /> Vật tư và thiết bị có nguồn gốc rõ ràng</li>
+              <li><CheckCircle2 /> Hỗ trợ kỹ thuật sau bàn giao</li>
+            </ul>
+            <Link href="/lien-he" className="button button-primary">Nhận tư vấn <ArrowRight size={17} /></Link>
+          </div>
+          <div className="lovable-stat-grid">
+            <article><BadgeCheck /><b>15+</b><span>Năm kinh nghiệm</span></article>
+            <article><PackageCheck /><b>8.000+</b><span>Công trình bàn giao</span></article>
+            <article><Clock3 /><b>30–60</b><span>Phút phản hồi nội thành</span></article>
+            <article><Headphones /><b>24/7</b><span>Tiếp nhận hỗ trợ</span></article>
           </div>
         </div>
       </section>
 
-      {/* ========== CTA BAND ========== */}
-      <div className="navy-cta-band">
-        <div className="container navy-cta-inner">
-          <div className="cta-left">
-            <h2>CẦN HỖ TRỢ NGAY?</h2>
-            <p>Liên hệ chúng tôi để được tư vấn và hỗ trợ nhanh chóng 24/7</p>
+      <section className="section lovable-projects-section">
+        <div className="container">
+          <div className="lovable-section-heading">
+            <span>Dự án</span>
+            <h2>Công trình thực tế</h2>
+            <p>Một số hạng mục sửa chữa, bảo trì và lắp đặt tiêu biểu của đội ngũ kỹ thuật.</p>
           </div>
-          <div className="cta-right">
-            <div className="cta-phone">
-              <div className="cta-phone-icon"><Phone /></div>
-              <div className="cta-phone-text">
-                <b>{site.hotline}</b>
-                <span>Hotline miễn phí 24/7</span>
-              </div>
-            </div>
-            <a href={site.hotlineHref} className="btn-yellow-solid">GỌI NGAY</a>
+          <div className="lovable-project-grid">
+            {projects.map((project, index) => (
+              <Link href={`/du-an/${project.slug}`} className="lovable-project-card" key={project.slug}>
+                <img src={projectImages[index % projectImages.length]} alt={project.name} />
+                <div><span>{project.category}</span><h3>{project.name}</h3><p>{project.location}</p></div>
+              </Link>
+            ))}
           </div>
+          <div className="lovable-center-action"><Link href="/du-an" className="button button-light">Xem tất cả công trình <ArrowRight size={17} /></Link></div>
         </div>
-      </div>
+      </section>
+
+      {categories.length > 0 && (
+        <section className="lovable-categories-section">
+          <div className="container lovable-category-wrap">
+            <h2>Danh mục nổi bật</h2>
+            <div>{categories.slice(0, 8).map((category) => <Link href={`/danh-muc/${category.slug}`} key={category.id}>{category.name}<ArrowRight size={16} /></Link>)}</div>
+          </div>
+        </section>
+      )}
+
+      <section className="lovable-home-cta">
+        <div className="container"><div><h2>Cần tư vấn hoặc sửa cửa cuốn gấp?</h2><p>Gọi hotline để được hỗ trợ. Khảo sát và báo giá ban đầu hoàn toàn miễn phí.</p></div><a href={site.hotlineHref} className="button button-gold"><Phone size={19} /> {site.hotline}</a></div>
+      </section>
     </>
   );
 }
