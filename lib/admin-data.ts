@@ -31,23 +31,23 @@ export async function getAdminProduct(id: string) { if (!getSupabaseConfig()) re
 
 export async function getAdminProjects(): Promise<AdminProjectRow[]> {
   if (!getSupabaseConfig()) return [];
+  const token = await getAdminAccessToken();
   try {
-    const token = await getAdminAccessToken();
     return await supabaseFetch<AdminProjectRow[]>(
       "/rest/v1/projects?select=*,images:project_images(id,storage_path,alt_text,sort_order,is_primary)&order=updated_at.desc",
       { cache: "no-store" },
       token
     );
   } catch (error) {
-    console.error("Chưa tạo bảng projects trong Supabase hoặc lỗi kết nối:", error);
+    console.error("Lỗi khi tải danh sách dự án từ Supabase:", error);
     return [];
   }
 }
 
 export async function getAdminProject(id: string): Promise<AdminProjectRow | null> {
   if (!getSupabaseConfig()) return null;
+  const token = await getAdminAccessToken();
   try {
-    const token = await getAdminAccessToken();
     const rows = await supabaseFetch<AdminProjectRow[]>(
       `/rest/v1/projects?select=*,images:project_images(id,storage_path,alt_text,sort_order,is_primary)&id=eq.${encodeURIComponent(
         id

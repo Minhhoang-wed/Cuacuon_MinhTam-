@@ -5,6 +5,8 @@ import { getAdminSession } from "@/lib/admin-auth";
 import { isSupabaseConfigured } from "@/lib/supabase-rest";
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Admin CMS — Cửa Cuốn An Tâm",
   robots: { index: false, follow: false },
