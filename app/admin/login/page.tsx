@@ -1,18 +1,18 @@
 import type { Metadata } from "next";
-import { AlertCircle, ArrowLeft, ArrowRight, CheckCircle, Database, KeyRound, Lock, Shield, ShieldCheck } from "lucide-react";
+import { AlertCircle, ArrowLeft, ArrowRight, Boxes, Building2, KeyRound, Settings, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { isSupabaseConfigured } from "@/lib/supabase-rest";
 
 export const metadata: Metadata = {
-  title: "Đăng nhập quản trị CMS — Cửa Cuốn An Tâm",
+  title: "Đăng nhập quản trị CMS — Minh Tâm",
   robots: { index: false, follow: false },
 };
 
 const messages: Record<string, string> = {
-  config: "Supabase chưa được cấu hình biến môi trường.",
+  config: "Hệ thống chưa kết nối cơ sở dữ liệu.",
   invalid: "Vui lòng nhập đầy đủ email và mật khẩu hợp lệ.",
   credentials: "Email hoặc mật khẩu không chính xác. Vui lòng kiểm tra lại.",
-  permission: "Tài khoản này chưa được phân quyền Quản trị viên (ADMIN_USERS).",
+  permission: "Tài khoản này chưa được cấp quyền Quản trị viên.",
 };
 
 export default async function AdminLoginPage({
@@ -30,7 +30,7 @@ export default async function AdminLoginPage({
           <ShieldCheck size={26} />
         </span>
         <span>
-          <b>CỬA CUỐN AN TÂM</b>
+          <b>MINH TÂM</b>
           <small>CONTENT MANAGEMENT SYSTEM</small>
         </span>
       </div>
@@ -39,25 +39,25 @@ export default async function AdminLoginPage({
         <section>
           <span className="kicker">Hệ thống Quản trị</span>
           <h1>
-            Nội dung website,<br />
-            chủ động trong tay bạn.
+            Quản trị nội dung<br />
+            Cửa Cuốn Minh Tâm.
           </h1>
           <p>
-            Quản lý toàn bộ danh mục cửa cuốn, hình ảnh thực tế, bảng giá niêm yết và thông tin doanh nghiệp trong khu vực bảo mật độc lập.
+            Khu vực dành riêng cho ban quản trị cập nhật sản phẩm, hình ảnh công trình và thông tin hiển thị website.
           </p>
 
           <ul>
             <li>
-              <Lock size={18} />
-              <span>Phân quyền xác thực bảo mật đa tầng qua Supabase Auth</span>
+              <Boxes size={18} />
+              <span>Quản lý danh mục & bảng giá sản phẩm cửa cuốn</span>
             </li>
             <li>
-              <Shield size={18} />
-              <span>Dữ liệu được bảo vệ an toàn bằng Row Level Security (RLS)</span>
+              <Building2 size={18} />
+              <span>Cập nhật dự án & hình ảnh công trình thực tế</span>
             </li>
             <li>
-              <Database size={18} />
-              <span>Lưu trữ hình ảnh chuẩn CDN đám mây với hiệu năng cao</span>
+              <Settings size={18} />
+              <span>Tùy chỉnh thông tin liên hệ, hotline & cấu hình trang chủ</span>
             </li>
           </ul>
         </section>

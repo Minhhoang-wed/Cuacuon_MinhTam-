@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Admin CMS — Cửa Cuốn An Tâm",
+  title: "Admin CMS — Minh Tâm",
   robots: { index: false, follow: false },
 };
 

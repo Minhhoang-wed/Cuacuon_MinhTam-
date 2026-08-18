@@ -1,6 +1,6 @@
 export const siteConfig = {
-  name: "Minh Tâm MITADOOR",
-  shortName: "MINH TÂM MITADOOR",
+  name: "Cửa Cuốn Minh Tâm",
+  shortName: "MINH TÂM",
   description:
     "Dịch vụ sửa chữa, bảo trì và lắp đặt cửa cuốn tận nơi tại TP.HCM. Tiếp nhận yêu cầu 24/7, khảo sát rõ ràng, bảo hành minh bạch.",
   hotline: "0909 123 456",
