@@ -50,7 +50,7 @@ export function SiteFooter({ site }: { site: ManagedSiteConfig }) {
           <div className="footer-maison-contact">
             <a href={site.hotlineHref} className="footer-hotline-highlight">
               <Phone size={16} />
-              <div>
+              <div className="footer-hotline-text">
                 <small>TỔNG ĐÀI 24/7</small>
                 <b>{site.hotline}</b>
               </div>
