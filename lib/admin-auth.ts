@@ -39,19 +39,20 @@ export const getAdminSession = cache(async function getAdminSession(): Promise<A
   }
 
   try {
-    const user = await supabaseFetch<{ id: string; email?: string }>("/auth/v1/user", { cache: "no-store" }, token);
+    const userId = jwt.sub;
+    if (!userId) return null;
     const rows = await supabaseFetch<Array<{ user_id: string; email: string | null }>>(
-      `/rest/v1/admin_users?user_id=eq.${encodeURIComponent(user.id)}&select=user_id,email&limit=1`,
+      `/rest/v1/admin_users?user_id=eq.${encodeURIComponent(userId)}&select=user_id,email&limit=1`,
       { cache: "no-store" },
       token
     );
     if (!rows[0]) return null;
 
-    const session: AdminSession = { id: user.id, email: rows[0].email || user.email || jwt.email || "admin" };
-    // Cache kết quả xác thực 2 phút để không phải gọi Supabase liên tục mỗi lần bấm menu
+    const session: AdminSession = { id: userId, email: rows[0].email || jwt.email || "admin" };
+    // Cache ket qua xac thuc 5 phut de khong phai goi Supabase lien tuc moi lan chuyen trang
     sessionCache.set(token, {
       session,
-      expiresAt: Math.min(now + 120000, (jwt.exp ? jwt.exp * 1000 : now + 120000)),
+      expiresAt: Math.min(now + 300000, (jwt.exp ? jwt.exp * 1000 : now + 300000)),
     });
     return session;
   } catch {

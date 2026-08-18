@@ -17,7 +17,7 @@ import { HeroSlider } from "@/components/hero-slider";
 import { services } from "@/data/content";
 import { formatPrice, getCategories, getHomepageContent, getProducts, getProjects, getSiteSettings } from "@/lib/catalog";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 300;
 
 const projectImages = [
   "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1000&q=82",
