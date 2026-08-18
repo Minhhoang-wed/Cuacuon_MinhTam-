@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, ChevronDown, Mail, MapPin, Menu, Phone, ShoppingBag, X } from "lucide-react";
+import { ArrowRight, ChevronDown, Menu, Phone, ShoppingBag, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -24,22 +24,6 @@ export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
 
   return (
     <header className="site-header-navy">
-      <div className="top-strip-navy">
-        <div className="container top-strip-navy-inner">
-          <div className="top-strip-left">
-            <a href={site.mapsHref} target="_blank" rel="noreferrer">
-              <MapPin size={13} /> {site.address}
-            </a>
-            <a href={`mailto:${site.email}`}>
-              <Mail size={13} /> {site.email}
-            </a>
-          </div>
-          <div className="top-strip-right">
-            <span>{site.hours} · Khảo sát & Báo giá miễn phí</span>
-          </div>
-        </div>
-      </div>
-
       <div className="container nav-row-navy">
         <Logo name={site.name} shortName={site.shortName} />
 

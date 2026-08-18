@@ -13,7 +13,7 @@ import {
   Wrench,
 } from "lucide-react";
 import Link from "next/link";
-import { CtaBand } from "@/components/cta-band";
+import { HeroSlider } from "@/components/hero-slider";
 import { services } from "@/data/content";
 import { formatPrice, getCategories, getHomepageContent, getProducts, getProjects, getSiteSettings } from "@/lib/catalog";
 
@@ -55,87 +55,20 @@ export default async function HomePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusiness) }} />
 
-      {/* 1. Full-Width Cinematic Lookbook Hero (Maison Style) */}
-      <section className="maison-hero-panorama">
-        <div className="container">
-          <div className="maison-hero-inner">
-            <span className="maison-hero-eyebrow">
-              <ShieldCheck size={15} /> {homepage.heroEyebrow || "15 NĂM KINH NGHIỆM THI CÔNG & BẢO HÀNH"}
-            </span>
-            <h1>
-              {homepage.heroTitle || "Giải pháp cửa cuốn"}
-              <span>{homepage.heroEmphasis || "An tâm & Vận hành êm ái"}</span>
-            </h1>
-            <p>{homepage.heroDescription || site.description}</p>
-            <div className="maison-hero-actions">
-              <a
-                href={site.zaloHref}
-                target="_blank"
-                rel="noreferrer"
-                className="button button-primary"
-              >
-                Nhận báo giá qua Zalo <ArrowRight size={16} />
-              </a>
-              <a href={site.hotlineHref} className="button button-light">
-                Hotline: {site.hotline}
-              </a>
-            </div>
-            <div className="maison-hero-trust">
-              <span><CheckCircle2 /> Khảo sát miễn phí tận nơi</span>
-              <span><CheckCircle2 /> Báo giá trong 15 phút</span>
-              <span><CheckCircle2 /> Bảo hành chính hãng 5 năm</span>
-              <span><BadgeCheck /> 8.000+ Công trình hoàn thiện</span>
-            </div>
-          </div>
-        </div>
+      {/* 1. Full-Width Cinematic Lookbook Hero Slider (3s Auto-Slide) */}
+      <HeroSlider
+        heroEyebrow={homepage.heroEyebrow}
+        heroTitle={homepage.heroTitle}
+        heroEmphasis={homepage.heroEmphasis}
+      />
 
-        <div className="maison-hero-scroll" aria-hidden="true">
-          <span>SCROLL</span>
-          <ChevronDown size={14} />
-        </div>
-      </section>
-
-
-      {/* 2. Trust Commitment Strip */}
-      <section className="lovable-trust-strip" aria-label="Cam kết dịch vụ">
-        <div className="container lovable-trust-grid">
-          <article>
-            <Clock3 />
-            <div>
-              <b>Sửa chữa 24/7</b>
-              <span>Có mặt trong 30-60 phút</span>
-            </div>
-          </article>
-          <article>
-            <Wrench />
-            <div>
-              <b>Lắp đặt chuyên nghiệp</b>
-              <span>Đội thợ tay nghề cao</span>
-            </div>
-          </article>
-          <article>
-            <BadgeCheck />
-            <div>
-              <b>Linh kiện chính hãng</b>
-              <span>Đầy đủ tem & bảo hành</span>
-            </div>
-          </article>
-          <article>
-            <ShieldCheck />
-            <div>
-              <b>Bảo hành dài hạn</b>
-              <span>Hỗ trợ kỹ thuật trọn đời</span>
-            </div>
-          </article>
-        </div>
-      </section>
 
       {/* 3. Featured Collection Split Banner (Maison Split Section) */}
       <section className="maison-split-section">
         <div className="container maison-split-grid">
           <div className="maison-split-media">
             <img
-              src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1200&q=84"
+              src="/images/collection-banner.jpg"
               alt="Cửa cuốn khe thoáng công nghệ Đức"
             />
           </div>
@@ -206,22 +139,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 5. Editorial Philosophy / Brand Story Block */}
-      <section className="maison-philosophy-section">
-        <div className="container maison-philosophy-wrap">
-          <span className="kicker">TRIẾT LÝ PHỤC VỤ</span>
-          <blockquote>
-            “Chúng tôi tin vào sự bền bỉ trong từng chi tiết — <em>sản phẩm chính hãng</em>, vận hành êm ái và sự đồng hành tận tâm trên mỗi công trình.”
-          </blockquote>
-          <p>
-            Mỗi bộ cửa cuốn không đơn thuần là một giải pháp che chắn, mà là tấm lá chắn an toàn bảo vệ gia đình và tài sản của bạn. Chúng tôi cam kết minh bạch về vật tư, tư vấn đúng hiện trạng và bảo hành chu đáo.
-          </p>
-          <Link href="/ve-chung-toi" className="button button-light">
-            Tìm hiểu về chúng tôi <ArrowRight size={16} />
-          </Link>
-        </div>
-      </section>
-
       {/* 6. Services Section */}
       {services.length > 0 && (
         <section className="section lovable-services-section">
@@ -251,7 +168,24 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* 7. Why Choose Us & Stats Grid */}
+      {/* 7. Category Lookbook Wrap */}
+      {categories.length > 0 && (
+        <section className="lovable-categories-section">
+          <div className="container lovable-category-wrap">
+            <h2>Danh mục nổi bật</h2>
+            <div>
+              {categories.slice(0, 8).map((category) => (
+                <Link href={`/danh-muc/${category.slug}`} key={category.id}>
+                  {category.name}
+                  <ArrowRight size={14} />
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* 8. Why Choose Us & Stats Grid */}
       <section className="section lovable-why-section">
         <div className="container lovable-why-grid">
           <div className="lovable-why-copy">
@@ -298,56 +232,6 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* 8. Projects Gallery */}
-      {projects.length > 0 && (
-        <section className="section lovable-projects-section">
-          <div className="container">
-            <div className="lovable-project-heading">
-              <div>
-                <span>DỰ ÁN TIÊU BIỂU</span>
-                <h2>Công trình thực tế</h2>
-              </div>
-              <p>Một số công trình tiêu biểu đã được đội ngũ kỹ thuật của chúng tôi thi công và bàn giao.</p>
-            </div>
-            <div className="lovable-project-grid">
-              {projects.map((project, index) => (
-                <Link href={`/du-an/${project.slug}`} className="lovable-project-card" key={project.slug}>
-                  <img
-                    src={project.images[0]?.url || projectImages[index % projectImages.length]}
-                    alt={project.images[0]?.altText || project.name}
-                  />
-                  <div>
-                    <h3>{project.name}</h3>
-                    <p>{project.category} · {project.location}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-
-      {/* 9. Category Lookbook Wrap */}
-      {categories.length > 0 && (
-        <section className="lovable-categories-section">
-          <div className="container lovable-category-wrap">
-            <h2>Danh mục nổi bật</h2>
-            <div>
-              {categories.slice(0, 8).map((category) => (
-                <Link href={`/danh-muc/${category.slug}`} key={category.id}>
-                  {category.name}
-                  <ArrowRight size={14} />
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {/* 10. Home CTA Footer Strip */}
-      <CtaBand />
     </>
   );
 }
