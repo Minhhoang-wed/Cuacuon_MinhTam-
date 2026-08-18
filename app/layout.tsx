@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import "@cloudimage/360-view/css";
 import "./globals.css";
 import { SiteShell } from "@/components/site-shell";
 import { getSiteSettings } from "@/lib/catalog";

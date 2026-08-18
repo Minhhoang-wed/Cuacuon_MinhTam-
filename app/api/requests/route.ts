@@ -39,7 +39,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ ok: false, message: "Kênh tiếp nhận chưa được cấu hình. Vui lòng gọi hotline." }, { status: 503 });
     }
 
-    return NextResponse.json({ ok: true, requestCode: code, message: webhookUrl ? " Nhân sự sẽ liên hệ xác nhận." : " Đây là chế độ demo local; chưa chuyển dữ liệu ra ngoài." });
+    return NextResponse.json({ ok: true, requestCode: code, message: " Yêu cầu đã được ghi nhận. Kỹ thuật viên sẽ liên hệ xác nhận trong ít phút." });
   } catch {
     return NextResponse.json({ ok: false, message: "Hệ thống đang bận. Vui lòng gọi hotline để được hỗ trợ." }, { status: 500 });
   }

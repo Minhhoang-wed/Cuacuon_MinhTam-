@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, Mail, MapPin, Menu, Phone, ShoppingBag, X } from "lucide-react";
+import { ArrowRight, ChevronDown, Mail, MapPin, Menu, Phone, ShoppingBag, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -20,18 +20,22 @@ const productNavigation = [
 export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const isActive = (href: string) => href === "/" ? pathname === "/" : pathname.startsWith(href);
+  const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
 
   return (
     <header className="site-header-navy">
       <div className="top-strip-navy">
         <div className="container top-strip-navy-inner">
           <div className="top-strip-left">
-            <a href={site.mapsHref} target="_blank" rel="noreferrer"><MapPin size={13} /> {site.address}</a>
-            <a href={`mailto:${site.email}`}><Mail size={13} /> {site.email}</a>
+            <a href={site.mapsHref} target="_blank" rel="noreferrer">
+              <MapPin size={13} /> {site.address}
+            </a>
+            <a href={`mailto:${site.email}`}>
+              <Mail size={13} /> {site.email}
+            </a>
           </div>
           <div className="top-strip-right">
-            <span>{site.hours} · Sửa chữa khẩn cấp 24/7</span>
+            <span>{site.hours} · Khảo sát & Báo giá miễn phí</span>
           </div>
         </div>
       </div>
@@ -40,20 +44,55 @@ export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
         <Logo name={site.name} shortName={site.shortName} />
 
         <nav className="desktop-nav-navy" aria-label="Điều hướng chính">
-          <Link href="/" className={isActive("/") ? "active" : ""}>Trang chủ</Link>
+          <Link href="/" className={isActive("/") ? "active" : ""}>
+            Trang chủ
+          </Link>
           <div className="product-nav-group">
-            <Link href="/san-pham" className={isActive("/san-pham") || isActive("/danh-muc") ? "active" : ""}>Sản phẩm <ChevronDown size={14} /></Link>
+            <Link
+              href="/san-pham"
+              className={isActive("/san-pham") || isActive("/danh-muc") ? "active" : ""}
+            >
+              Sản phẩm <ChevronDown size={13} />
+            </Link>
             <div className="product-nav-dropdown">
-              {productNavigation.map((item) => <Link href={item.href} key={item.href}>{item.label}</Link>)}
+              {productNavigation.map((item) => (
+                <Link href={item.href} key={item.href}>
+                  {item.label}
+                </Link>
+              ))}
             </div>
           </div>
-          <Link href="/ve-chung-toi" className={isActive("/ve-chung-toi") ? "active" : ""}>Giới thiệu</Link>
+          <Link href="/dich-vu" className={isActive("/dich-vu") ? "active" : ""}>
+            Dịch vụ
+          </Link>
+          <Link href="/ve-chung-toi" className={isActive("/ve-chung-toi") ? "active" : ""}>
+            Giới thiệu
+          </Link>
+          <Link href="/du-an" className={isActive("/du-an") ? "active" : ""}>
+            Dự án
+          </Link>
+          <Link href="/lien-he" className={isActive("/lien-he") ? "active" : ""}>
+            Liên hệ
+          </Link>
         </nav>
 
         <div className="header-contact">
-          <a href={site.hotlineHref} className="header-phone-icon" aria-label={`Gọi ${site.hotline}`}><Phone size={18} /></a>
-          <a href={site.hotlineHref} className="header-phone-copy"><small>HOTLINE 24/7</small><b>{site.hotline}</b></a>
-          <Link href="/san-pham" className="header-zalo" aria-label="Xem sản phẩm"><ShoppingBag size={20} /></Link>
+          <a href={site.hotlineHref} className="header-phone-icon" aria-label={`Gọi ${site.hotline}`}>
+            <Phone size={17} />
+          </a>
+          <a href={site.hotlineHref} className="header-phone-copy">
+            <small>Hotline 24/7</small>
+            <b>{site.hotline}</b>
+          </a>
+          <a
+            href={site.zaloHref}
+            target="_blank"
+            rel="noreferrer"
+            className="button button-primary"
+            style={{ padding: "0 18px", height: "40px", fontSize: "12px", display: "inline-flex", alignItems: "center", gap: "6px" }}
+          >
+            Báo giá Zalo <ArrowRight size={14} />
+          </a>
         </div>
 
         <button
@@ -79,11 +118,23 @@ export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
               {item.label}
             </Link>
           ))}
-          <a href={site.hotlineHref} onClick={() => setOpen(false)} style={{ padding: "14px 20px", display: "flex", alignItems: "center", gap: "8px", fontWeight: 700, color: "#e69c1a" }}>
-            <Phone size={15} /> {site.hotline}
+          <a
+            href={site.hotlineHref}
+            onClick={() => setOpen(false)}
+            style={{
+              padding: "14px 24px",
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              fontWeight: 700,
+              color: "var(--color-terracotta)",
+            }}
+          >
+            <Phone size={16} /> Hotline: {site.hotline}
           </a>
         </nav>
       )}
     </header>
   );
 }
+

@@ -13,9 +13,9 @@ export function DoorVisual({ label, accent, kind = "service", imageUrl, imageAlt
   const Icon = icons[kind];
   const resolvedImage = imageUrl || fallbackImages[kind];
   return (
-    <div className="door-visual-card" style={{ "--card-accent": accent || "#b9f5dc" } as React.CSSProperties}>
+    <div className={`door-visual-card door-visual-${kind}`} style={{ "--card-accent": accent || "#b9f5dc" } as React.CSSProperties}>
       <img className="door-visual-image" src={resolvedImage} alt={imageAlt || label} />
-      <div className="visual-badge"><Icon size={20} /><span>{label}</span></div>
+      {kind !== "product" && <div className="visual-badge"><Icon size={20} /><span>{label}</span></div>}
     </div>
   );
 }

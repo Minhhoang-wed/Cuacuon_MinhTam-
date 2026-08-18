@@ -10,7 +10,7 @@ export function generateStaticParams() { return services.map(({ slug }) => ({ sl
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const service = getService((await params).slug);
   if (!service) return {};
-  return { title: service.name, description: service.summary, openGraph: { title: service.name, description: service.summary, images: [] }, twitter: { title: service.name, description: service.summary, images: [] } };
+  return { title: service.name, description: service.summary, alternates: { canonical: `/dich-vu/${service.slug}` }, openGraph: { title: service.name, description: service.summary, images: ["/og.png"] }, twitter: { card: "summary_large_image", title: service.name, description: service.summary, images: ["/og.png"] } };
 }
 
 export default async function ServiceDetailPage({ params }: { params: Promise<{ slug: string }> }) {
@@ -20,7 +20,15 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
     <>
       <section className="detail-hero">
         <div className="container detail-hero-grid">
-          <div><Link href="/dich-vu" className="back-link"><ArrowLeft /> Tất cả dịch vụ</Link><span className="kicker">Sửa chữa tận nơi</span><h1>{service.name}</h1><p>{service.summary}</p><Link href="/lien-he#dat-lich" className="button button-primary"><CalendarCheck /> Đặt lịch kiểm tra</Link></div>
+          <div>
+            <Link href="/dich-vu" className="back-link"><ArrowLeft /> Tất cả dịch vụ</Link>
+            <span className="kicker">Sửa chữa tận nơi</span>
+            <h1>{service.name}</h1>
+            <p>{service.summary}</p>
+            <a href="https://zalo.me/0909123456" target="_blank" rel="noreferrer" className="button button-primary">
+              Tư vấn & Báo giá qua Zalo
+            </a>
+          </div>
           <DoorVisual label="KỸ THUẬT" kind="service" />
         </div>
       </section>

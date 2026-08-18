@@ -1,56 +1,86 @@
-import { Clock3, Mail, MapPin, Phone } from "lucide-react";
+import { ArrowRight, Clock3, Mail, MapPin, MessageCircle, Phone, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { Logo } from "@/components/logo";
 import type { ManagedSiteConfig } from "@/lib/catalog";
 
 export function SiteFooter({ site }: { site: ManagedSiteConfig }) {
   return (
-    <footer className="footer-navy">
-      <div className="container footer-navy-grid">
-        <div className="footer-navy-brand">
+    <footer className="footer-maison">
+      <div className="container footer-maison-grid">
+        <div className="footer-maison-brand">
           <Logo name={site.name} shortName={site.shortName} />
           <p>{site.description}</p>
-          <span className="footer-license">Phục vụ: {site.serviceArea}</span>
-        </div>
-
-        <div>
-          <h3>Sản phẩm</h3>
-          <div className="footer-navy-links">
-            <Link href="/san-pham">Cửa cuốn khe thoáng</Link>
-            <Link href="/san-pham">Cửa cuốn tấm liền</Link>
-            <Link href="/san-pham">Cửa cuốn trong suốt</Link>
-            <Link href="/san-pham">Cửa cuốn công nghiệp</Link>
-            <Link href="/san-pham">Motor cửa cuốn</Link>
-            <Link href="/san-pham">Phụ kiện & linh kiện</Link>
+          <div className="footer-maison-trust">
+            <ShieldCheck size={16} />
+            <span>Cam kết vật tư chính hãng 100% · Bảo hành đến 5 năm</span>
+          </div>
+          <div className="footer-maison-actions">
+            <a href={site.zaloHref} target="_blank" rel="noreferrer" className="footer-zalo-btn">
+              <MessageCircle size={16} /> Chat Zalo Nhận Báo Giá
+            </a>
           </div>
         </div>
 
         <div>
-          <h3>Dịch vụ</h3>
-          <div className="footer-navy-links">
+          <h3>Sản Phẩm</h3>
+          <div className="footer-maison-links">
+            <Link href="/san-pham?category=cua-cuon-khe-thoang">Cửa cuốn khe thoáng</Link>
+            <Link href="/san-pham?category=cua-cuon-tam-lien">Cửa cuốn tấm liền</Link>
+            <Link href="/san-pham?category=cua-cuon-trong-suot">Cửa cuốn trong suốt</Link>
+            <Link href="/san-pham?category=cua-cuon-cong-nghiep">Cửa cuốn công nghiệp</Link>
+            <Link href="/san-pham?category=motor-cua-cuon">Motor cửa cuốn & Remote</Link>
+            <Link href="/san-pham">Phụ kiện & Bình lưu điện</Link>
+          </div>
+        </div>
+
+        <div>
+          <h3>Dịch Vụ & Dự Án</h3>
+          <div className="footer-maison-links">
             <Link href="/dich-vu">Lắp đặt cửa cuốn trọn gói</Link>
-            <Link href="/dich-vu">Sửa chữa cửa cuốn 24/7</Link>
-            <Link href="/dich-vu">Thay motor & remote</Link>
-            <Link href="/dich-vu">Bảo trì định kỳ</Link>
-            <Link href="/dich-vu">Thay nan, thay ray dẫn hướng</Link>
+            <Link href="/dich-vu">Sửa chữa & Cứu hộ 24/7</Link>
+            <Link href="/dich-vu">Bảo dưỡng định kỳ</Link>
+            <Link href="/du-an">Công trình biệt thự tiêu biểu</Link>
+            <Link href="/du-an">Dự án nhà phố & Shophouse</Link>
+            <Link href="/ve-chung-toi">Về Minh Tâm Mitadoor</Link>
           </div>
         </div>
 
         <div>
-          <h3>Liên hệ</h3>
-          <div className="footer-navy-contact">
-            <a href={site.hotlineHref}><Phone size={14} /> {site.hotline}</a>
-            <a href={`mailto:${site.email}`}><Mail size={14} /> {site.email}</a>
-            <span><MapPin size={14} /> {site.address}</span>
-            <span><Clock3 size={14} /> {site.hours}</span>
+          <h3>Thông Tin Liên Hệ</h3>
+          <div className="footer-maison-contact">
+            <a href={site.hotlineHref} className="footer-hotline-highlight">
+              <Phone size={16} />
+              <div>
+                <small>TỔNG ĐÀI 24/7</small>
+                <b>{site.hotline}</b>
+              </div>
+            </a>
+            <a href={site.mapsHref} target="_blank" rel="noreferrer">
+              <MapPin size={16} />
+              <span>{site.address}</span>
+            </a>
+            <a href={`mailto:${site.email}`}>
+              <Mail size={16} />
+              <span>{site.email}</span>
+            </a>
+            <div>
+              <Clock3 size={16} />
+              <span>{site.hours} — Phục vụ toàn TP.HCM & lân cận</span>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="container footer-navy-bottom">
-        <span>© {new Date().getFullYear()} {site.name}. Bảo lưu mọi quyền.</span>
-        <div><Link href="/lien-he">Chính sách bảo hành</Link><Link href="/lien-he">Chính sách bảo mật</Link><Link href="/lien-he">Điều khoản sử dụng</Link></div>
+      <div className="container footer-maison-bottom">
+        <span>© {new Date().getFullYear()} {site.name}. Giữ toàn quyền tác quyền & nội dung.</span>
+        <div>
+          <Link href="/ve-chung-toi">Về chúng tôi</Link>
+          <Link href="/san-pham">Catalog sản phẩm</Link>
+          <Link href="/du-an">Hồ sơ công trình</Link>
+          <Link href="/lien-he">Liên hệ & Báo giá</Link>
+        </div>
       </div>
     </footer>
   );
 }
+

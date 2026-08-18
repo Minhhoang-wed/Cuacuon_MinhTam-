@@ -21,7 +21,10 @@ export async function supabaseFetch<T>(path: string, init: SupabaseFetchInit = {
   headers.set("Authorization", `Bearer ${accessToken || config.key}`);
   if (init.body && !(init.body instanceof FormData) && !headers.has("Content-Type")) headers.set("Content-Type", "application/json");
 
-  const response = await fetch(`${config.url}${path}`, { ...init, headers });
+  // Đặt timeout 6 giây để tránh treo request khi mạng quốc tế/Supabase chậm
+  const signal = init.signal || AbortSignal.timeout(7000);
+
+  const response = await fetch(`${config.url}${path}`, { ...init, signal, headers });
   if (!response.ok) {
     const detail = await response.text();
     throw new Error(`SUPABASE_${response.status}: ${detail.slice(0, 500)}`);
@@ -29,6 +32,7 @@ export async function supabaseFetch<T>(path: string, init: SupabaseFetchInit = {
   if (response.status === 204 || response.headers.get("content-length") === "0") return undefined as T;
   return response.json() as Promise<T>;
 }
+
 
 export function publicAssetUrl(path: string | null | undefined) {
   if (!path) return null;

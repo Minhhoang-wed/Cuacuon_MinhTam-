@@ -6,6 +6,7 @@ import { PageHero } from "@/components/page-hero";
 export const metadata: Metadata = {
   title: "Giới thiệu",
   description: "Giới thiệu đội ngũ, quy trình và cam kết phục vụ trong lĩnh vực cửa cuốn.",
+  alternates: { canonical: "/ve-chung-toi" },
 };
 
 export default function AboutPage() {
@@ -57,4 +58,3 @@ export default function AboutPage() {
     </>
   );
 }
-

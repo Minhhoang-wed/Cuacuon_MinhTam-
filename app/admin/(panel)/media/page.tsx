@@ -1,6 +1,107 @@
-import { ImagePlus, Trash2, Upload } from "lucide-react";
+import { CheckCircle2, Image as ImageIcon, ImagePlus, Trash2, Upload } from "lucide-react";
 import { deleteMedia, uploadMedia } from "@/lib/admin-actions";
 import { getAdminMedia } from "@/lib/admin-data";
 import { isSupabaseConfigured, publicAssetUrl } from "@/lib/supabase-rest";
 
-export default async function AdminMediaPage({ searchParams }: { searchParams: Promise<{ uploaded?: string }> }) { const media = await getAdminMedia(); const demo = !isSupabaseConfigured(); const uploaded = (await searchParams).uploaded; return <>{uploaded && <div className="admin-success">Đã tải ảnh lên thư viện.</div>}<header className="admin-page-header"><div><span>Storage</span><h1>Thư viện ảnh</h1><p>Quản lý ảnh sản phẩm, banner và nội dung website.</p></div></header><section className="admin-form-card media-upload-card"><div><ImagePlus /><h2>Tải ảnh mới</h2><p>JPG, PNG, WebP · tối đa 5MB/ảnh · tối đa 10 ảnh/lần.</p></div><form action={uploadMedia}><label><span>Alt text dùng cho SEO</span><input name="alt_text" placeholder="Mô tả ngắn nội dung ảnh" /></label><label className="admin-upload"><Upload /><span>Chọn ảnh</span><input type="file" name="images" accept="image/jpeg,image/png,image/webp" multiple required disabled={demo} /></label><button className="button button-primary" disabled={demo}>Tải lên</button></form></section>{media.length ? <section className="media-admin-grid">{media.map((item) => <article key={item.id}><img src={publicAssetUrl(item.storage_path) || ""} alt={item.alt_text || item.file_name} /><div><b>{item.file_name}</b><small>{Math.round(item.size_bytes / 1024)} KB · {item.mime_type}</small><code>{item.storage_path}</code><form action={deleteMedia}><input type="hidden" name="id" value={item.id} /><input type="hidden" name="path" value={item.storage_path} /><button disabled={demo}><Trash2 /> Xóa</button></form></div></article>)}</section> : <div className="empty-state admin-empty"><ImagePlus /><h2>Chưa có ảnh trong thư viện</h2><p>Ảnh tải trực tiếp trong sản phẩm cũng sẽ xuất hiện tại đây.</p></div>}</>; }
+export default async function AdminMediaPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ uploaded?: string }>;
+}) {
+  const media = await getAdminMedia();
+  const demo = !isSupabaseConfigured();
+  const uploaded = (await searchParams).uploaded;
+
+  return (
+    <>
+      {uploaded && (
+        <div className="admin-success">
+          <CheckCircle2 size={18} />
+          <span>Đã tải hình ảnh mới lên thư viện lưu trữ thành công.</span>
+        </div>
+      )}
+
+      <header className="admin-page-header">
+        <div>
+          <span>Lưu trữ Đám mây (Storage)</span>
+          <h1>Thư viện hình ảnh ({media.length})</h1>
+          <p>Quản lý toàn bộ kho hình ảnh sản phẩm, ảnh chụp công trình và banner giao diện.</p>
+        </div>
+      </header>
+
+      {/* Vùng Tải ảnh */}
+      <section className="admin-form-card media-upload-card">
+        <div>
+          <ImagePlus size={32} />
+          <h2>Tải ảnh lên kho</h2>
+          <p>Hỗ trợ định dạng JPG, PNG, WebP · Dung lượng tối đa 5MB/ảnh · Có thể chọn tối đa 10 ảnh cùng lúc.</p>
+        </div>
+
+        <form action={uploadMedia}>
+          <label>
+            <span>Văn bản thay thế (Alt text SEO)</span>
+            <input name="alt_text" placeholder="VD: Lắp đặt cửa cuốn khe thoáng tại Bình Thạnh" />
+          </label>
+
+          <label className="admin-upload">
+            <Upload size={24} />
+            <span>Bấm hoặc kéo thả file hình ảnh vào đây</span>
+            <input
+              type="file"
+              name="images"
+              accept="image/jpeg,image/png,image/webp"
+              multiple
+              required
+            />
+          </label>
+
+          <button className="button button-primary" style={{ width: "100%", height: 44 }}>
+            <Upload size={18} />
+            <span>Bắt đầu tải lên thư viện</span>
+          </button>
+        </form>
+      </section>
+
+      {/* Lưới hình ảnh */}
+      {media.length ? (
+        <section className="media-admin-grid">
+          {media.map((item) => (
+            <article key={item.id}>
+              <img
+                src={publicAssetUrl(item.storage_path) || ""}
+                alt={item.alt_text || item.file_name}
+                loading="lazy"
+              />
+              <div>
+                <b title={item.file_name}>{item.file_name}</b>
+                <small>
+                  {Math.round(item.size_bytes / 1024)} KB · {item.mime_type || "image/jpeg"}
+                </small>
+                <code title={item.storage_path}>{item.storage_path}</code>
+
+                <form action={deleteMedia} style={{ margin: 0 }}>
+                  <input type="hidden" name="id" value={item.id} />
+                  <input type="hidden" name="path" value={item.storage_path} />
+                  <button
+                    type="submit"
+                    title="Xóa ảnh vĩnh viễn khỏi thư viện"
+                  >
+                    <Trash2 size={14} />
+                    <span>Xóa khỏi kho</span>
+                  </button>
+                </form>
+              </div>
+            </article>
+          ))}
+        </section>
+      ) : (
+        <div className="empty-state admin-empty">
+          <ImageIcon size={44} />
+          <h2>Chưa có hình ảnh trong thư viện</h2>
+          <p>Hình ảnh tải lên tại form sản phẩm hoặc khu vực này sẽ được hiển thị và quản lý tập trung tại đây.</p>
+        </div>
+      )}
+    </>
+  );
+}
+

@@ -1,41 +1,32 @@
-import { products as demoProducts } from "@/data/content";
 import { siteConfig } from "@/data/site";
 import { getSupabaseConfig, publicAssetUrl, supabaseFetch } from "@/lib/supabase-rest";
 
 export type PriceMode = "exact" | "from" | "contact" | "hidden";
-export type CatalogCategory = { id: string; name: string; slug: string; description: string; imagePath?: string | null; sortOrder: number };
+export type CatalogCategory = { id: string; name: string; slug: string; description: string; imagePath?: string | null; sortOrder: number; updatedAt?: string | null };
 export type CatalogImage = { id: string; storagePath: string; altText: string; sortOrder: number; isPrimary: boolean; url: string | null };
 export type CatalogSpec = { id: string; name: string; value: string; groupName: string; sortOrder: number };
 export type CatalogProduct = {
   id: string; slug: string; name: string; category: CatalogCategory; shortDescription: string; description: string;
   priceMode: PriceMode; priceAmount: number | null; priceLabel: string | null; currency: string; warranty: string;
   featured: boolean; status: "draft" | "published" | "archived"; seoTitle: string | null; seoDescription: string | null;
-  accent: string; images: CatalogImage[]; specs: CatalogSpec[];
+  accent: string; updatedAt?: string | null; images: CatalogImage[]; specs: CatalogSpec[];
 };
 
 export type ManagedSiteConfig = { name: string; shortName: string; description: string; hotline: string; hotlineHref: string; zaloHref: string; email: string; address: string; hours: string; mapsHref: string; serviceArea: string; baseUrl: string; facebookHref: string; messengerHref: string };
 export type HomepageContent = { heroEyebrow: string; heroTitle: string; heroEmphasis: string; heroDescription: string; heroCtaLabel: string; introTitle: string; introText: string };
 
-const demoCategories: CatalogCategory[] = [...new Set(demoProducts.map((item) => item.category))].map((name, index) => ({ id: `demo-category-${index}`, name, slug: slugify(name), description: `Danh mục ${name.toLowerCase()} dành cho hệ cửa cuốn gia đình và cửa hàng.`, sortOrder: index }));
-const demoCatalog: CatalogProduct[] = demoProducts.map((item, index) => ({
-  id: `demo-product-${index}`, slug: item.slug, name: item.name, category: demoCategories.find((category) => category.name === item.category)!, shortDescription: item.summary,
-  description: item.summary, priceMode: item.price === "Liên hệ" || item.price === "Theo kích thước" ? "contact" : "exact", priceAmount: parseAmount(item.price), priceLabel: item.price,
-  currency: "VND", warranty: item.warranty, featured: index < 3, status: "published", seoTitle: null, seoDescription: null, accent: item.accent,
-  images: [], specs: item.specs.map((spec, specIndex) => ({ id: `demo-spec-${index}-${specIndex}`, name: spec.includes(" ") ? spec.split(" ").slice(0, 2).join(" ") : "Thông số", value: spec, groupName: "Thông số chung", sortOrder: specIndex })),
-}));
-
 function parseAmount(value: string) { const digits = value.replace(/\D/g, ""); return digits ? Number(digits) : null; }
 function slugify(value: string) { return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/đ/g, "d").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""); }
-function mapCategory(row: DbCategory): CatalogCategory { return { id: row.id, name: row.name, slug: row.slug, description: row.description || "", imagePath: row.image_path, sortOrder: row.sort_order || 0 }; }
+function mapCategory(row: DbCategory): CatalogCategory { return { id: row.id, name: row.name, slug: row.slug, description: row.description || "", imagePath: row.image_path, sortOrder: row.sort_order || 0, updatedAt: row.updated_at }; }
 function mapProduct(row: DbProduct): CatalogProduct {
-  return { id: row.id, slug: row.slug, name: row.name, category: mapCategory(row.category), shortDescription: row.short_description || "", description: row.description || "", priceMode: row.price_mode, priceAmount: row.price_amount === null ? null : Number(row.price_amount), priceLabel: row.price_label, currency: row.currency || "VND", warranty: row.warranty || "Liên hệ", featured: row.is_featured, status: row.status, seoTitle: row.seo_title, seoDescription: row.seo_description, accent: row.accent || "#b9f5dc", images: (row.images || []).sort((a,b) => a.sort_order-b.sort_order).map((image) => ({ id: image.id, storagePath: image.storage_path, altText: image.alt_text || row.name, sortOrder: image.sort_order, isPrimary: image.is_primary, url: publicAssetUrl(image.storage_path) })), specs: (row.specs || []).sort((a,b) => a.sort_order-b.sort_order).map((spec) => ({ id: spec.id, name: spec.spec_name, value: spec.spec_value, groupName: spec.group_name || "Thông số chung", sortOrder: spec.sort_order })) };
+  return { id: row.id, slug: row.slug, name: row.name, category: mapCategory(row.category), shortDescription: row.short_description || "", description: row.description || "", priceMode: row.price_mode, priceAmount: row.price_amount === null ? null : Number(row.price_amount), priceLabel: row.price_label, currency: row.currency || "VND", warranty: row.warranty || "Liên hệ", featured: row.is_featured, status: row.status, seoTitle: row.seo_title, seoDescription: row.seo_description, accent: row.accent || "#b9f5dc", updatedAt: row.updated_at, images: (row.images || []).sort((a,b) => a.sort_order-b.sort_order).map((image) => ({ id: image.id, storagePath: image.storage_path, altText: image.alt_text || row.name, sortOrder: image.sort_order, isPrimary: image.is_primary, url: publicAssetUrl(image.storage_path) })), specs: (row.specs || []).sort((a,b) => a.sort_order-b.sort_order).map((spec) => ({ id: spec.id, name: spec.spec_name, value: spec.spec_value, groupName: spec.group_name || "Thông số chung", sortOrder: spec.sort_order })) };
 }
 
-type DbCategory = { id: string; name: string; slug: string; description: string | null; image_path: string | null; sort_order: number };
+type DbCategory = { id: string; name: string; slug: string; description: string | null; image_path: string | null; sort_order: number; updated_at: string | null };
 type DbImage = { id: string; storage_path: string; alt_text: string | null; sort_order: number; is_primary: boolean };
 type DbSpec = { id: string; spec_name: string; spec_value: string; group_name: string | null; sort_order: number };
-type DbProduct = { id: string; slug: string; name: string; short_description: string | null; description: string | null; price_mode: PriceMode; price_amount: number | string | null; price_label: string | null; currency: string; warranty: string | null; is_featured: boolean; status: "draft" | "published" | "archived"; seo_title: string | null; seo_description: string | null; accent: string | null; category: DbCategory; images: DbImage[]; specs: DbSpec[] };
-const productSelect = "id,slug,name,short_description,description,price_mode,price_amount,price_label,currency,warranty,is_featured,status,seo_title,seo_description,accent,category:categories(id,name,slug,description,image_path,sort_order),images:product_images(id,storage_path,alt_text,sort_order,is_primary),specs:product_specs(id,spec_name,spec_value,group_name,sort_order)";
+type DbProduct = { id: string; slug: string; name: string; short_description: string | null; description: string | null; price_mode: PriceMode; price_amount: number | string | null; price_label: string | null; currency: string; warranty: string | null; is_featured: boolean; status: "draft" | "published" | "archived"; seo_title: string | null; seo_description: string | null; accent: string | null; updated_at: string | null; category: DbCategory; images: DbImage[]; specs: DbSpec[] };
+const productSelect = "id,slug,name,short_description,description,price_mode,price_amount,price_label,currency,warranty,is_featured,status,seo_title,seo_description,accent,updated_at,category:categories(id,name,slug,description,image_path,sort_order,updated_at),images:product_images(id,storage_path,alt_text,sort_order,is_primary),specs:product_specs(id,spec_name,spec_value,group_name,sort_order)";
 
 export function formatPrice(product: Pick<CatalogProduct, "priceMode" | "priceAmount" | "priceLabel" | "currency">) {
   if (product.priceMode === "hidden") return "";
@@ -45,15 +36,15 @@ export function formatPrice(product: Pick<CatalogProduct, "priceMode" | "priceAm
 }
 
 export async function getCategories(): Promise<CatalogCategory[]> {
-  if (!getSupabaseConfig()) return demoCategories;
-  try { const rows = await supabaseFetch<DbCategory[]>("/rest/v1/categories?select=id,name,slug,description,image_path,sort_order&is_active=eq.true&order=sort_order.asc", { next: { revalidate: 300, tags: ["categories"] } }); return rows.map(mapCategory); }
+  if (!getSupabaseConfig()) return [];
+  try { const rows = await supabaseFetch<DbCategory[]>("/rest/v1/categories?select=id,name,slug,description,image_path,sort_order,updated_at&is_active=eq.true&order=sort_order.asc", { next: { revalidate: 300, tags: ["categories"] } }); return rows.map(mapCategory); }
   catch (error) { console.error("Không thể tải danh mục từ Supabase", error); return []; }
 }
 
 export async function getProducts(filters: { category?: string; search?: string; featured?: boolean } = {}): Promise<CatalogProduct[]> {
-  if (!getSupabaseConfig()) return demoCatalog.filter((product) => (!filters.category || product.category.slug === filters.category) && (!filters.search || `${product.name} ${product.shortDescription}`.toLowerCase().includes(filters.search.toLowerCase())) && (filters.featured === undefined || product.featured === filters.featured));
+  if (!getSupabaseConfig()) return [];
   try {
-    let path = `/rest/v1/products?select=${encodeURIComponent(productSelect)}&status=eq.published&order=sort_order.asc,created_at.desc`;
+    let path = `/rest/v1/products?select=${encodeURIComponent(productSelect)}&status=eq.published&order=is_featured.desc,sort_order.asc,created_at.desc`;
     if (filters.featured) path += "&is_featured=eq.true";
     if (filters.search) path += `&or=(name.ilike.*${encodeURIComponent(filters.search)}*,short_description.ilike.*${encodeURIComponent(filters.search)}*)`;
     const rows = await supabaseFetch<DbProduct[]>(path, { next: { revalidate: 300, tags: ["products"] } });
@@ -63,12 +54,131 @@ export async function getProducts(filters: { category?: string; search?: string;
 }
 
 export async function getProductBySlug(slug: string): Promise<CatalogProduct | null> {
-  if (!getSupabaseConfig()) return demoCatalog.find((item) => item.slug === slug) || null;
-  try { const rows = await supabaseFetch<DbProduct[]>(`/rest/v1/products?select=${encodeURIComponent(productSelect)}&slug=eq.${encodeURIComponent(slug)}&status=eq.published&limit=1`, { next: { revalidate: 300, tags: ["products", `product-${slug}`] } }); return rows[0] ? mapProduct(rows[0]) : null; }
-  catch { return null; }
+  if (!getSupabaseConfig()) return null;
+  try {
+    const rows = await supabaseFetch<DbProduct[]>(
+      `/rest/v1/products?select=${encodeURIComponent(
+        productSelect
+      )}&slug=eq.${encodeURIComponent(slug)}&status=eq.published&limit=1`,
+      { next: { revalidate: 300, tags: ["products", `product-${slug}`] } }
+    );
+    return rows[0] ? mapProduct(rows[0]) : null;
+  } catch {
+    return null;
+  }
 }
 
+
+export type CatalogProject = {
+  id: string;
+  name: string;
+  slug: string;
+  location: string;
+  category: string;
+  summary: string;
+  description: string;
+  result: string;
+  accent: string;
+  isFeatured: boolean;
+  status: "draft" | "published" | "archived";
+  sortOrder: number;
+  updatedAt?: string | null;
+  images: CatalogImage[];
+};
+
+type DbProject = {
+  id: string;
+  name: string;
+  slug: string;
+  location: string;
+  category: string;
+  summary: string;
+  description: string | null;
+  result: string | null;
+  accent: string | null;
+  is_featured: boolean;
+  status: "draft" | "published" | "archived";
+  sort_order: number;
+  updated_at: string | null;
+  images: DbImage[];
+};
+
+const projectSelect =
+  "id,name,slug,location,category,summary,description,result,accent,is_featured,status,sort_order,updated_at,images:project_images(id,storage_path,alt_text,sort_order,is_primary)";
+
+function mapProject(row: DbProject): CatalogProject {
+  return {
+    id: row.id,
+    name: row.name,
+    slug: row.slug,
+    location: row.location || "TP.HCM",
+    category: row.category || "Nhà phố",
+    summary: row.summary || "",
+    description: row.description || "",
+    result: row.result || "Hoàn tất bàn giao đúng tiến độ, vận hành êm ái.",
+    accent: row.accent || "#10b981",
+    isFeatured: row.is_featured,
+    status: row.status,
+    sortOrder: row.sort_order || 0,
+    updatedAt: row.updated_at,
+    images: (row.images || [])
+      .sort((a, b) => a.sort_order - b.sort_order)
+      .map((image) => ({
+        id: image.id,
+        storagePath: image.storage_path,
+        altText: image.alt_text || row.name,
+        sortOrder: image.sort_order,
+        isPrimary: image.is_primary,
+        url: publicAssetUrl(image.storage_path),
+      })),
+  };
+}
+
+export async function getProjects(
+  filters: { featured?: boolean; search?: string; category?: string } = {}
+): Promise<CatalogProject[]> {
+  if (!getSupabaseConfig()) return [];
+  try {
+    let path = `/rest/v1/projects?select=${encodeURIComponent(
+      projectSelect
+    )}&status=eq.published&order=is_featured.desc,sort_order.asc,created_at.desc`;
+    if (filters.featured) path += "&is_featured=eq.true";
+    if (filters.category) path += `&category=eq.${encodeURIComponent(filters.category)}`;
+    if (filters.search) {
+      path += `&or=(name.ilike.*${encodeURIComponent(
+        filters.search
+      )}*,summary.ilike.*${encodeURIComponent(filters.search)}*,location.ilike.*${encodeURIComponent(
+        filters.search
+      )}*)`;
+    }
+    const rows = await supabaseFetch<DbProject[]>(path, {
+      next: { revalidate: 300, tags: ["projects"] },
+    });
+    return rows.map(mapProject);
+  } catch (error) {
+    console.error("Không thể tải danh sách dự án từ Supabase", error);
+    return [];
+  }
+}
+
+export async function getProjectBySlug(slug: string): Promise<CatalogProject | null> {
+  if (!getSupabaseConfig()) return null;
+  try {
+    const rows = await supabaseFetch<DbProject[]>(
+      `/rest/v1/projects?select=${encodeURIComponent(
+        projectSelect
+      )}&slug=eq.${encodeURIComponent(slug)}&status=eq.published&limit=1`,
+      { next: { revalidate: 300, tags: ["projects", `project-${slug}`] } }
+    );
+    return rows[0] ? mapProject(rows[0]) : null;
+  } catch {
+    return null;
+  }
+}
+
+
 export async function getCategoryBySlug(slug: string) { const categories = await getCategories(); return categories.find((item) => item.slug === slug) || null; }
+
 
 export async function getSiteSettings(): Promise<ManagedSiteConfig> {
   const fallback: ManagedSiteConfig = { ...siteConfig, facebookHref: "https://facebook.com/", messengerHref: "https://m.me/" };

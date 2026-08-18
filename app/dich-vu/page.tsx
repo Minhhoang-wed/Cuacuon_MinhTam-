@@ -6,27 +6,47 @@ import { DoorVisual } from "@/components/door-visual";
 import { PageHero } from "@/components/page-hero";
 import { services } from "@/data/content";
 
-export const metadata: Metadata = { title: "Dịch vụ sửa cửa cuốn", description: "Danh sách dịch vụ sửa chữa, bảo trì cửa cuốn và mức giá tham khảo tại TP.HCM." };
+export const metadata: Metadata = { title: "Dịch vụ sửa cửa cuốn", description: "Danh sách dịch vụ sửa chữa, bảo trì cửa cuốn và mức giá tham khảo tại TP.HCM.", alternates: { canonical: "/dich-vu" } };
 
 export default function ServicesPage() {
   return (
     <>
       <PageHero eyebrow="Dịch vụ tận nơi" title="Đúng lỗi. Đúng giải pháp. Đúng phần cần sửa." description="Giá dưới đây mang tính tham khảo. Mọi hạng mục chỉ được thực hiện sau khi khảo sát và có xác nhận của khách hàng." image="https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=1600&q=82" />
       <section className="section">
-        <div className="container listing-grid">
-          {services.map((service, index) => (
-            <article className="listing-card" key={service.slug}>
-              <DoorVisual label={`0${index + 1}`} kind="service" accent={index % 2 ? "#d9f99d" : "#b9f5dc"} />
-              <div className="listing-card-body">
-                <div className="card-meta"><span><Clock3 /> {service.duration}</span><span><ShieldCheck /> {service.warranty}</span></div>
-                <h2>{service.name}</h2><p>{service.summary}</p>
-                <div className="card-price"><span>Giá tham khảo</span><b>{service.price}</b></div>
-                <Link href={`/dich-vu/${service.slug}`} className="text-link">Xem chi tiết <ArrowRight size={17} /></Link>
-              </div>
-            </article>
-          ))}
+        <div className="container">
+          {services.length > 0 ? (
+            <div className="listing-grid">
+              {services.map((service, index) => (
+                <article className="listing-card" key={service.slug}>
+                  <DoorVisual label={`0${index + 1}`} kind="service" accent={index % 2 ? "#d9f99d" : "#b9f5dc"} />
+                  <div className="listing-card-body">
+                    <div className="card-meta">
+                      <span><Clock3 /> {service.duration}</span>
+                      <span><ShieldCheck /> {service.warranty}</span>
+                    </div>
+                    <h2>{service.name}</h2>
+                    <p>{service.summary}</p>
+                    <div className="card-price">
+                      <span>Giá tham khảo</span>
+                      <b>{service.price}</b>
+                    </div>
+                    <Link href={`/dich-vu/${service.slug}`} className="text-link">
+                      Xem chi tiết <ArrowRight size={17} />
+                    </Link>
+                  </div>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className="empty-state" style={{ padding: "48px 24px", background: "var(--bg-card)", borderRadius: "12px", textAlign: "center" }}>
+              <p style={{ margin: 0, color: "#78716c", fontSize: "15px" }}>
+                Danh sách dịch vụ đang được cập nhật dữ liệu.
+              </p>
+            </div>
+          )}
         </div>
       </section>
+
       <section className="section section-tint">
         <div className="container value-panel">
           <div><span className="kicker">Cam kết phục vụ</span><h2>Không biến một lỗi nhỏ thành hóa đơn lớn.</h2></div>
