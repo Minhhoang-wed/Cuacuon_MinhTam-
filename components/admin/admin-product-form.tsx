@@ -1,8 +1,8 @@
-import { AlertCircle, DollarSign, ImagePlus, Layers, Package, Save, Search, Sliders, Trash2, Upload } from "lucide-react";
-import { saveProduct } from "@/lib/admin-actions";
+import { AlertCircle, DollarSign, Layers, Package, Save, Search, Sliders, Trash2 } from "lucide-react";
+import { deleteProductImage, saveProduct } from "@/lib/admin-actions";
 import type { AdminCategoryRow, AdminProductRow } from "@/lib/admin-data";
 import { publicAssetUrl } from "@/lib/supabase-rest";
-import { deleteProductImage } from "@/lib/admin-actions";
+import { ImageUploadWithPreview } from "@/components/admin/image-upload-with-preview";
 
 export function AdminProductForm({
   product,
@@ -52,7 +52,7 @@ export function AdminProductForm({
             />
           </label>
 
-          <div className="admin-grid-2">
+          <div className="admin-fields two">
             <label>
               <span>Danh mục *</span>
               <select name="category_id" defaultValue={product?.category_id || categories[0]?.id || ""} required>
@@ -106,7 +106,7 @@ export function AdminProductForm({
         </div>
 
         <div className="admin-fields">
-          <div className="admin-grid-3">
+          <div className="admin-fields four">
             <label>
               <span>Chế độ giá</span>
               <select name="price_mode" defaultValue={product?.price_mode || "exact"}>
@@ -137,7 +137,7 @@ export function AdminProductForm({
             </label>
           </div>
 
-          <div className="admin-grid-3">
+          <div className="admin-fields two">
             <label>
               <span>Trạng thái hiển thị</span>
               <select name="status" defaultValue={product?.status || "published"}>
@@ -156,17 +156,17 @@ export function AdminProductForm({
                 placeholder="0"
               />
             </label>
-
-            <label className="admin-checkbox-label">
-              <input
-                type="checkbox"
-                name="is_featured"
-                value="true"
-                defaultChecked={Boolean(product?.is_featured)}
-              />
-              <span>Đánh dấu là Sản phẩm Nổi Bật (Featured)</span>
-            </label>
           </div>
+
+          <label className="check-field">
+            <input
+              type="checkbox"
+              name="is_featured"
+              value="true"
+              defaultChecked={Boolean(product?.is_featured)}
+            />
+            <span>Đánh dấu là Sản phẩm Nổi Bật (Featured)</span>
+          </label>
         </div>
       </section>
 
@@ -202,35 +202,36 @@ export function AdminProductForm({
         </div>
 
         {product?.images && product.images.length > 0 ? (
-          <div className="admin-images-grid">
-            {product.images.map((image) => {
-              const removeImage = deleteProductImage.bind(null, product.id, image.id, image.storage_path);
-              return (
-                <div className="admin-image-item" key={image.id}>
-                  <img
-                    src={publicAssetUrl(image.storage_path) || ""}
-                    alt={image.alt_text || product.name}
-                  />
-                  <button type="submit" formAction={removeImage}>
-                    <Trash2 size={13} style={{ display: "inline", verticalAlign: "-2px", marginRight: 4 }} />
-                    Xóa ảnh này
-                  </button>
-                </div>
-              );
-            })}
+          <div style={{ marginBottom: "20px" }}>
+            <span style={{ fontSize: "13px", fontWeight: 600, color: "#475569", display: "block", marginBottom: "10px" }}>
+              Ảnh hiện có trong hệ thống ({product.images.length})
+            </span>
+            <div className="admin-images-grid">
+              {product.images.map((image) => {
+                const removeImage = deleteProductImage.bind(null, product.id, image.id, image.storage_path);
+                return (
+                  <div className="admin-image-item" key={image.id}>
+                    <img
+                      src={publicAssetUrl(image.storage_path) || ""}
+                      alt={image.alt_text || product.name}
+                    />
+                    <button type="submit" formAction={removeImage}>
+                      <Trash2 size={13} style={{ display: "inline", verticalAlign: "-2px", marginRight: 4 }} />
+                      Xóa ảnh này
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         ) : null}
 
-        <label className="admin-upload">
-          <Upload />
-          <span>Bấm hoặc kéo thả ảnh để tải lên (tối đa 6 ảnh)</span>
-          <input
-            type="file"
-            name="images"
-            accept="image/jpeg,image/png,image/webp"
-            multiple
-          />
-        </label>
+        <ImageUploadWithPreview
+          name="images"
+          maxFiles={6}
+          label="Tải lên ảnh mẫu sản phẩm mới"
+          helperText="Xem trước hình ảnh ngay lập tức, xoay góc hoặc tùy chỉnh tỷ lệ hiển thị trước khi lưu."
+        />
       </section>
 
       {/* SEO */}

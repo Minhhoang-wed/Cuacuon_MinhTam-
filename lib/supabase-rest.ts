@@ -24,7 +24,12 @@ export async function supabaseFetch<T>(path: string, init: SupabaseFetchInit = {
   // Đặt timeout 6 giây để tránh treo request khi mạng quốc tế/Supabase chậm
   const signal = init.signal || AbortSignal.timeout(7000);
 
-  const response = await fetch(`${config.url}${path}`, { ...init, signal, headers });
+  const response = await fetch(`${config.url}${path}`, {
+    ...init,
+    signal,
+    headers,
+    keepalive: true,
+  });
   if (!response.ok) {
     const detail = await response.text();
     throw new Error(`SUPABASE_${response.status}: ${detail.slice(0, 500)}`);
@@ -37,6 +42,7 @@ export async function supabaseFetch<T>(path: string, init: SupabaseFetchInit = {
 export function publicAssetUrl(path: string | null | undefined) {
   if (!path) return null;
   if (/^https?:\/\//.test(path)) return path;
+  if (path.startsWith("/")) return path;
   const config = getSupabaseConfig();
   return config ? `${config.url}/storage/v1/object/public/product-media/${path.replace(/^\//, "")}` : null;
 }

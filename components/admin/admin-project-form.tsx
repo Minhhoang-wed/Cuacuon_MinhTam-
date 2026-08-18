@@ -1,7 +1,8 @@
-import { Building2, CheckCircle2, ImagePlus, MapPin, Save, Trash2, Upload } from "lucide-react";
+import { Building2, CheckCircle2, MapPin, Save, Trash2 } from "lucide-react";
 import { deleteProjectImage, saveProject } from "@/lib/admin-actions";
 import type { AdminProjectRow } from "@/lib/admin-data";
 import { publicAssetUrl } from "@/lib/supabase-rest";
+import { ImageUploadWithPreview } from "@/components/admin/image-upload-with-preview";
 
 const defaultCategories = [
   "Nhà phố hiện đại",
@@ -51,7 +52,7 @@ export function AdminProjectForm({
             />
           </label>
 
-          <div className="admin-grid-2">
+          <div className="admin-fields two">
             <label>
               <span>Loại công trình *</span>
               <input
@@ -120,8 +121,7 @@ export function AdminProjectForm({
           </div>
         </div>
 
-        <div className="admin-fields">
-          <div className="admin-grid-3">
+          <div className="admin-fields two">
             <label>
               <span>Trạng thái</span>
               <select name="status" defaultValue={project?.status || "published"}>
@@ -140,18 +140,17 @@ export function AdminProjectForm({
                 placeholder="0"
               />
             </label>
-
-            <label className="admin-checkbox-label">
-              <input
-                type="checkbox"
-                name="is_featured"
-                value="true"
-                defaultChecked={Boolean(project?.is_featured)}
-              />
-              <span>Đưa lên mục Dự Án Nổi Bật trên Trang chủ</span>
-            </label>
           </div>
-        </div>
+
+          <label className="check-field">
+            <input
+              type="checkbox"
+              name="is_featured"
+              value="true"
+              defaultChecked={Boolean(project?.is_featured)}
+            />
+            <span>Đưa lên mục Dự Án Nổi Bật trên Trang chủ</span>
+          </label>
       </section>
 
       {/* Thư viện hình ảnh */}
@@ -164,35 +163,36 @@ export function AdminProjectForm({
         </div>
 
         {project?.images && project.images.length > 0 ? (
-          <div className="admin-images-grid">
-            {project.images.map((image) => {
-              const removeImage = deleteProjectImage.bind(null, project.id, image.id, image.storage_path);
-              return (
-                <div className="admin-image-item" key={image.id}>
-                  <img
-                    src={publicAssetUrl(image.storage_path) || ""}
-                    alt={image.alt_text || project.name}
-                  />
-                  <button type="submit" formAction={removeImage}>
-                    <Trash2 size={13} style={{ display: "inline", verticalAlign: "-2px", marginRight: 4 }} />
-                    Xóa ảnh này
-                  </button>
-                </div>
-              );
-            })}
+          <div style={{ marginBottom: "20px" }}>
+            <span style={{ fontSize: "13px", fontWeight: 600, color: "#475569", display: "block", marginBottom: "10px" }}>
+              Ảnh hiện có trong hệ thống ({project.images.length})
+            </span>
+            <div className="admin-images-grid">
+              {project.images.map((image) => {
+                const removeImage = deleteProjectImage.bind(null, project.id, image.id, image.storage_path);
+                return (
+                  <div className="admin-image-item" key={image.id}>
+                    <img
+                      src={publicAssetUrl(image.storage_path) || ""}
+                      alt={image.alt_text || project.name}
+                    />
+                    <button type="submit" formAction={removeImage}>
+                      <Trash2 size={13} style={{ display: "inline", verticalAlign: "-2px", marginRight: 4 }} />
+                      Xóa ảnh này
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         ) : null}
 
-        <label className="admin-upload">
-          <Upload />
-          <span>Bấm hoặc kéo thả ảnh chụp thực tế công trình (tối đa 6 ảnh)</span>
-          <input
-            type="file"
-            name="images"
-            accept="image/jpeg,image/png,image/webp"
-            multiple
-          />
-        </label>
+        <ImageUploadWithPreview
+          name="images"
+          maxFiles={6}
+          label="Tải lên ảnh mới cho công trình"
+          helperText="Xem trước hình ảnh ngay lập tức, xoay góc hoặc tùy chỉnh tỷ lệ hiển thị trước khi lưu."
+        />
       </section>
 
       {/* Floating Save Action */}

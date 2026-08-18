@@ -48,7 +48,7 @@ export async function deleteCategory(form: FormData) {
 export async function saveProduct(form: FormData) {
   await requireAdmin(); const token = await getAdminAccessToken(); const id = value(form, "id"); const name = value(form, "name"); const categoryId = value(form, "category_id");
   if (name.length < 2 || !categoryId) throw new Error("Cần tên và danh mục sản phẩm.");
-  const payload = { category_id: categoryId, name, slug: slugify(value(form, "slug") || name), short_description: optional(form, "short_description"), description: optional(form, "description"), price_mode: value(form, "price_mode") || "contact", price_amount: numberOrNull(value(form, "price_amount")), price_label: optional(form, "price_label"), currency: "VND", warranty: optional(form, "warranty"), is_featured: form.get("is_featured") === "on", status: value(form, "status") || "draft", sort_order: Number(value(form, "sort_order") || 0), seo_title: optional(form, "seo_title"), seo_description: optional(form, "seo_description"), accent: value(form, "accent") || "#b9f5dc", updated_at: new Date().toISOString() };
+  const payload = { category_id: categoryId, name, slug: slugify(value(form, "slug") || name), short_description: optional(form, "short_description"), description: optional(form, "description"), price_mode: value(form, "price_mode") || "contact", price_amount: numberOrNull(value(form, "price_amount")), price_label: optional(form, "price_label"), currency: "VND", warranty: optional(form, "warranty"), is_featured: form.get("is_featured") === "true" || form.get("is_featured") === "on", status: value(form, "status") || "draft", sort_order: Number(value(form, "sort_order") || 0), seo_title: optional(form, "seo_title"), seo_description: optional(form, "seo_description"), accent: value(form, "accent") || "#b9f5dc", updated_at: new Date().toISOString() };
   let productId = id;
   if (id) await supabaseFetch(`/rest/v1/products?id=eq.${encodeURIComponent(id)}`, { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify(payload) }, token);
   else { const rows = await supabaseFetch<Array<{ id: string }>>("/rest/v1/products?select=id", { method: "POST", headers: { Prefer: "return=representation" }, body: JSON.stringify(payload) }, token); productId = rows[0].id; }
@@ -141,7 +141,7 @@ export async function saveProject(form: FormData) {
     description: optional(form, "description"),
     result: value(form, "result") || "Hoàn tất bàn giao đúng tiến độ, vận hành êm ái.",
     accent: value(form, "accent") || "#10b981",
-    is_featured: form.get("is_featured") === "on",
+    is_featured: form.get("is_featured") === "true" || form.get("is_featured") === "on",
     status: value(form, "status") || "published",
     sort_order: Number(value(form, "sort_order") || 0),
     updated_at: new Date().toISOString(),

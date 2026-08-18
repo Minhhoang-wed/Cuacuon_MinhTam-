@@ -6,6 +6,13 @@ import { CtaBand } from "@/components/cta-band";
 import { ProductImageViewer } from "@/components/product-image-viewer";
 import { CatalogImage, CatalogSpec, formatPrice, getProductBySlug, getProducts, getSiteSettings } from "@/lib/catalog";
 
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  const products = await getProducts();
+  return products.map((p) => ({ slug: p.slug }));
+}
+
 export async function generateMetadata({
   params,
 }: {

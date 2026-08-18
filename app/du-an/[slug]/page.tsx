@@ -4,7 +4,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CtaBand } from "@/components/cta-band";
 import { DoorVisual } from "@/components/door-visual";
-import { getProjectBySlug, getProjects } from "@/lib/catalog";
+import { getProjectBySlug, getProjects, getSiteSettings } from "@/lib/catalog";
+
+export const revalidate = 300;
+
+export async function generateStaticParams() {
+  const projects = await getProjects();
+  return projects.map((p) => ({ slug: p.slug }));
+}
 
 export async function generateMetadata({
   params,
@@ -32,11 +39,25 @@ export default async function ProjectDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const item = await getProjectBySlug(slug);
+  const [item, site] = await Promise.all([getProjectBySlug(slug), getSiteSettings()]);
   if (!item) notFound();
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Trang chủ", item: site.baseUrl },
+      { "@type": "ListItem", position: 2, name: "Dự án", item: `${site.baseUrl.replace(/\/$/, "")}/du-an` },
+      { "@type": "ListItem", position: 3, name: item.name, item: `${site.baseUrl.replace(/\/$/, "")}/du-an/${item.slug}` },
+    ],
+  };
 
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <section className="detail-hero">
         <div className="container detail-hero-grid">
           <div>
