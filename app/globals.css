@@ -3420,10 +3420,10 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
 .repair-area-panel-heading span {
   display: block;
   color: var(--repair-blue);
-  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+  font-family: var(--font-body), "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif !important;
   font-size: 17px;
   font-weight: 800;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 .repair-area-panel-heading p {

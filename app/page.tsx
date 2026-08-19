@@ -261,18 +261,9 @@ export default async function HomePage() {
             ))}
           </div>
 
-          <div className="repair-district-list" aria-label="Các khu vực phục vụ tại TP.HCM">
-            {districtChips.map((district) => (
-              <a href={site.hotlineHref} className="repair-district-pill" key={district}>
-                <MapPin size={15} />
-                {district}
-              </a>
-            ))}
-          </div>
-
           <div className="repair-area-panel">
             <div className="repair-area-panel-heading">
-              <span>Đội kỹ thuật trực chiến lưu động 24/7</span>
+              <span>Đội kỹ thuật lưu động 24/7</span>
               <p>Kỹ thuật viên túc trực tại chỗ ở từng quận huyện · 15 - 30 phút có mặt tận nơi xử lý sự cố.</p>
             </div>
             <div className="repair-area-list">
