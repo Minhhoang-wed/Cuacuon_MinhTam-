@@ -13,12 +13,9 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import {
-  districtChips,
-  directStores,
   repairIssues,
   repairServices,
   repairTips,
-  serviceAreaPoints,
   trustItems,
 } from "@/data/public-home";
 import { formatPrice, getCategories, getHomepageContent, getProducts, getSiteSettings } from "@/lib/catalog";
@@ -228,60 +225,6 @@ export default async function HomePage() {
           </div>
         </div>
       </section>
-
-
-
-      <section className="repair-area-band" id="khu-vuc-phuc-vu">
-        <div className="container">
-          <div className="repair-section-heading compact">
-            <span>Mạng lưới phục vụ toàn diện</span>
-            <h2>Hệ Thống Cửa Hàng & Mạng Lưới Kỹ Thuật Toàn TP.HCM</h2>
-            <p>
-              Minh Tâm Door có 2 cửa hàng trực tiếp và đội ngũ kỹ thuật viên túc trực tại tất cả các quận huyện.
-              Có mặt tận nơi sau 15 – 30 phút, quý khách không cần phải chờ đợi lâu!
-            </p>
-          </div>
-
-          {/* 2 Cửa hàng trực tiếp */}
-          <div className="direct-stores-grid">
-            {directStores.map((store) => (
-              <div className="direct-store-card" key={store.branch}>
-                <div className="direct-store-badge">
-                  <MapPin size={17} /> Cửa hàng trực tiếp
-                </div>
-                <h3>{store.branch}</h3>
-                <p className="direct-store-address">{store.address}</p>
-                <div className="direct-store-footer">
-                  <span>{store.note}</span>
-                  <a href={`tel:${store.hotline.replace(/\./g, "")}`} className="direct-store-phone">
-                    <Phone size={15} /> {store.hotline}
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="repair-area-panel">
-            <div className="repair-area-panel-heading">
-              <span>Đội kỹ thuật lưu động 24/7</span>
-              <p>Kỹ thuật viên túc trực tại chỗ ở từng quận huyện · 15 - 30 phút có mặt tận nơi xử lý sự cố.</p>
-            </div>
-            <div className="repair-area-list">
-              {serviceAreaPoints.map((item) => (
-                <a href={site.hotlineHref} className="repair-area-row" key={item.district}>
-                  <MapPin size={18} />
-                  <span>
-                    <b>{item.district}</b>
-                    <em>{item.address}</em>
-                    <small>{item.note}</small>
-                  </span>
-                </a>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
     </>
   );
 }
