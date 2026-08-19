@@ -55,11 +55,14 @@ export default async function HomePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusiness) }} />
 
-      {/* 1. Full-Width Cinematic Lookbook Hero Slider (3s Auto-Slide) */}
+      {/* 1. Modern Rounded Card Hero Banner */}
       <HeroSlider
         heroEyebrow={homepage.heroEyebrow}
         heroTitle={homepage.heroTitle}
         heroEmphasis={homepage.heroEmphasis}
+        heroDescription={homepage.heroDescription}
+        heroCtaLabel={homepage.heroCtaLabel}
+        hotline={site.hotline}
       />
 
 
