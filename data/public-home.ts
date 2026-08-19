@@ -165,28 +165,121 @@ export const districtChips = [
 ] as const;
 
 export const serviceAreaPoints = [
-  { area: "Khu vực Quận 1 - TP.HCM", note: "Kỹ thuật túc trực sẵn · Có mặt sau 15 – 30 phút" },
-  { area: "Khu vực Quận 2 - TP.HCM", note: "Kỹ thuật túc trực sẵn · Có mặt sau 15 – 30 phút" },
-  { area: "Khu vực Quận 3 - TP.HCM", note: "Kỹ thuật túc trực sẵn · Có mặt sau 15 – 30 phút" },
-  { area: "Khu vực Quận 4 - TP.HCM", note: "Kỹ thuật túc trực sẵn · Có mặt sau 15 – 30 phút" },
-  { area: "Khu vực Quận 5 - TP.HCM", note: "Kỹ thuật túc trực sẵn · Có mặt sau 15 – 30 phút" },
-  { area: "Khu vực Quận 6 - TP.HCM", note: "Chi nhánh 617 Phạm Văn Chí · Có mặt ngay" },
-  { area: "Khu vực Quận 7 - TP.HCM", note: "Kỹ thuật túc trực sẵn · Có mặt sau 15 – 30 phút" },
-  { area: "Khu vực Quận 8 - TP.HCM", note: "Kỹ thuật túc trực sẵn · Có mặt sau 15 – 30 phút" },
-  { area: "Khu vực Quận 9 - TP.HCM", note: "Kỹ thuật túc trực sẵn · Có mặt sau 15 – 30 phút" },
-  { area: "Khu vực Quận 10 - TP.HCM", note: "Trụ sở 361 Lý Thường Kiệt · Có mặt ngay" },
-  { area: "Khu vực Quận 11 - TP.HCM", note: "Kỹ thuật túc trực sẵn · Có mặt sau 15 – 30 phút" },
-  { area: "Khu vực Quận 12 - TP.HCM", note: "Đội thợ túc trực tại Q12 · Có mặt sau 15 – 30 phút" },
-  { area: "Khu vực Bình Thạnh - TP.HCM", note: "Kỹ thuật túc trực sẵn · Có mặt sau 15 – 30 phút" },
-  { area: "Khu vực Gò Vấp - TP.HCM", note: "Đội thợ túc trực tại Gò Vấp · Có mặt sau 15 – 30 phút" },
-  { area: "Khu vực Tân Bình - TP.HCM", note: "Đội thợ túc trực tại Tân Bình · Có mặt sau 15 – 30 phút" },
-  { area: "Khu vực Tân Phú - TP.HCM", note: "Đội thợ túc trực tại Tân Phú · Có mặt sau 15 – 30 phút" },
-  { area: "Khu vực Phú Nhuận - TP.HCM", note: "Đội thợ túc trực tại Phú Nhuận · Có mặt sau 15 – 30 phút" },
-  { area: "Khu vực Bình Tân - TP.HCM", note: "Đội thợ túc trực tại Bình Tân · Có mặt sau 15 – 30 phút" },
-  { area: "Khu vực TP. Thủ Đức - TP.HCM", note: "Đội thợ túc trực tại Thủ Đức · Có mặt sau 15 – 30 phút" },
-  { area: "Khu vực Hóc Môn - TP.HCM", note: "Đội thợ lưu động tận nơi · Có mặt sau 20 – 35 phút" },
-  { area: "Khu vực Bình Chánh - TP.HCM", note: "Đội thợ lưu động tận nơi · Có mặt sau 20 – 35 phút" },
-  { area: "Khu vực Nhà Bè - TP.HCM", note: "Đội thợ lưu động tận nơi · Có mặt sau 20 – 35 phút" },
+  {
+    district: "Quận 1",
+    address: "128 Nguyễn Trãi, P. Bến Thành, Quận 1",
+    note: "Trạm kỹ thuật trung tâm · Có mặt sau 15 – 20 phút",
+  },
+  {
+    district: "Quận 2",
+    address: "42 Trần Não, P. An Khánh, TP. Thủ Đức (Q.2 cũ)",
+    note: "Trạm kỹ thuật khu Đông · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Quận 3",
+    address: "215 Lý Chính Thắng, P. Võ Thị Sáu, Quận 3",
+    note: "Trạm trực kỹ thuật · Có mặt sau 15 – 20 phút",
+  },
+  {
+    district: "Quận 4",
+    address: "88 Hoàng Diệu, Phường 12, Quận 4",
+    note: "Trạm trực kỹ thuật · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Quận 5",
+    address: "156 Trần Hưng Đạo, Phường 7, Quận 5",
+    note: "Trạm trực kỹ thuật Chợ Lớn · Có mặt sau 15 – 20 phút",
+  },
+  {
+    district: "Quận 6",
+    address: "617 Phạm Văn Chí, P. Bình Tiên, Quận 6",
+    note: "Cơ sở cửa hàng trực tiếp & Showroom · Có mặt ngay",
+  },
+  {
+    district: "Quận 7",
+    address: "75 Nguyễn Thị Thập, P. Tân Phong, Quận 7",
+    note: "Trạm trực kỹ thuật Nam Sài Gòn · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Quận 8",
+    address: "324 Phạm Thế Hiển, Phường 3, Quận 8",
+    note: "Trạm trực kỹ thuật · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Quận 9",
+    address: "112 Lê Văn Việt, P. Hiệp Phú, TP. Thủ Đức (Q.9 cũ)",
+    note: "Trạm trực kỹ thuật · Có mặt sau 15 – 30 phút",
+  },
+  {
+    district: "Quận 10",
+    address: "361 Lý Thường Kiệt, P. Tân Hòa, Quận 10",
+    note: "Trụ sở chính & Showroom trưng bày · Có mặt ngay",
+  },
+  {
+    district: "Quận 11",
+    address: "192 Lạc Long Quân, Phường 3, Quận 11",
+    note: "Trạm trực kỹ thuật · Có mặt sau 15 – 20 phút",
+  },
+  {
+    district: "Quận 12",
+    address: "184 Nguyễn Ảnh Thủ, P. Hiệp Thành, Quận 12",
+    note: "Trạm trực kỹ thuật Q.12 · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Quận Bình Thạnh",
+    address: "268 Bạch Đằng, Phường 24, Q. Bình Thạnh",
+    note: "Trạm trực kỹ thuật · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Quận Gò Vấp",
+    address: "248 Quang Trung, Phường 10, Q. Gò Vấp",
+    note: "Trạm trực kỹ thuật Gò Vấp · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Quận Tân Bình",
+    address: "340 Trường Chinh, Phường 13, Q. Tân Bình",
+    note: "Trạm trực kỹ thuật Tân Bình · Có mặt sau 15 – 20 phút",
+  },
+  {
+    district: "Quận Tân Phú",
+    address: "165 Lũy Bán Bích, P. Tân Thới Hòa, Q. Tân Phú",
+    note: "Trạm trực kỹ thuật Tân Phú · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Quận Phú Nhuận",
+    address: "52 Phan Đăng Lưu, Phường 5, Q. Phú Nhuận",
+    note: "Trạm trực kỹ thuật · Có mặt sau 15 – 20 phút",
+  },
+  {
+    district: "Quận Bình Tân",
+    address: "410 Tên Lửa, P. Bình Trị Đông B, Q. Bình Tân",
+    note: "Trạm trực kỹ thuật Bình Tân · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "TP. Thủ Đức",
+    address: "68 Võ Văn Ngân, P. Linh Chiểu, TP. Thủ Đức",
+    note: "Trạm trực kỹ thuật Thủ Đức · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Huyện Hóc Môn",
+    address: "74 Lý Thường Kiệt, TT. Hóc Môn, H. Hóc Môn",
+    note: "Đội kỹ thuật lưu động tận nơi · Có mặt sau 20 – 30 phút",
+  },
+  {
+    district: "Huyện Bình Chánh",
+    address: "B12/9 Quốc Lộ 50, Xã Bình Hưng, H. Bình Chánh",
+    note: "Đội kỹ thuật lưu động tận nơi · Có mặt sau 20 – 30 phút",
+  },
+  {
+    district: "Huyện Nhà Bè",
+    address: "182 Huỳnh Tấn Phát, TT. Nhà Bè, H. Nhà Bè",
+    note: "Đội kỹ thuật lưu động tận nơi · Có mặt sau 20 – 30 phút",
+  },
+  {
+    district: "Huyện Củ Chi",
+    address: "55 Tỉnh Lộ 8, TT. Củ Chi, H. Củ Chi",
+    note: "Đội kỹ thuật lưu động tận nơi · Có mặt sau 25 – 35 phút",
+  },
 ] as const;
 
 export const repairTips = [

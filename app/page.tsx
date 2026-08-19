@@ -268,10 +268,11 @@ export default async function HomePage() {
             </div>
             <div className="repair-area-list">
               {serviceAreaPoints.map((item) => (
-                <a href={site.hotlineHref} className="repair-area-row" key={item.area}>
+                <a href={site.hotlineHref} className="repair-area-row" key={item.district}>
                   <MapPin size={18} />
                   <span>
-                    <b>{item.area}</b>
+                    <b>{item.district}</b>
+                    <em>{item.address}</em>
                     <small>{item.note}</small>
                   </span>
                 </a>
