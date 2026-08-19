@@ -1,6 +1,6 @@
 import { ArrowRight, Clock3, Mail, MapPin, MessageCircle, Phone, ShieldCheck } from "lucide-react";
 import Link from "next/link";
-import { Logo } from "@/components/logo";
+import { PublicLogo } from "@/components/public-logo";
 import type { ManagedSiteConfig } from "@/lib/catalog";
 
 export function SiteFooter({ site }: { site: ManagedSiteConfig }) {
@@ -8,40 +8,38 @@ export function SiteFooter({ site }: { site: ManagedSiteConfig }) {
     <footer className="footer-maison">
       <div className="container footer-maison-grid">
         <div className="footer-maison-brand">
-          <Logo name={site.name} shortName={site.shortName} />
+          <PublicLogo name={site.name} shortName={site.shortName} />
           <p>{site.description}</p>
           <div className="footer-maison-trust">
             <ShieldCheck size={16} />
-            <span>Cam kết vật tư chính hãng 100% · Bảo hành đến 5 năm</span>
+            <span>Tư vấn rõ tình trạng · Hỗ trợ sửa chữa và bảo trì cửa cuốn</span>
           </div>
           <div className="footer-maison-actions">
             <a href={site.zaloHref} target="_blank" rel="noreferrer" className="footer-zalo-btn">
-              <MessageCircle size={16} /> Chat Zalo Nhận Báo Giá
+              <MessageCircle size={16} /> Zalo tư vấn sửa cửa cuốn
             </a>
           </div>
         </div>
 
         <div>
-          <h3>Sản Phẩm</h3>
+          <h3>Sửa Chữa & Dịch Vụ</h3>
           <div className="footer-maison-links">
-            <Link href="/san-pham?category=cua-cuon-khe-thoang">Cửa cuốn khe thoáng</Link>
-            <Link href="/san-pham?category=cua-cuon-tam-lien">Cửa cuốn tấm liền</Link>
-            <Link href="/san-pham?category=cua-cuon-trong-suot">Cửa cuốn trong suốt</Link>
-            <Link href="/san-pham?category=cua-cuon-cong-nghiep">Cửa cuốn công nghiệp</Link>
-            <Link href="/san-pham?category=motor-cua-cuon">Motor cửa cuốn & Remote</Link>
-            <Link href="/san-pham">Phụ kiện & Bình lưu điện</Link>
+            <Link href="/dich-vu">Sửa cửa cuốn</Link>
+            <Link href="/dich-vu">Sửa motor cửa cuốn</Link>
+            <Link href="/dich-vu">Sửa remote cửa cuốn</Link>
+            <Link href="/dich-vu">Bảo trì & bảo dưỡng</Link>
+            <Link href="/dich-vu#loi-thuong-gap">Các lỗi thường gặp</Link>
           </div>
         </div>
 
         <div>
-          <h3>Dịch Vụ & Dự Án</h3>
+          <h3>Khu Vực & Hướng Dẫn</h3>
           <div className="footer-maison-links">
-            <Link href="/dich-vu">Lắp đặt cửa cuốn trọn gói</Link>
-            <Link href="/dich-vu">Sửa chữa & Cứu hộ 24/7</Link>
-            <Link href="/dich-vu">Bảo dưỡng định kỳ</Link>
-            <Link href="/du-an">Công trình biệt thự tiêu biểu</Link>
-            <Link href="/du-an">Dự án nhà phố & Shophouse</Link>
-            <Link href="/ve-chung-toi">Về Minh Tâm Mitadoor</Link>
+            <Link href="/khu-vuc-phuc-vu">Khu vực phục vụ</Link>
+            <Link href="/meo-kien-thuc">Mẹo & kiến thức</Link>
+            <Link href="/tin-tuc">Bài viết hữu ích</Link>
+            <Link href="/san-pham">Sản phẩm & phụ kiện</Link>
+            <Link href="/ve-chung-toi">Về Minh Tâm</Link>
           </div>
         </div>
 
@@ -49,11 +47,9 @@ export function SiteFooter({ site }: { site: ManagedSiteConfig }) {
           <h3>Thông Tin Liên Hệ</h3>
           <div className="footer-maison-contact">
             <a href={site.hotlineHref} className="footer-hotline-highlight">
-              <Phone size={16} />
-              <div className="footer-hotline-text">
-                <small>TỔNG ĐÀI 24/7</small>
-                <b>{site.hotline}</b>
-              </div>
+              <Phone size={17} />
+              <span className="footer-hotline-label">TỔNG ĐÀI 24/7:</span>
+              <strong className="footer-hotline-number">{site.hotline}</strong>
             </a>
             <a href={site.mapsHref} target="_blank" rel="noreferrer">
               <MapPin size={16} />
@@ -76,7 +72,7 @@ export function SiteFooter({ site }: { site: ManagedSiteConfig }) {
         <div>
           <Link href="/ve-chung-toi">Về chúng tôi</Link>
           <Link href="/san-pham">Catalog sản phẩm</Link>
-          <Link href="/du-an">Hồ sơ công trình</Link>
+          <Link href="/dich-vu">Sửa cửa cuốn</Link>
           <Link href="/lien-he">Liên hệ & Báo giá</Link>
         </div>
       </div>
