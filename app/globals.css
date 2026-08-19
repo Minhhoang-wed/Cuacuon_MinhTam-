@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700;1,800&family=Inter:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700;1,800&family=Be+Vietnam+Pro:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&display=swap");
 @import "tailwindcss";
 
 :root {
@@ -2558,8 +2558,9 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
 .cinematic-hero-content {
   position: relative;
   z-index: 2;
-  max-width: 960px;
-  padding: 64px 24px;
+  max-width: 1120px;
+  width: 100%;
+  padding: 68px 24px;
   margin: 0 auto;
   text-align: center;
   display: flex;
@@ -2577,42 +2578,51 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
   border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 6px;
   color: #ffffff;
-  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif !important;
+  font-family: "Plus Jakarta Sans", "Inter", sans-serif !important;
   font-size: 12.5px;
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  margin-bottom: 22px;
+  margin-bottom: 24px;
 }
 .cinematic-hero-title {
+  width: 100%;
+  max-width: 1080px;
   margin: 0 0 18px;
   color: #ffffff !important;
-  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif !important;
-  font-size: clamp(34px, 4.6vw, 54px);
-  font-weight: 800;
-  line-height: 1.2;
-  letter-spacing: -0.015em;
+  font-family: "Plus Jakarta Sans", "Inter", sans-serif !important;
+  font-size: clamp(30px, 4vw, 50px);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 6px;
 }
 .cinematic-hero-title span {
   display: block;
+  font-weight: 700;
   color: #ffffff;
-  font-weight: 800;
 }
 .cinematic-hero-title em {
-  font-style: normal;
-  font-weight: 800;
-  color: #ffffff;
-  opacity: 0.95;
+  display: block;
+  font-style: italic !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  white-space: nowrap;
+}
+@media (max-width: 900px) {
+  .cinematic-hero-title em {
+    white-space: normal;
+  }
 }
 .cinematic-hero-desc {
-  max-width: 720px;
+  max-width: 780px;
   margin: 0 0 32px;
-  color: rgba(255, 255, 255, 0.9);
-  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif !important;
-  font-size: clamp(15.5px, 1.35vw, 17.5px);
+  color: rgba(255, 255, 255, 0.88);
+  font-family: "Plus Jakarta Sans", "Inter", sans-serif !important;
+  font-size: clamp(15px, 1.3vw, 17px);
   line-height: 1.65;
   font-weight: 400;
 }
