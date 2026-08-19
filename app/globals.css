@@ -3317,6 +3317,90 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
 .repair-district-pill svg {
   color: var(--repair-blue);
 }
+/* Direct Stores */
+.direct-stores-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+  margin-bottom: 32px;
+}
+.direct-store-card {
+  background: #ffffff;
+  border: 2px solid rgba(15, 95, 215, 0.18);
+  border-radius: 16px;
+  padding: 24px 28px;
+  box-shadow: 0 10px 24px rgba(13, 49, 88, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.25s ease;
+}
+.direct-store-card:hover {
+  border-color: #0f5fd7;
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px rgba(15, 95, 215, 0.12);
+}
+.direct-store-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  padding: 4px 12px;
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fef3c7;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.direct-store-card h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--repair-navy-deep);
+  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+}
+.direct-store-address {
+  margin: 0;
+  color: #334155;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.5;
+  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+}
+.direct-store-footer {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px dashed #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.direct-store-footer span {
+  font-size: 13px;
+  color: #64748b;
+}
+.direct-store-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #0f5fd7;
+  font-weight: 800;
+  font-size: 14px;
+  text-decoration: none;
+  font-family: "Plus Jakarta Sans", sans-serif;
+}
+.direct-store-phone:hover {
+  text-decoration: underline;
+  color: #073b88;
+}
+@media (max-width: 768px) {
+  .direct-stores-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .repair-area-panel {
   margin-top: 28px;
   padding: 24px;

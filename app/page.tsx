@@ -14,6 +14,7 @@ import {
 import Link from "next/link";
 import {
   districtChips,
+  directStores,
   repairIssues,
   repairServices,
   repairTips,
@@ -233,9 +234,31 @@ export default async function HomePage() {
       <section className="repair-area-band" id="khu-vuc-phuc-vu">
         <div className="container">
           <div className="repair-section-heading compact">
-            <span>Phục vụ toàn TP.HCM</span>
-            <h2>Sửa cửa cuốn tận nơi trên toàn TP.HCM</h2>
-            <p>Minh Tâm tiếp nhận yêu cầu sửa chữa tại các quận, huyện và khu vực thuộc TP.HCM.</p>
+            <span>Mạng lưới phục vụ toàn diện</span>
+            <h2>Hệ Thống Cửa Hàng & Mạng Lưới Kỹ Thuật Toàn TP.HCM</h2>
+            <p>
+              Minh Tâm Door có 2 cửa hàng trực tiếp và đội ngũ kỹ thuật viên túc trực tại tất cả các quận huyện.
+              Có mặt tận nơi sau 15 – 30 phút, quý khách không cần phải chờ đợi lâu!
+            </p>
+          </div>
+
+          {/* 2 Cửa hàng trực tiếp */}
+          <div className="direct-stores-grid">
+            {directStores.map((store) => (
+              <div className="direct-store-card" key={store.branch}>
+                <div className="direct-store-badge">
+                  <MapPin size={17} /> Cửa hàng trực tiếp
+                </div>
+                <h3>{store.branch}</h3>
+                <p className="direct-store-address">{store.address}</p>
+                <div className="direct-store-footer">
+                  <span>{store.note}</span>
+                  <a href={`tel:${store.hotline.replace(/\./g, "")}`} className="direct-store-phone">
+                    <Phone size={15} /> {store.hotline}
+                  </a>
+                </div>
+              </div>
+            ))}
           </div>
 
           <div className="repair-district-list" aria-label="Các khu vực phục vụ tại TP.HCM">
@@ -249,16 +272,18 @@ export default async function HomePage() {
 
           <div className="repair-area-panel">
             <div className="repair-area-panel-heading">
-              <span>Khu vực tiếp nhận / phục vụ</span>
-              <p>Danh sách khu vực phục vụ theo quận/huyện, không phải địa chỉ chi nhánh.</p>
+              <div>
+                <span>Đội kỹ thuật trực chiến lưu động 24/7</span>
+                <p>Kỹ thuật viên túc trực tại chỗ ở từng quận huyện · 15 - 30 phút có mặt tận nơi xử lý sự cố.</p>
+              </div>
             </div>
             <div className="repair-area-list">
-              {serviceAreaPoints.map((area) => (
-                <a href={site.hotlineHref} className="repair-area-row" key={area}>
+              {serviceAreaPoints.map((item) => (
+                <a href={site.hotlineHref} className="repair-area-row" key={item.area}>
                   <MapPin size={18} />
                   <span>
-                    <b>{area}</b>
-                    <small>Tiếp nhận yêu cầu sửa chữa cửa cuốn</small>
+                    <b>{item.area}</b>
+                    <small>{item.note}</small>
                   </span>
                 </a>
               ))}

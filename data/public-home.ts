@@ -123,6 +123,21 @@ export const servicePriceCategories = [
   },
 ];
 
+export const directStores = [
+  {
+    branch: "Cơ sở 1 (Trụ sở Quận 10)",
+    address: "361 Lý Thường Kiệt, P. Tân Hòa, Quận 10, TP.HCM",
+    hotline: "0327.359.368",
+    note: "Cửa hàng trưng bày & Trung tâm kỹ thuật",
+  },
+  {
+    branch: "Cơ sở 2 (Chi nhánh Quận 6)",
+    address: "617 Phạm Văn Chí, P. Bình Tiên, Quận 6, TP.HCM",
+    hotline: "0327.359.368",
+    note: "Cửa hàng trưng bày & Điểm trực kỹ thuật",
+  },
+] as const;
+
 export const districtChips = [
   "Quận 1",
   "Quận 2",
@@ -132,6 +147,7 @@ export const districtChips = [
   "Quận 6",
   "Quận 7",
   "Quận 8",
+  "Quận 9",
   "Quận 10",
   "Quận 11",
   "Quận 12",
@@ -141,29 +157,36 @@ export const districtChips = [
   "Tân Phú",
   "Phú Nhuận",
   "Bình Tân",
-  "Thủ Đức",
+  "TP. Thủ Đức",
+  "Hóc Môn",
+  "Bình Chánh",
+  "Nhà Bè",
+  "Củ Chi",
 ] as const;
 
-// Area labels only, not production addresses.
 export const serviceAreaPoints = [
-  "Khu vực Quận 1 - TP.HCM",
-  "Khu vực Quận 2 - TP.HCM",
-  "Khu vực Quận 3 - TP.HCM",
-  "Khu vực Quận 4 - TP.HCM",
-  "Khu vực Quận 5 - TP.HCM",
-  "Khu vực Quận 6 - TP.HCM",
-  "Khu vực Quận 7 - TP.HCM",
-  "Khu vực Quận 8 - TP.HCM",
-  "Khu vực Quận 10 - TP.HCM",
-  "Khu vực Quận 11 - TP.HCM",
-  "Khu vực Quận 12 - TP.HCM",
-  "Khu vực Bình Thạnh - TP.HCM",
-  "Khu vực Gò Vấp - TP.HCM",
-  "Khu vực Tân Bình - TP.HCM",
-  "Khu vực Tân Phú - TP.HCM",
-  "Khu vực Phú Nhuận - TP.HCM",
-  "Khu vực Bình Tân - TP.HCM",
-  "Khu vực Thủ Đức - TP.HCM",
+  { area: "Khu vực Quận 1 - TP.HCM", note: "Kỹ thuật túc trực sẵn · Có mặt sau 15 – 30 phút" },
+  { area: "Khu vực Quận 2 - TP.HCM", note: "Kỹ thuật túc trực sẵn · Có mặt sau 15 – 30 phút" },
+  { area: "Khu vực Quận 3 - TP.HCM", note: "Kỹ thuật túc trực sẵn · Có mặt sau 15 – 30 phút" },
+  { area: "Khu vực Quận 4 - TP.HCM", note: "Kỹ thuật túc trực sẵn · Có mặt sau 15 – 30 phút" },
+  { area: "Khu vực Quận 5 - TP.HCM", note: "Kỹ thuật túc trực sẵn · Có mặt sau 15 – 30 phút" },
+  { area: "Khu vực Quận 6 - TP.HCM", note: "Chi nhánh 617 Phạm Văn Chí · Có mặt ngay" },
+  { area: "Khu vực Quận 7 - TP.HCM", note: "Kỹ thuật túc trực sẵn · Có mặt sau 15 – 30 phút" },
+  { area: "Khu vực Quận 8 - TP.HCM", note: "Kỹ thuật túc trực sẵn · Có mặt sau 15 – 30 phút" },
+  { area: "Khu vực Quận 9 - TP.HCM", note: "Kỹ thuật túc trực sẵn · Có mặt sau 15 – 30 phút" },
+  { area: "Khu vực Quận 10 - TP.HCM", note: "Trụ sở 361 Lý Thường Kiệt · Có mặt ngay" },
+  { area: "Khu vực Quận 11 - TP.HCM", note: "Kỹ thuật túc trực sẵn · Có mặt sau 15 – 30 phút" },
+  { area: "Khu vực Quận 12 - TP.HCM", note: "Đội thợ túc trực tại Q12 · Có mặt sau 15 – 30 phút" },
+  { area: "Khu vực Bình Thạnh - TP.HCM", note: "Kỹ thuật túc trực sẵn · Có mặt sau 15 – 30 phút" },
+  { area: "Khu vực Gò Vấp - TP.HCM", note: "Đội thợ túc trực tại Gò Vấp · Có mặt sau 15 – 30 phút" },
+  { area: "Khu vực Tân Bình - TP.HCM", note: "Đội thợ túc trực tại Tân Bình · Có mặt sau 15 – 30 phút" },
+  { area: "Khu vực Tân Phú - TP.HCM", note: "Đội thợ túc trực tại Tân Phú · Có mặt sau 15 – 30 phút" },
+  { area: "Khu vực Phú Nhuận - TP.HCM", note: "Đội thợ túc trực tại Phú Nhuận · Có mặt sau 15 – 30 phút" },
+  { area: "Khu vực Bình Tân - TP.HCM", note: "Đội thợ túc trực tại Bình Tân · Có mặt sau 15 – 30 phút" },
+  { area: "Khu vực TP. Thủ Đức - TP.HCM", note: "Đội thợ túc trực tại Thủ Đức · Có mặt sau 15 – 30 phút" },
+  { area: "Khu vực Hóc Môn - TP.HCM", note: "Đội thợ lưu động tận nơi · Có mặt sau 20 – 35 phút" },
+  { area: "Khu vực Bình Chánh - TP.HCM", note: "Đội thợ lưu động tận nơi · Có mặt sau 20 – 35 phút" },
+  { area: "Khu vực Nhà Bè - TP.HCM", note: "Đội thợ lưu động tận nơi · Có mặt sau 20 – 35 phút" },
 ] as const;
 
 export const repairTips = [
