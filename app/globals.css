@@ -3386,10 +3386,11 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
   align-items: center;
   gap: 6px;
   color: #0f5fd7;
-  font-weight: 800;
-  font-size: 14px;
+  font-weight: 700;
+  font-size: 15px;
   text-decoration: none;
-  font-family: "Plus Jakarta Sans", sans-serif;
+  font-family: var(--font-body), "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif !important;
+  letter-spacing: 0.02em;
 }
 .direct-store-phone:hover {
   text-decoration: underline;
