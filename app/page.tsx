@@ -272,10 +272,8 @@ export default async function HomePage() {
 
           <div className="repair-area-panel">
             <div className="repair-area-panel-heading">
-              <div>
-                <span>Đội kỹ thuật trực chiến lưu động 24/7</span>
-                <p>Kỹ thuật viên túc trực tại chỗ ở từng quận huyện · 15 - 30 phút có mặt tận nơi xử lý sự cố.</p>
-              </div>
+              <span>Đội kỹ thuật trực chiến lưu động 24/7</span>
+              <p>Kỹ thuật viên túc trực tại chỗ ở từng quận huyện · 15 - 30 phút có mặt tận nơi xử lý sự cố.</p>
             </div>
             <div className="repair-area-list">
               {serviceAreaPoints.map((item) => (

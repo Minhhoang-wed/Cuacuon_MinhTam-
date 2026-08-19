@@ -68,14 +68,9 @@ export default async function ServiceAreaPage() {
           </div>
 
           <div className="repair-area-panel" style={{ background: "#ffffff", padding: "36px 30px" }}>
-            <div className="repair-area-panel-heading" style={{ marginBottom: "28px" }}>
-              <div>
-                <span style={{ fontSize: "14px" }}>Mạng lưới hỗ trợ kỹ thuật tận nơi TP.HCM</span>
-                <h3 style={{ margin: "6px 0 0", fontSize: "22px", color: "var(--repair-navy-deep)" }}>
-                  Có mặt nhanh trong 15 - 30 phút tại từng quận
-                </h3>
-              </div>
-              <p>Đội thợ kỹ thuật phân bổ thường trực theo khu vực, gọi là có mặt ngay.</p>
+            <div className="repair-area-panel-heading" style={{ marginBottom: "24px" }}>
+              <span>Đội kỹ thuật trực chiến lưu động 24/7</span>
+              <p>Kỹ thuật viên túc trực tại chỗ ở từng quận huyện · 15 - 30 phút có mặt tận nơi xử lý sự cố.</p>
             </div>
             <div className="repair-area-list">
               {serviceAreaPoints.map((item) => (
