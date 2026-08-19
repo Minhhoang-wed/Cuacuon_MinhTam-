@@ -54,26 +54,32 @@ export default async function HomePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusiness) }} />
 
-      <section className="repair-hero" id="sua-cua-cuon">
-        <div className="container repair-hero-grid">
-          <div className="repair-hero-copy">
-            <span className="repair-eyebrow">
-              Sửa cửa cuốn · Tiếp nhận nhanh
-            </span>
-            <h1>
-              Cửa cuốn gặp sự cố?
-              <span>Minh Tâm hỗ trợ <em>sửa chữa</em> tận nơi.</span>
-            </h1>
-            <p>
-              Tiếp nhận các tình trạng cửa cuốn bị kẹt, lỗi motor, remote, lệch ray, đứt nan và nhiều sự cố thường gặp.
-            </p>
-            <a href="#loi-thuong-gap" className="repair-text-link">
-              Xem lỗi thường gặp <ArrowRight size={18} />
-            </a>
-          </div>
-
-          <div className="repair-hero-visual" aria-label="Kỹ thuật viên sửa cửa cuốn">
-            <img src="/hero/hero-technician-repair.png" alt="Kỹ thuật viên Minh Tâm đang kiểm tra cửa cuốn" />
+      {/* Hero Banner phong cách Card vòm điện ảnh cao cấp (Talently Style) */}
+      <section className="cinematic-hero-section" id="sua-cua-cuon">
+        <div className="container">
+          <div className="cinematic-hero-card">
+            <div className="cinematic-hero-overlay" />
+            <div className="cinematic-hero-content">
+              <span className="cinematic-hero-badge">
+                <ShieldCheck size={16} /> CỨU HỘ & SỬA CỬA CUỐN 24/7 TOÀN TP.HCM
+              </span>
+              <h1 className="cinematic-hero-title">
+                Cửa cuốn gặp sự cố?
+                <em>Minh Tâm hỗ trợ sửa chữa tận nơi.</em>
+              </h1>
+              <p className="cinematic-hero-desc">
+                Tiếp nhận mọi sự cố cửa cuốn kẹt nan, hỏng motor, lỗi remote, lệch ray, đứt lò xo... 
+                Kỹ thuật viên có mặt nhanh sau 15 – 30 phút tại tất cả các quận huyện TP.HCM.
+              </p>
+              <div className="cinematic-hero-actions">
+                <a href={site.hotlineHref} className="cinematic-btn-primary">
+                  <Phone size={18} /> Gọi cứu hộ ngay: {site.hotline}
+                </a>
+                <a href={site.zaloHref} target="_blank" rel="noreferrer" className="cinematic-btn-secondary">
+                  <MessageCircle size={18} /> Zalo tư vấn miễn phí
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
