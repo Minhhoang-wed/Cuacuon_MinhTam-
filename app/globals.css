@@ -2537,22 +2537,17 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
 }
 .cinematic-hero-card {
   position: relative;
-  min-height: 480px;
+  min-height: 500px;
   border-radius: 28px;
   overflow: hidden;
-  background-color: #0b3260;
-  background-image:
-    radial-gradient(circle at 15% 25%, rgba(59, 130, 246, 0.45) 0%, transparent 45%),
-    radial-gradient(circle at 85% 75%, rgba(14, 165, 233, 0.4) 0%, transparent 45%),
-    linear-gradient(135deg, #092c55 0%, #0d4a8f 50%, #0a3366 100%),
-    url("/images/home-hero-daylight.jpg");
+  background-color: #1e293b;
+  background-image: url("/images/home-hero-daylight.jpg");
   background-size: cover;
   background-position: center;
-  background-blend-mode: normal, normal, overlay, normal;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 20px 50px rgba(11, 37, 69, 0.14);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
 }
 .cinematic-hero-content {
   position: relative;
@@ -2571,10 +2566,10 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
   align-items: center;
   justify-content: center;
   padding: 6px 14px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(15, 23, 42, 0.6);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 6px;
   color: #ffffff;
   font-family: "Plus Jakarta Sans", "Inter", sans-serif !important;
@@ -2583,6 +2578,7 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
   letter-spacing: 0.05em;
   text-transform: uppercase;
   margin-bottom: 24px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
 }
 .cinematic-hero-title {
   width: 100%;
@@ -2598,6 +2594,7 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
   flex-direction: column;
   align-items: center;
   gap: 6px;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.7), 0 4px 28px rgba(0, 0, 0, 0.5);
 }
 .cinematic-hero-title span {
   display: block;
@@ -2619,11 +2616,12 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
 .cinematic-hero-desc {
   max-width: 780px;
   margin: 0 0 32px;
-  color: rgba(255, 255, 255, 0.88);
+  color: #ffffff;
   font-family: "Plus Jakarta Sans", "Inter", sans-serif !important;
   font-size: clamp(15px, 1.3vw, 17px);
   line-height: 1.65;
-  font-weight: 400;
+  font-weight: 500;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.75), 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 .cinematic-hero-actions {
   display: flex;
@@ -2640,19 +2638,19 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
   padding: 15px 34px;
   background: #ffffff;
   color: #0b2545 !important;
-  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif !important;
+  font-family: "Plus Jakarta Sans", "Inter", sans-serif !important;
   font-size: 15.5px;
   font-weight: 700;
   letter-spacing: 0.01em;
   border-radius: 999px;
   text-decoration: none;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
   transition: all 0.25s ease;
 }
 .cinematic-btn-primary:hover {
   background: #f8fafc;
   transform: translateY(-2px);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
   color: #0f5fd7 !important;
 }
 .cinematic-btn-primary svg {
@@ -2664,21 +2662,21 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
   justify-content: center;
   gap: 10px;
   padding: 15px 30px;
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(15, 23, 42, 0.6);
   color: #ffffff !important;
-  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif !important;
+  font-family: "Plus Jakarta Sans", "Inter", sans-serif !important;
   font-size: 15.5px;
   font-weight: 700;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   text-decoration: none;
   transition: all 0.25s ease;
 }
 .cinematic-btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.22);
-  border-color: rgba(255, 255, 255, 0.55);
+  background: rgba(15, 23, 42, 0.8);
+  border-color: rgba(255, 255, 255, 0.7);
   transform: translateY(-2px);
 }
 @media (max-width: 768px) {
