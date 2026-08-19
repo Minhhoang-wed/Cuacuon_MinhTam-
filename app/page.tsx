@@ -61,7 +61,7 @@ export default async function HomePage() {
             <div className="cinematic-hero-overlay" />
             <div className="cinematic-hero-content">
               <span className="cinematic-hero-badge">
-                <ShieldCheck size={16} /> CỨU HỘ & SỬA CỬA CUỐN 24/7 TOÀN TP.HCM
+                CỨU HỘ & SỬA CỬA CUỐN 24/7 TOÀN TP.HCM
               </span>
               <h1 className="cinematic-hero-title">
                 Cửa cuốn gặp sự cố?
