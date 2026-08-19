@@ -60,7 +60,7 @@ export default async function HomePage() {
         <div className="container repair-hero-grid">
           <div className="repair-hero-copy">
             <span className="repair-eyebrow">
-              <Zap size={18} /> Sửa cửa cuốn · Tiếp nhận nhanh
+              Sửa cửa cuốn · Tiếp nhận nhanh
             </span>
             <h1>
               Cửa cuốn gặp sự cố?
@@ -69,22 +69,6 @@ export default async function HomePage() {
             <p>
               Tiếp nhận các tình trạng cửa cuốn bị kẹt, lỗi motor, remote, lệch ray, đứt nan và nhiều sự cố thường gặp.
             </p>
-            <div className="repair-hero-actions">
-              <a href={site.hotlineHref} className="repair-call-card">
-                <Phone size={24} />
-                <span>
-                  <b>Gọi ngay</b>
-                  <small>{site.hotline}</small>
-                </span>
-              </a>
-              <a href={site.zaloHref} target="_blank" rel="noreferrer" className="repair-zalo-card">
-                <MessageCircle size={24} />
-                <span>
-                  <b>Zalo tư vấn</b>
-                  <small>Chat nhanh, miễn phí</small>
-                </span>
-              </a>
-            </div>
             <a href="#loi-thuong-gap" className="repair-text-link">
               Xem lỗi thường gặp <ArrowRight size={18} />
             </a>
@@ -92,28 +76,25 @@ export default async function HomePage() {
 
           <div className="repair-hero-visual" aria-label="Kỹ thuật viên sửa cửa cuốn">
             <img src="/hero/hero-technician-repair.png" alt="Kỹ thuật viên Minh Tâm đang kiểm tra cửa cuốn" />
-            <div className="repair-trust-card">
-              <article>
-                <Clock3 />
-                <b>Tiếp nhận nhanh</b>
-                <span>Theo lịch hẹn phù hợp</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="repair-section repair-trust-section" id="vi-sao-chon-minh-tam">
+        <div className="container">
+          <div className="repair-section-heading">
+            <span>Vì sao chọn Minh Tâm</span>
+            <h2>Uy tín tạo nên niềm tin</h2>
+            <p>Minh Tâm tập trung vào tư vấn rõ tình trạng, xử lý đúng nhu cầu và bàn giao minh bạch.</p>
+          </div>
+          <div className="repair-trust-grid">
+            {trustItems.map((item) => (
+              <article className="repair-trust-item" key={item.title}>
+                <img src={item.icon} alt="" aria-hidden="true" />
+                <h3>{item.title}</h3>
+                <p>{item.description}</p>
               </article>
-              <article>
-                <ShieldCheck />
-                <b>Kiểm tra rõ ràng</b>
-                <span>Tư vấn trước khi sửa</span>
-              </article>
-              <article>
-                <BadgeCheck />
-                <b>Bảo hành dịch vụ</b>
-                <span>Trao đổi minh bạch</span>
-              </article>
-              <article>
-                <Wrench />
-                <b>Kỹ thuật viên</b>
-                <span>Kinh nghiệm, tận tâm</span>
-              </article>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -151,23 +132,19 @@ export default async function HomePage() {
             {repairServices.map((service, index) => (
               <article className="repair-service-card" key={service.title}>
                 <div className="repair-service-copy">
-                  <img src={service.icon} alt="" aria-hidden="true" />
                   <small>{String(index + 1).padStart(2, "0")}</small>
                   <h3>{service.title}</h3>
                   <p>{service.description}</p>
-                  <a href={site.hotlineHref} aria-label={`Gọi tư vấn ${service.title}`}>
-                    <ArrowRight size={18} />
-                  </a>
+                  <div className="repair-service-price-stack">
+                    <b className="service-price">{service.price}</b>
+                    <span className="service-warranty">{service.warranty}</span>
+                  </div>
                 </div>
                 <img src={service.image} alt={service.title} />
               </article>
             ))}
           </div>
-          <div className="repair-center-action">
-            <a href={site.hotlineHref} className="repair-outline-button">
-              <Wrench size={18} /> Gọi tư vấn dịch vụ sửa chữa <ArrowRight size={18} />
-            </a>
-          </div>
+
         </div>
       </section>
 
@@ -219,21 +196,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {categories.length > 0 && (
-        <section className="repair-category-strip">
-          <div className="container lovable-category-wrap">
-            <h2>Danh mục nổi bật</h2>
-            <div>
-              {categories.slice(0, 8).map((category) => (
-                <Link href={`/danh-muc/${category.slug}`} key={category.id}>
-                  {category.name}
-                  <ArrowRight size={14} />
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+
 
       <section className="repair-section repair-tips-section" id="meo-kien-thuc">
         <div className="container">
@@ -265,24 +228,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="repair-section repair-trust-section" id="vi-sao-chon-minh-tam">
-        <div className="container">
-          <div className="repair-section-heading">
-            <span>Vì sao chọn Minh Tâm</span>
-            <h2>Uy tín tạo nên niềm tin</h2>
-            <p>Minh Tâm tập trung vào tư vấn rõ tình trạng, xử lý đúng nhu cầu và bàn giao minh bạch.</p>
-          </div>
-          <div className="repair-trust-grid">
-            {trustItems.map((item) => (
-              <article className="repair-trust-item" key={item.title}>
-                <img src={item.icon} alt="" aria-hidden="true" />
-                <h3>{item.title}</h3>
-                <p>{item.description}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+
 
       <section className="repair-area-band" id="khu-vuc-phuc-vu">
         <div className="container">
@@ -321,36 +267,6 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="repair-final-cta">
-        <div className="container repair-final-cta-inner">
-          <img src="/cta/technician-support.png" alt="Kỹ thuật viên Minh Tâm hỗ trợ sửa cửa cuốn" />
-          <div>
-            <span>Cửa cuốn đang gặp sự cố?</span>
-            <h2>Gọi Minh Tâm - Hỗ trợ ngay!</h2>
-            <ul>
-              <li><CheckCircle2 /> Tiếp nhận tư vấn theo tình trạng thực tế</li>
-              <li><CheckCircle2 /> Kỹ thuật viên trao đổi rõ hướng xử lý</li>
-              <li><CheckCircle2 /> Sửa chữa, thay thế, bảo trì các dòng cửa cuốn</li>
-            </ul>
-          </div>
-          <div className="repair-final-actions">
-            <a href={site.hotlineHref} className="repair-call-card">
-              <Phone size={24} />
-              <span>
-                <b>Gọi ngay</b>
-                <small>{site.hotline}</small>
-              </span>
-            </a>
-            <a href={site.zaloHref} target="_blank" rel="noreferrer" className="repair-zalo-card">
-              <MessageCircle size={24} />
-              <span>
-                <b>Zalo tư vấn</b>
-                <small>Chat nhanh, miễn phí</small>
-              </span>
-            </a>
-          </div>
-        </div>
-      </section>
     </>
   );
 }

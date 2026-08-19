@@ -1,63 +1,100 @@
 import type { Metadata } from "next";
-import { ArrowRight, CheckCircle2, Clock3, ShieldCheck } from "lucide-react";
+import { ArrowRight, CheckCircle2, MessageCircle, Phone, ShieldCheck, Zap } from "lucide-react";
 import Link from "next/link";
 import { CtaBand } from "@/components/cta-band";
-import { DoorVisual } from "@/components/door-visual";
 import { PageHero } from "@/components/page-hero";
-import { services } from "@/data/content";
+import { repairServices, servicePriceCategories } from "@/data/public-home";
+import { getSiteSettings } from "@/lib/catalog";
 
-export const metadata: Metadata = { title: "Dịch vụ sửa cửa cuốn", description: "Danh sách dịch vụ sửa chữa, bảo trì cửa cuốn và mức giá tham khảo tại TP.HCM.", alternates: { canonical: "/dich-vu" } };
+export const metadata: Metadata = {
+  title: "Bảng báo giá dịch vụ sửa cửa cuốn Minh Tâm Door",
+  description:
+    "Bảng báo giá dịch vụ sửa cửa cuốn, motor, remote, bình lưu điện UPS và thay thế linh kiện cửa cuốn tận nơi tại TP.HCM. Hotline: 0327.359.368.",
+  alternates: { canonical: "/dich-vu" },
+};
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const site = await getSiteSettings();
+
   return (
     <>
-      <PageHero eyebrow="Dịch vụ tận nơi" title="Đúng lỗi. Đúng giải pháp. Đúng phần cần sửa." description="Giá dưới đây mang tính tham khảo. Mọi hạng mục chỉ được thực hiện sau khi khảo sát và có xác nhận của khách hàng." image="https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=1600&q=82" />
-      <section className="section">
-        <div className="container">
-          {services.length > 0 ? (
-            <div className="listing-grid">
-              {services.map((service, index) => (
-                <article className="listing-card" key={service.slug}>
-                  <DoorVisual label={`0${index + 1}`} kind="service" accent={index % 2 ? "#d9f99d" : "#b9f5dc"} />
-                  <div className="listing-card-body">
-                    <div className="card-meta">
-                      <span><Clock3 /> {service.duration}</span>
-                      <span><ShieldCheck /> {service.warranty}</span>
-                    </div>
-                    <h2>{service.name}</h2>
-                    <p>{service.summary}</p>
-                    <div className="card-price">
-                      <span>Giá tham khảo</span>
-                      <b>{service.price}</b>
-                    </div>
-                    <Link href={`/dich-vu/${service.slug}`} className="text-link">
-                      Xem chi tiết <ArrowRight size={17} />
-                    </Link>
-                  </div>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <div className="empty-state" style={{ padding: "48px 24px", background: "var(--bg-card)", borderRadius: "12px", textAlign: "center" }}>
-              <p style={{ margin: 0, color: "#78716c", fontSize: "15px" }}>
-                Danh sách dịch vụ đang được cập nhật dữ liệu.
-              </p>
-            </div>
-          )}
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Dịch vụ tận nơi 24/7"
+        title="Đúng lỗi. Đúng giải pháp. Đúng phần cần sửa."
+        description="Báo giá rõ ràng, minh bạch trước khi làm. Kỹ thuật viên kiểm tra thực tế, tư vấn phương án tối ưu và bảo hành dài hạn từ 3 - 24 tháng."
+        image="/images/service-hero-banner.jpg"
+      />
 
-      <section className="section section-tint">
-        <div className="container value-panel">
-          <div><span className="kicker">Cam kết phục vụ</span><h2>Không biến một lỗi nhỏ thành hóa đơn lớn.</h2></div>
-          <div className="check-stack">
-            <span><CheckCircle2 /> Kiểm tra và giải thích nguyên nhân</span>
-            <span><CheckCircle2 /> Xác nhận giá trước khi thực hiện</span>
-            <span><CheckCircle2 /> Linh kiện thay thế có thông tin bảo hành</span>
-            <span><CheckCircle2 /> Chạy thử và bàn giao sau sửa chữa</span>
+      {/* 6 Khối Dịch vụ Nổi bật có gắn giá và bảo hành */}
+      <section className="section" style={{ background: "#ffffff" }}>
+        <div className="container">
+          <div className="repair-section-heading">
+            <span>Dịch vụ kỹ thuật chuyên sâu</span>
+            <h2>Các hạng mục sửa chữa cửa cuốn phổ biến</h2>
+            <p>Khảo sát tận nơi sau 15 - 30 phút, báo giá minh bạch trước khi sửa.</p>
+          </div>
+
+          <div className="repair-service-grid">
+            {repairServices.map((service, index) => (
+              <article className="repair-service-card" key={service.title}>
+                <div className="repair-service-copy">
+                  <small>{String(index + 1).padStart(2, "0")}</small>
+                  <h3>{service.title}</h3>
+                  <p>{service.description}</p>
+                  <div className="repair-service-price-stack">
+                    <b className="service-price">{service.price}</b>
+                    <span className="service-warranty">{service.warranty}</span>
+                  </div>
+                </div>
+                <img src={service.image} alt={service.title} />
+              </article>
+            ))}
           </div>
         </div>
       </section>
+
+      {/* BẢNG BÁO GIÁ DỊCH VỤ CỬA CUỐN MINH TÂM DOOR */}
+      <section className="section repair-price-table-section" id="bang-bao-gia" style={{ background: "var(--bg-stone)", padding: "80px 0" }}>
+        <div className="container">
+          <div className="repair-section-heading">
+            <span>Báo giá minh bạch & Tận tâm</span>
+            <h2>BẢNG BÁO GIÁ DỊCH VỤ CỬA CUỐN MINH TÂM DOOR</h2>
+            <p>Áp dụng cho dịch vụ sửa chữa, cứu hộ và thay thế linh kiện cửa cuốn tận nơi tại TP.HCM.</p>
+          </div>
+
+          {/* 4 Bảng giá chi tiết theo danh mục khách hàng cung cấp */}
+          <div className="repair-price-tables-grid">
+            {servicePriceCategories.map((cat) => (
+              <div className="repair-price-category-card" key={cat.categoryTitle}>
+                <div className="repair-price-category-header">
+                  <h3 style={{ color: "#ffffff", margin: 0 }}>{cat.categoryTitle}</h3>
+                </div>
+                <div className="repair-price-table-wrap">
+                  <table className="repair-price-table">
+                    <thead>
+                      <tr>
+                        <th>Hạng mục sửa chữa / Dịch vụ</th>
+                        <th>Mức giá tham khảo</th>
+                        <th>Bảo hành</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {cat.items.map((item) => (
+                        <tr key={item.name}>
+                          <td><b>{item.name}</b></td>
+                          <td className="price-cell">{item.price}</td>
+                          <td><span className="warranty-tag">{item.warranty}</span></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <CtaBand />
     </>
   );

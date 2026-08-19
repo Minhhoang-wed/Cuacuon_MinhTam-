@@ -18,9 +18,9 @@ const productNavigation = [
 
 const navLinks = [
   { label: "Trang chủ", href: "/" },
-  { label: "Sửa cửa cuốn", href: "/#dich-vu-sua-chua" },
-  { label: "Khu vực phục vụ", href: "/#khu-vuc-phuc-vu" },
-  { label: "Mẹo & kiến thức", href: "/#meo-kien-thuc" },
+  { label: "Sửa cửa cuốn", href: "/dich-vu" },
+  { label: "Khu vực phục vụ", href: "/khu-vuc-phuc-vu" },
+  { label: "Mẹo & kiến thức", href: "/meo-kien-thuc" },
   { label: "Giới thiệu", href: "/ve-chung-toi" },
 ];
 
@@ -50,7 +50,7 @@ export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
           {navLinks.slice(0, 2).map((item) => (
             <Link
               href={item.href}
-              className={item.href === "/" && isActive("/") ? "active" : ""}
+              className={isActive(item.href) ? "active" : ""}
               key={item.href}
             >
               {item.label}
@@ -74,7 +74,7 @@ export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
           {navLinks.slice(2).map((item) => (
             <Link
               href={item.href}
-              className={item.href === "/ve-chung-toi" && isActive("/ve-chung-toi") ? "active" : ""}
+              className={isActive(item.href) ? "active" : ""}
               key={item.href}
             >
               {item.label}
@@ -94,10 +94,10 @@ export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
             href={site.zaloHref}
             target="_blank"
             rel="noreferrer"
-            className="button button-primary"
-            style={{ padding: "0 18px", height: "40px", fontSize: "12px", display: "inline-flex", alignItems: "center", gap: "6px" }}
+            className="header-zalo-btn"
           >
-            Zalo tư vấn <ArrowRight size={14} />
+            <span>Zalo tư vấn</span>
+            <ArrowRight size={15} />
           </a>
         </div>
 

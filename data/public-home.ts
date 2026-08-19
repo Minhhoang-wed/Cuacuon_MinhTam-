@@ -34,41 +34,94 @@ export const repairIssues = [
 export const repairServices = [
   {
     title: "Sửa cửa cuốn bị kẹt",
-    description: "Xử lý cửa kẹt nan, kẹt ray, không lên xuống được.",
+    description: "Xử lý cửa kẹt nan, xổ lô, lệch ray, không lên xuống được.",
+    price: "300.000 – 800.000đ",
+    warranty: "3 – 6 tháng",
     icon: "/icons/services/sua-cua-bi-ket.png",
     image: "/services/sua-cua-bi-ket.png",
   },
   {
     title: "Sửa motor cửa cuốn",
-    description: "Kiểm tra motor yếu, không hoạt động hoặc phát tiếng kêu.",
+    description: "Sửa motor kẹt cơ, hỏng tụ, cháy cuộn dây, thay vỉ mạch hành trình.",
+    price: "350.000 – 800.000đ",
+    warranty: "3 – 6 tháng",
     icon: "/icons/services/sua-motor.png",
     image: "/services/sua-motor.png",
   },
   {
-    title: "Sửa remote cửa cuốn",
-    description: "Khắc phục remote chập chờn, mất tín hiệu hoặc không nhận.",
+    title: "Sửa remote & hộp nhận",
+    description: "Khắc phục remote chập chờn, làm thêm remote mã gạt/nhảy, đổi mã khóa.",
+    price: "150.000 – 550.000đ",
+    warranty: "6 – 12 tháng",
     icon: "/icons/services/sua-remote.png",
     image: "/services/sua-remote.png",
   },
   {
-    title: "Thay nan cửa cuốn",
-    description: "Thay nan móp, gãy, rỉ sét hoặc xuống cấp.",
+    title: "Thay nan & lò xo cửa",
+    description: "Gỡ xô nan, nắn phẳng nan móp gãy, thay bộ lò xo trợ lực kéo tay.",
+    price: "800.000 – 1.500.000đ",
+    warranty: "6 – 12 tháng",
     icon: "/icons/services/thay-nan.png",
     image: "/services/thay-nan.png",
   },
   {
-    title: "Sửa ray dẫn hướng",
-    description: "Căn chỉnh, thay mới ray dẫn hướng bị lệch hoặc móp.",
+    title: "Sửa ray & chỉnh hành trình",
+    description: "Căn chỉnh, thay mới ray dẫn hướng bị lệch, móp, tra dầu mỡ bảo dưỡng.",
+    price: "400.000 – 900.000đ",
+    warranty: "3 – 6 tháng",
     icon: "/icons/services/sua-ray.png",
     image: "/services/sua-ray.png",
   },
   {
-    title: "Kiểm tra bình lưu điện",
-    description: "Kiểm tra, sửa chữa hoặc thay mới bình lưu điện phù hợp.",
+    title: "Sửa bình lưu điện (UPS)",
+    description: "Sửa UPS lỗi không sạc, thay cặp ắc quy mới, thay bộ UPS chính hãng.",
+    price: "350.000 – 1.200.000đ",
+    warranty: "6 – 24 tháng",
     icon: "/icons/services/binh-luu-dien.png",
     image: "/services/binh-luu-dien.png",
   },
 ] as const;
+
+export const servicePriceCategories = [
+  {
+    categoryTitle: "1. Bảng giá sửa chữa cơ bản & cứu hộ cửa cuốn",
+    items: [
+      { name: "Sửa cửa cuốn bị kẹt nan, xổ lô nhẹ", price: "300.000 – 800.000 VNĐ", warranty: "3 – 6 tháng" },
+      { name: "Gỡ xô nan, nắn phẳng nan bị kẹt nặng", price: "800.000 – 1.500.000 VNĐ", warranty: "6 tháng" },
+      { name: "Sửa ray cửa bị lệch, cong vênh, chỉnh hành trình", price: "400.000 – 900.000 VNĐ", warranty: "3 – 6 tháng" },
+      { name: "Thay lò xo cửa cuốn kéo tay (theo bộ)", price: "800.000 – 1.900.000 VNĐ", warranty: "6 – 12 tháng" },
+      { name: "Bảo dưỡng, vệ sinh, tra dầu mỡ toàn bộ cửa", price: "200.000 – 600.000 VNĐ", warranty: "Kiểm tra định kỳ" },
+    ],
+  },
+  {
+    categoryTitle: "2. Bảng giá sửa chữa & thay mới Motor",
+    items: [
+      { name: "Sửa motor bị kẹt cơ, hỏng tụ, cháy cuộn dây", price: "350.000 – 800.000 VNĐ", warranty: "3 – 6 tháng" },
+      { name: "Thay tụ điện motor cửa cuốn", price: "300.000 – 500.000 VNĐ", warranty: "6 tháng" },
+      { name: "Thay vỉ mạch/hành trình motor", price: "495.000 – 1.200.000 VNĐ", warranty: "6 – 12 tháng" },
+      { name: "Thay mới motor cửa cuốn chính hãng (Austdoor, YH, Mitadoor...)", price: "1.500.000 – 3.500.000 VNĐ", warranty: "12 – 24 tháng" },
+      { name: "Motor tải trọng lớn hoặc nhập khẩu cao cấp", price: "Từ 4.600.000 VNĐ", warranty: "12 – 24 tháng" },
+    ],
+  },
+  {
+    categoryTitle: "3. Bảng giá Remote & Hộp nhận tín hiệu",
+    items: [
+      { name: "Sửa remote lỗi mạch, lỗi mã phát sóng", price: "150.000 – 300.000 VNĐ", warranty: "3 – 6 tháng" },
+      { name: "Làm thêm remote mã gạt thông dụng", price: "300.000 – 550.000 VNĐ", warranty: "6 – 12 tháng" },
+      { name: "Làm thêm remote mã nhảy (ARC) chống sao chép", price: "400.000 – 650.000 VNĐ", warranty: "6 – 12 tháng" },
+      { name: "Thay mới bộ hộp nhận + 2 remote điều khiển", price: "600.000 – 1.850.000 VNĐ", warranty: "12 tháng" },
+      { name: "Reset, đổi mã khóa an toàn cửa cuốn", price: "200.000 – 350.000 VNĐ", warranty: "Hỗ trợ tận nơi" },
+    ],
+  },
+  {
+    categoryTitle: "4. Bảng giá sửa chữa Bộ lưu điện (UPS)",
+    items: [
+      { name: "Sửa UPS lỗi không sạc, lỗi mạch nguồn", price: "350.000 – 900.000 VNĐ", warranty: "3 – 6 tháng" },
+      { name: "Thay ắc quy bộ lưu điện (01 cặp 2 bình chất lượng cao)", price: "800.000 – 1.200.000 VNĐ", warranty: "6 tháng" },
+      { name: "Thay mới bộ lưu điện UPS chính hãng (900W – 1200W)", price: "2.200.000 – 2.900.000 VNĐ", warranty: "12 – 24 tháng" },
+    ],
+  },
+];
 
 export const districtChips = [
   "Quận 1",
@@ -141,13 +194,13 @@ export const trustItems = [
     icon: "/icons/trust/kinh-nghiem-chuyen-nghiep.png",
   },
   {
-    title: "Tiếp nhận nhanh",
-    description: "Tư vấn tình trạng rõ ràng trước khi hẹn lịch kiểm tra.",
+    title: "15 phút có mặt nhanh",
+    description: "Kỹ thuật viên có mặt tận nơi nhanh chóng, xử lý kịp thời khi cửa gặp sự cố.",
     icon: "/icons/trust/co-mat-nhanh.png",
   },
   {
-    title: "Bảo hành rõ ràng",
-    description: "Nội dung sửa chữa, thay thế và bảo hành được trao đổi minh bạch.",
+    title: "Bảo hành 12 - 24 tháng",
+    description: "Bảo hành sửa chữa và các sản phẩm cửa cuốn thường từ 12 - 24 tháng rõ ràng.",
     icon: "/icons/trust/bao-hanh-ro-rang.png",
   },
   {

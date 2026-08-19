@@ -24,19 +24,19 @@ export function SiteFooter({ site }: { site: ManagedSiteConfig }) {
         <div>
           <h3>Sửa Chữa & Dịch Vụ</h3>
           <div className="footer-maison-links">
-            <Link href="/#dich-vu-sua-chua">Sửa cửa cuốn</Link>
-            <Link href="/#dich-vu-sua-chua">Sửa motor cửa cuốn</Link>
-            <Link href="/#dich-vu-sua-chua">Sửa remote cửa cuốn</Link>
-            <Link href="/#dich-vu-sua-chua">Bảo trì & bảo dưỡng</Link>
-            <Link href="/#loi-thuong-gap">Các lỗi thường gặp</Link>
+            <Link href="/dich-vu">Sửa cửa cuốn</Link>
+            <Link href="/dich-vu">Sửa motor cửa cuốn</Link>
+            <Link href="/dich-vu">Sửa remote cửa cuốn</Link>
+            <Link href="/dich-vu">Bảo trì & bảo dưỡng</Link>
+            <Link href="/dich-vu#loi-thuong-gap">Các lỗi thường gặp</Link>
           </div>
         </div>
 
         <div>
           <h3>Khu Vực & Hướng Dẫn</h3>
           <div className="footer-maison-links">
-            <Link href="/#khu-vuc-phuc-vu">Khu vực phục vụ</Link>
-            <Link href="/#meo-kien-thuc">Mẹo & kiến thức</Link>
+            <Link href="/khu-vuc-phuc-vu">Khu vực phục vụ</Link>
+            <Link href="/meo-kien-thuc">Mẹo & kiến thức</Link>
             <Link href="/tin-tuc">Bài viết hữu ích</Link>
             <Link href="/san-pham">Sản phẩm & phụ kiện</Link>
             <Link href="/ve-chung-toi">Về Minh Tâm</Link>
@@ -47,11 +47,9 @@ export function SiteFooter({ site }: { site: ManagedSiteConfig }) {
           <h3>Thông Tin Liên Hệ</h3>
           <div className="footer-maison-contact">
             <a href={site.hotlineHref} className="footer-hotline-highlight">
-              <Phone size={16} />
-              <div className="footer-hotline-text">
-                <small>TỔNG ĐÀI 24/7</small>
-                <b>{site.hotline}</b>
-              </div>
+              <Phone size={17} />
+              <span className="footer-hotline-label">TỔNG ĐÀI 24/7:</span>
+              <strong className="footer-hotline-number">{site.hotline}</strong>
             </a>
             <a href={site.mapsHref} target="_blank" rel="noreferrer">
               <MapPin size={16} />
@@ -74,7 +72,7 @@ export function SiteFooter({ site }: { site: ManagedSiteConfig }) {
         <div>
           <Link href="/ve-chung-toi">Về chúng tôi</Link>
           <Link href="/san-pham">Catalog sản phẩm</Link>
-          <Link href="/#dich-vu-sua-chua">Sửa cửa cuốn</Link>
+          <Link href="/dich-vu">Sửa cửa cuốn</Link>
           <Link href="/lien-he">Liên hệ & Báo giá</Link>
         </div>
       </div>

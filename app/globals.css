@@ -1,9 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500;1,600;1,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&family=Be+Vietnam+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap");
 @import "tailwindcss";
 
 :root {
-  --font-display: "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-display: "Plus Jakarta Sans", "Be Vietnam Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-body: "Plus Jakarta Sans", "Be Vietnam Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-heading: "Plus Jakarta Sans", "Be Vietnam Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --bg-stone: #f6f3ee;
   --bg-stone-subtle: #ede8df;
   --bg-card: #eae5dc;
@@ -80,6 +81,38 @@ img { max-width: 100%; }
 .header-phone-icon:hover { background: var(--color-terracotta); color: white; }
 .header-zalo { width: 38px; height: 38px; border-radius: 50%; background: var(--color-charcoal); display: grid; place-items: center; color: white; transition: all .15s; }
 .header-zalo:hover { background: var(--color-terracotta); }
+
+.header-zalo-btn {
+  height: 42px;
+  padding: 0 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #0f5fd7;
+  color: #ffffff;
+  border-radius: 8px;
+  font-family: var(--font-body), "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(15, 95, 215, 0.25);
+}
+.header-zalo-btn:hover {
+  background: #0b4cb0;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(15, 95, 215, 0.35);
+  color: #ffffff;
+}
+.header-zalo-btn svg {
+  transition: transform 0.2s ease;
+}
+.header-zalo-btn:hover svg {
+  transform: translateX(3px);
+}
 
 .menu-button-navy { display: none; width: 42px; height: 42px; border: 1px solid var(--color-border); border-radius: 8px; background: transparent; cursor: pointer; color: var(--color-charcoal); align-items: center; justify-content: center; }
 .mobile-nav-navy { background: #ffffff; border-top: 1px solid var(--color-border); box-shadow: 0 12px 30px rgba(0,0,0,.08); padding: 12px 0; }
@@ -305,20 +338,36 @@ img { max-width: 100%; }
 .lovable-product-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
 .lovable-product-card { display: flex; flex-direction: column; }
 .lovable-product-card-link { display: flex; flex-direction: column; height: 100%; text-decoration: none; color: inherit; }
-.lovable-product-image { position: relative; width: 100%; aspect-ratio: 1/1.12; background: var(--bg-card); border-radius: 6px; overflow: hidden; }
-.lovable-product-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
-.lovable-product-card:hover .lovable-product-image img { transform: scale(1.05); }
-.lovable-product-image span { position: absolute; top: 12px; left: 12px; padding: 4px 10px; background: var(--color-terracotta); color: #ffffff; font-size: 9.5px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; border-radius: 2px; }
-.lovable-product-image i { position: absolute; bottom: 14px; right: 14px; padding: 7px 12px; background: rgba(255,255,255,0.9); backdrop-filter: blur(8px); border-radius: 4px; font-size: 11px; font-weight: 600; font-style: normal; color: var(--color-charcoal); opacity: 0; transform: translateY(6px); transition: all 0.25s ease; }
+.lovable-product-card {
+  height: 100%;
+  border: 1px solid var(--repair-line, #e2e8f0);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(13, 49, 88, 0.05);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+.lovable-product-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(15, 95, 215, 0.35);
+  box-shadow: 0 14px 30px rgba(13, 49, 88, 0.1);
+}
+.lovable-product-image { position: relative; width: 100%; aspect-ratio: 1/1; background: #ffffff; overflow: hidden; display: flex; align-items: center; justify-content: center; padding: 14px; }
+.lovable-product-image img { width: 100%; height: 100%; object-fit: contain; transition: transform 0.4s ease; }
+.lovable-product-card:hover .lovable-product-image img { transform: scale(1.04); }
+.lovable-product-image span { position: absolute; top: 12px; left: 12px; padding: 4px 10px; background: #0f5fd7; color: #ffffff; font-size: 10px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 4px; z-index: 2; }
+.lovable-product-image i { position: absolute; bottom: 12px; right: 12px; padding: 6px 12px; background: rgba(255,255,255,0.92); backdrop-filter: blur(8px); border-radius: 6px; font-size: 11.5px; font-weight: 700; font-style: normal; color: #0f5fd7; border: 1px solid rgba(15, 95, 215, 0.2); opacity: 0; transform: translateY(4px); transition: all 0.2s ease; z-index: 2; }
 .lovable-product-card:hover .lovable-product-image i { opacity: 1; transform: translateY(0); }
 
-.lovable-product-body { padding: 16px 4px 8px; display: flex; flex-direction: column; flex: 1; }
-.lovable-product-body > span { font-size: 10.5px; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: #78716c; margin-bottom: 6px; }
-.lovable-product-body h3 { margin: 0 0 6px; font-family: var(--font-display); font-size: 17px; font-weight: 600; color: var(--color-charcoal); line-height: 1.3; }
-.lovable-product-body p { margin: 0 0 14px; font-size: 13px; color: #78716c; line-height: 1.5; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-.lovable-product-body > div { margin-top: auto; display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
-.lovable-product-body > div b { font-size: 14.5px; font-weight: 700; color: var(--color-terracotta); }
-.lovable-product-body > div small { font-size: 11.5px; color: #a8a29e; }
+.lovable-product-body { padding: 16px 18px 18px; display: flex; flex-direction: column; flex: 1; background: #ffffff; }
+.lovable-product-body > span { min-height: 18px; display: block; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #d97706; margin-bottom: 6px; font-family: var(--font-body), "Plus Jakarta Sans", sans-serif; }
+.lovable-product-body h3 { min-height: 66px; margin: 0 0 8px; font-family: var(--font-body), "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif; font-size: 15px; font-weight: 700; color: #0f5fd7; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.lovable-product-body p { min-height: 38px; margin: 0 0 14px; font-size: 12.5px; color: #64748b; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.lovable-product-body > div { margin-top: auto; padding-top: 12px; border-top: 1px solid #f1f5f9; display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; min-height: 42px; }
+.lovable-product-body > div b { font-size: 15px; font-weight: 800; color: #d97706; font-family: var(--font-body), "Plus Jakarta Sans", sans-serif; line-height: 1.2; }
+.lovable-product-body > div small { font-size: 11px; color: #64748b; font-weight: 600; line-height: 1.3; text-align: right; max-width: 55%; }
 .lovable-center-action { margin-top: 50px; text-align: center; }
 
 /* ========== MAISON EDITORIAL PHILOSOPHY ========== */
@@ -440,16 +489,17 @@ img { max-width: 100%; }
 .category-row .clear-filter { display: inline-flex; align-items: center; gap: 4px; color: #991b1b; background: #fee2e2; border-color: #fecaca; }
 
 .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
-.product-card { overflow: hidden; border: 1px solid var(--color-border); border-radius: 8px; background: #ffffff; display: flex; flex-direction: column; }
-.product-card-body { padding: 22px; display: flex; flex-direction: column; flex: 1; }
-.product-category { color: var(--color-terracotta); font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
-.product-card h2 { margin: 8px 0 6px; font-family: var(--font-display); font-size: 20px; font-weight: 600; color: var(--color-charcoal); }
-.product-card p { margin: 0 0 16px; color: #78716c; font-size: 13.5px; line-height: 1.6; }
-.product-footer { margin-top: auto; padding-top: 16px; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--color-border); }
-.product-footer span { display: flex; align-items: center; gap: 5px; color: #78716c; font-size: 11.5px; }
-.product-footer b { color: var(--color-terracotta); font-size: 15px; font-weight: 700; }
-.text-link { display: inline-flex; align-items: center; gap: 6px; color: var(--color-charcoal); font-size: 13px; font-weight: 700; margin-top: 12px; }
-.text-link:hover { color: var(--color-terracotta); }
+.product-card { overflow: hidden; border: 1px solid var(--repair-line, #e2e8f0); border-radius: 14px; background: #ffffff; display: flex; flex-direction: column; height: 100%; box-shadow: 0 8px 24px rgba(13, 49, 88, 0.05); transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease; }
+.product-card:hover { transform: translateY(-3px); border-color: rgba(15, 95, 215, 0.35); box-shadow: 0 14px 30px rgba(13, 49, 88, 0.1); }
+.product-card-body { padding: 18px 20px 20px; display: flex; flex-direction: column; flex: 1; }
+.product-category { color: #d97706; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; min-height: 18px; display: block; margin-bottom: 6px; font-family: var(--font-body), "Plus Jakarta Sans", sans-serif; }
+.product-card h2 { margin: 0 0 8px; font-family: var(--font-body), "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif; font-size: 16px; font-weight: 700; color: #0f5fd7; line-height: 1.35; min-height: 66px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.product-card p { margin: 0 0 14px; color: #64748b; font-size: 12.5px; line-height: 1.55; min-height: 38px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.product-footer { margin-top: auto; padding-top: 12px; display: flex; align-items: flex-end; justify-content: space-between; border-top: 1px solid #f1f5f9; min-height: 42px; gap: 8px; }
+.product-footer span { display: flex; align-items: center; gap: 5px; color: #64748b; font-size: 11px; font-weight: 600; text-align: right; line-height: 1.3; max-width: 55%; }
+.product-footer b { color: #d97706; font-size: 15px; font-weight: 800; font-family: var(--font-body), "Plus Jakarta Sans", sans-serif; line-height: 1.2; white-space: nowrap; }
+.text-link { display: inline-flex; align-items: center; gap: 6px; color: #0f5fd7; font-size: 13px; font-weight: 700; margin-top: 12px; }
+.text-link:hover { color: #0284c7; }
 
 /* Detail Pages */
 .detail-hero { padding-block: 70px; background: #ede8df; border-bottom: 1px solid var(--color-border); }
@@ -2514,18 +2564,16 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
   width: fit-content;
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 20px;
+  justify-content: center;
+  padding: 8px 18px;
   color: var(--repair-blue);
-  border: 1px solid rgba(15, 95, 215, 0.35);
-  border-radius: 999px;
+  border: 1.5px solid rgba(15, 95, 215, 0.35);
+  border-radius: 6px;
   background: #ffffff;
+  font-family: var(--font-body), "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
   font-size: 14px;
-  font-weight: 800;
-  text-transform: uppercase;
-}
-.repair-eyebrow svg {
-  color: var(--repair-gold);
+  font-weight: 600;
+  letter-spacing: 0.01em;
 }
 .repair-hero-copy h1 {
   max-width: 640px;
@@ -2708,18 +2756,20 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
 .repair-section-heading span {
   display: inline-block;
   color: var(--repair-blue);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: .12em;
+  font-family: var(--font-body), "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
 }
 .repair-section-heading span::after {
   content: "";
-  width: 42px;
+  width: 36px;
   height: 2px;
   display: block;
-  margin: 10px auto 0;
+  margin: 8px auto 0;
   background: var(--repair-gold);
+  border-radius: 2px;
 }
 .repair-section-heading h2 {
   margin: 12px 0 12px;
@@ -2790,8 +2840,15 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
   align-items: center;
   gap: 6px;
   color: var(--repair-blue);
-  font-size: 13px;
-  font-weight: 800;
+  font-family: var(--font-body), "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  transition: all 0.2s ease;
+}
+.repair-issue-card a:hover {
+  color: #0284c7;
+  gap: 9px;
 }
 
 .repair-service-grid {
@@ -2800,11 +2857,11 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
   gap: 22px;
 }
 .repair-service-card {
-  min-height: 260px;
+  min-height: 280px;
   display: grid;
   grid-template-columns: 1fr 44%;
   gap: 18px;
-  padding: 18px;
+  padding: 20px;
   border: 1px solid var(--repair-line);
   border-radius: 16px;
   background: #ffffff;
@@ -2815,36 +2872,398 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 12px 0 12px 4px;
-}
-.repair-service-copy img {
-  width: 52px;
-  height: 52px;
-  object-fit: contain;
-  margin-bottom: 16px;
+  padding: 4px 0 4px;
 }
 .repair-service-copy small {
-  color: var(--repair-gold);
-  font-size: 15px;
-  font-weight: 800;
+  display: block;
+  margin-bottom: 8px;
+  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+  color: #d97706;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.repair-service-copy h3 {
+  margin: 0 0 6px;
+  color: var(--repair-blue);
+  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.3;
 }
 .repair-service-card p {
-  margin: 12px 0;
+  margin: 0 0 10px;
   color: var(--repair-muted);
-  font-size: 13.5px;
-  line-height: 1.65;
+  font-size: 13px;
+  line-height: 1.55;
+  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
 }
-.repair-service-copy a {
+.repair-service-price-stack {
   margin-top: auto;
-  color: var(--repair-blue);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px;
+}
+.repair-service-price-stack .service-price {
+  color: #d97706;
+  font-size: 15.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+}
+.repair-service-price-stack .service-warranty {
+  color: #64748b;
+  font-size: 13.5px;
+  font-weight: 500;
+  line-height: 1.2;
+  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
 }
 .repair-service-card > img {
   width: 100%;
   height: 100%;
-  min-height: 210px;
+  min-height: 220px;
   object-fit: cover;
   border-radius: 12px;
 }
+
+/* ========== BẢNG BÁO GIÁ DỊCH VỤ MINH TÂM DOOR ========== */
+.repair-price-banner-card {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  box-shadow: 0 16px 36px rgba(13, 49, 88, 0.08);
+}
+.repair-price-banner-card img {
+  width: 100%;
+  height: auto;
+  max-height: 380px;
+  object-fit: cover;
+  display: block;
+}
+.repair-price-banner-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(6, 21, 35, 0.15) 0%, rgba(6, 21, 35, 0.9) 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 30px 36px;
+  color: #ffffff;
+}
+.repair-price-banner-text .repair-badge-gold {
+  display: inline-block;
+  padding: 4px 10px;
+  background: #d97706;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+.repair-price-banner-text h3 {
+  margin: 0 0 6px;
+  color: #ffffff;
+  font-size: clamp(20px, 2.4vw, 26px);
+  font-weight: 700;
+  font-family: var(--font-body), "Plus Jakarta Sans", sans-serif;
+}
+.repair-price-banner-text p {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 14px;
+}
+.repair-price-banner-hotline {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 22px;
+  background: #0f5fd7;
+  color: #ffffff;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 8px 20px rgba(15, 95, 215, 0.35);
+  flex-shrink: 0;
+}
+.repair-price-banner-hotline:hover {
+  background: #0b4cb0;
+  transform: translateY(-2px);
+}
+.repair-price-banner-hotline span {
+  display: grid;
+  line-height: 1.2;
+}
+.repair-price-banner-hotline small {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #93c5fd;
+}
+.repair-price-banner-hotline b {
+  font-size: 17px;
+  font-weight: 800;
+}
+.repair-price-notice-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 22px;
+  background: #fefce8;
+  border: 1px solid #fef08a;
+  border-radius: 12px;
+  margin-bottom: 32px;
+  color: #854d0e;
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+.repair-price-notice-box svg {
+  color: #ca8a04;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.repair-price-tables-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-bottom: 36px;
+}
+.repair-price-category-card {
+  background: #ffffff;
+  border: 1px solid rgba(13, 49, 88, 0.1);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(13, 49, 88, 0.04);
+  display: flex;
+  flex-direction: column;
+}
+.repair-price-category-header {
+  padding: 16px 20px;
+  background: linear-gradient(135deg, #0f5fd7 0%, #073b88 100%);
+  color: #ffffff;
+}
+.repair-price-category-header h3 {
+  margin: 0;
+  color: #ffffff !important;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+}
+.repair-price-table-wrap {
+  overflow-x: auto;
+  flex: 1;
+}
+.repair-price-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 13px;
+}
+.repair-price-table th {
+  padding: 12px 18px;
+  background: #f8fafc;
+  color: #475569;
+  font-weight: 700;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid #e2e8f0;
+}
+.repair-price-table td {
+  padding: 13px 18px;
+  border-bottom: 1px solid #f1f5f9;
+  color: var(--repair-navy-deep);
+  vertical-align: middle;
+}
+.repair-price-table td.price-cell {
+  color: #d97706;
+  font-weight: 700;
+  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+  font-size: 14px;
+  white-space: nowrap;
+  letter-spacing: 0.01em;
+}
+.repair-price-table .warranty-tag {
+  display: inline-block;
+  color: #64748b;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+  background: transparent;
+  padding: 0;
+  white-space: nowrap;
+}
+.repair-price-contact-bar {
+  padding: 26px 30px;
+  background: #ffffff;
+  border: 1px solid rgba(15, 95, 215, 0.25);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  box-shadow: 0 12px 28px rgba(13, 49, 88, 0.05);
+}
+.repair-price-contact-bar h4 {
+  margin: 0 0 4px;
+  color: var(--repair-navy-deep);
+  font-size: 17px;
+  font-weight: 700;
+  font-family: var(--font-body), "Plus Jakarta Sans", sans-serif;
+}
+.repair-price-contact-bar p {
+  margin: 0;
+  color: var(--repair-muted);
+  font-size: 13.5px;
+}
+.repair-price-contact-btns {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.repair-btn-hotline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  background: #d97706;
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 700;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.repair-btn-hotline:hover {
+  background: #b45309;
+  transform: translateY(-1px);
+}
+.repair-btn-zalo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  background: #0f5fd7;
+  color: #ffffff;
+  font-size: 13.5px;
+  font-weight: 700;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+.repair-btn-zalo:hover {
+  background: #0b4cb0;
+  transform: translateY(-1px);
+}
+
+/* ========== REPAIR COMMITMENT SECTION ========== */
+.repair-commitment-section {
+  padding: 90px 0;
+  background-color: #061523;
+  background-image: linear-gradient(rgba(4, 15, 26, 0.72), rgba(4, 15, 26, 0.88)), url("/images/commitment-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+.repair-commitment-card {
+  max-width: 1040px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.repair-commitment-header {
+  text-align: center;
+  max-width: 780px;
+  margin-inline: auto;
+}
+.repair-commitment-kicker {
+  display: inline-block;
+  color: #f59e0b;
+  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+  font-size: 12.5px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.repair-commitment-header h2 {
+  margin: 0 0 14px;
+  color: #ffffff !important;
+  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+  font-size: clamp(26px, 3.4vw, 38px);
+  font-weight: 700;
+  line-height: 1.25;
+}
+.repair-commitment-header p {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 15.5px;
+  line-height: 1.6;
+  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+}
+.repair-commitment-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px;
+}
+.repair-commitment-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  padding: 24px 26px;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  transition: all 0.25s ease;
+}
+.repair-commitment-item:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(245, 158, 11, 0.45);
+  transform: translateY(-2px);
+}
+.repair-commitment-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  display: grid;
+  place-items: center;
+  color: #f59e0b;
+  flex-shrink: 0;
+}
+.repair-commitment-item h4 {
+  margin: 0 0 6px;
+  color: #ffffff;
+  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.repair-commitment-item p {
+  margin: 0;
+  color: #cbd5e1;
+  font-size: 14px;
+  line-height: 1.6;
+  font-family: "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+}
+@media (max-width: 768px) {
+  .repair-commitment-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .repair-center-action {
   margin-top: 32px;
   text-align: center;
@@ -2915,9 +3334,10 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
 }
 .repair-area-panel-heading span {
   color: var(--repair-blue);
-  font-size: 12px;
-  font-weight: 800;
-  letter-spacing: .12em;
+  font-family: var(--font-body), "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
 }
 .repair-area-panel-heading p {
@@ -2981,7 +3401,7 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
 }
 .repair-tip-card {
   display: grid;
-  grid-template-columns: 42% 1fr;
+  grid-template-columns: 40% 1fr;
   overflow: hidden;
   border: 1px solid var(--repair-line);
   border-radius: 16px;
@@ -2989,47 +3409,80 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
   box-shadow: 0 10px 26px rgba(13, 49, 88, 0.05);
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
+.repair-tip-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(15, 95, 215, 0.25);
+  box-shadow: 0 14px 30px rgba(13, 49, 88, 0.09);
+}
 .repair-tip-card > img {
   width: 100%;
   height: 100%;
-  min-height: 220px;
+  min-height: 200px;
   object-fit: cover;
 }
 .repair-tip-card > div {
-  padding: 24px;
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 100%;
 }
 .repair-tip-card span {
   display: block;
-  margin-bottom: 12px;
+  margin-bottom: 8px;
   color: var(--repair-gold);
-  font-size: 10px;
-  font-weight: 800;
-  letter-spacing: .08em;
+  font-family: var(--font-body), "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
+.repair-tip-card h3 {
+  min-height: 44px;
+  margin: 0 0 8px;
+  color: var(--repair-navy-deep);
+  font-family: var(--font-body), "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.35;
+}
 .repair-tip-card p {
-  margin: 12px 0 20px;
+  min-height: 58px;
+  margin: 0 0 14px;
   color: var(--repair-muted);
   font-size: 13px;
-  line-height: 1.65;
+  line-height: 1.55;
 }
 .repair-tip-card a {
+  margin-top: auto;
   display: inline-flex;
   align-items: center;
   gap: 6px;
   color: var(--repair-blue);
-  font-size: 13px;
-  font-weight: 800;
+  font-family: var(--font-body), "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+  font-size: 13.5px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  transition: all 0.2s ease;
+}
+.repair-tip-card a:hover {
+  color: #0284c7;
+  gap: 9px;
 }
 
 .repair-trust-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 18px;
+  align-items: stretch;
 }
 .repair-trust-item {
-  min-height: 220px;
-  padding: 30px 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+  padding: 28px 18px 24px;
   text-align: center;
   border: 1px solid rgba(13, 49, 88, 0.08);
   border-radius: 16px;
@@ -3038,16 +3491,32 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
   transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .repair-trust-item img {
-  width: 70px;
-  height: 70px;
+  width: 62px;
+  height: 62px;
   object-fit: contain;
-  margin-bottom: 18px;
+  margin: 0 auto 16px;
+  display: block;
+  flex-shrink: 0;
+}
+.repair-trust-item h3 {
+  width: 100%;
+  min-height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 0;
+  color: var(--repair-blue);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.35;
 }
 .repair-trust-item p {
-  margin: 12px 0 0;
+  width: 100%;
+  margin: 10px 0 0;
   color: var(--repair-muted);
   font-size: 13px;
-  line-height: 1.65;
+  line-height: 1.6;
 }
 
 .repair-products-section .lovable-product-image {
@@ -3148,57 +3617,126 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
 }
 
 .public-site .footer-maison {
-  color: var(--repair-text);
-  background: #ffffff;
-  border-top: 1px solid rgba(13, 49, 88, 0.08);
+  position: relative;
+  overflow: hidden;
+  color: #d1d5db;
+  background-color: #061523;
+  background-image: 
+    linear-gradient(180deg, rgba(6, 21, 35, 0.82) 0%, rgba(6, 21, 35, 0.94) 100%),
+    url("/images/navy-wave-bg.jpg");
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  border-top: 1px solid rgba(56, 189, 248, 0.18);
 }
 .public-site .footer-maison-grid {
-  padding-block: 54px 42px;
+  position: relative;
+  z-index: 1;
+  padding-block: 56px 44px;
 }
-.public-site .footer-maison-brand p,
+.public-site .footer-maison-brand .logo-image-link {
+  display: inline-flex;
+  padding: 6px 14px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+.public-site .footer-maison-brand p {
+  color: #94a3b8;
+  font-size: 13.5px;
+  line-height: 1.65;
+  margin: 14px 0 16px;
+}
 .public-site .footer-maison-contact a,
 .public-site .footer-maison-contact div,
 .public-site .footer-maison-links a {
-  color: var(--repair-muted);
+  color: #cbd5e1;
+  font-size: 13.5px;
+  line-height: 1.6;
+  transition: all 0.2s ease;
+}
+.public-site .footer-maison-links a:hover,
+.public-site .footer-maison-contact a:hover {
+  color: #38bdf8;
 }
 .public-site .footer-maison h3,
 .public-site .footer-maison .footer-maison h3 {
-  color: var(--repair-blue) !important;
+  color: #ffffff !important;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 20px;
 }
 .public-site .footer-maison-trust {
-  color: var(--repair-navy-deep);
-  border-color: rgba(244, 179, 35, 0.22);
-  background: var(--repair-gold-soft);
+  color: #fef08a;
+  border: 1px solid rgba(234, 179, 8, 0.25);
+  background: rgba(234, 179, 8, 0.08);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
 }
 .public-site .footer-zalo-btn {
-  color: var(--repair-blue);
-  border-color: rgba(15, 95, 215, 0.3);
-  background: var(--repair-blue-soft);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  background: rgba(56, 189, 248, 0.1);
+  border-radius: 8px;
 }
 .public-site .footer-zalo-btn:hover {
   color: #ffffff;
-  background: var(--repair-blue);
+  background: #0284c7;
+  border-color: #0284c7;
 }
 .public-site .footer-hotline-highlight {
-  background: var(--repair-blue-soft);
-  border-color: rgba(15, 95, 215, 0.18);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: rgba(15, 95, 215, 0.25);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 8px;
+  text-decoration: none;
+  margin-bottom: 6px;
+  font-family: var(--font-body), "Plus Jakarta Sans", sans-serif;
+  transition: all 0.2s ease;
 }
-.public-site .footer-hotline-text small {
-  color: var(--repair-muted);
+.public-site .footer-hotline-highlight:hover {
+  background: rgba(15, 95, 215, 0.45);
+  border-color: rgba(56, 189, 248, 0.6);
+  transform: translateY(-1px);
 }
-.public-site .footer-hotline-text b,
+.public-site .footer-hotline-label {
+  color: #94a3b8;
+  font-size: 14.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  white-space: nowrap;
+}
+.public-site .footer-hotline-number {
+  color: #ffffff;
+  font-size: 14.5px;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  white-space: nowrap;
+}
 .public-site .footer-maison-contact svg {
-  color: var(--repair-blue);
+  color: #38bdf8;
 }
 .public-site .footer-maison-bottom {
   width: 100%;
   max-width: none;
-  padding: 18px max(32px, calc((100vw - 1240px) / 2));
-  color: rgba(255, 255, 255, 0.82);
-  background: var(--repair-navy-deep);
+  padding: 20px max(32px, calc((100vw - 1240px) / 2));
+  color: #94a3b8;
+  background: rgba(3, 11, 20, 0.88);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 12.5px;
 }
 .public-site .footer-maison-bottom a {
-  color: rgba(255, 255, 255, 0.86);
+  color: #cbd5e1;
+}
+.public-site .footer-maison-bottom a:hover {
+  color: #38bdf8;
 }
 
 .public-site .mobile-actions {
