@@ -58,7 +58,6 @@ export default async function HomePage() {
       <section className="cinematic-hero-section" id="sua-cua-cuon">
         <div className="container">
           <div className="cinematic-hero-card">
-            <div className="cinematic-hero-overlay" />
             <div className="cinematic-hero-content">
               <span className="cinematic-hero-badge">
                 CỨU HỘ & SỬA CỬA CUỐN 24/7 TOÀN TP.HCM
