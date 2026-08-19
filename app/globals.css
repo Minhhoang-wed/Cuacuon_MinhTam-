@@ -2532,13 +2532,17 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
 
 /* ========== CINEMATIC HERO SECTION (TALENTLY STYLE) ========== */
 .cinematic-hero-section {
-  padding: 28px 0 46px;
+  padding: 20px 0 46px;
   background: var(--bg-stone);
+}
+.cinematic-hero-section .container {
+  width: min(1480px, calc(100% - 24px));
+  max-width: 1480px;
 }
 .cinematic-hero-card {
   position: relative;
-  min-height: 500px;
-  border-radius: 28px;
+  min-height: 520px;
+  border-radius: 32px;
   overflow: hidden;
   background-color: #1e293b;
   background-image: url("/images/home-hero-daylight.jpg");
@@ -2552,9 +2556,9 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
 .cinematic-hero-content {
   position: relative;
   z-index: 2;
-  max-width: 1120px;
+  max-width: 1240px;
   width: 100%;
-  padding: 68px 24px;
+  padding: 72px 28px;
   margin: 0 auto;
   text-align: center;
   display: flex;
@@ -2582,11 +2586,11 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
 }
 .cinematic-hero-title {
   width: 100%;
-  max-width: 1080px;
+  max-width: 1200px;
   margin: 0 0 18px;
   color: #ffffff !important;
   font-family: "Plus Jakarta Sans", "Inter", sans-serif !important;
-  font-size: clamp(30px, 4vw, 50px);
+  font-size: clamp(32px, 4.2vw, 54px);
   font-weight: 700;
   line-height: 1.25;
   letter-spacing: -0.02em;
