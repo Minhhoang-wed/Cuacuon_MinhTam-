@@ -1,11 +1,10 @@
 "use client";
 
-import { ArrowRight, ChevronDown, Menu, Phone, ShoppingBag, X } from "lucide-react";
+import { ArrowRight, ChevronDown, Clock3, Mail, MapPin, Menu, Phone, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Logo } from "@/components/logo";
-import { mainNavigation } from "@/data/site";
+import { PublicLogo } from "@/components/public-logo";
 import type { ManagedSiteConfig } from "@/lib/catalog";
 
 const productNavigation = [
@@ -17,6 +16,14 @@ const productNavigation = [
   { label: "Phụ kiện & linh kiện", href: "/san-pham" },
 ];
 
+const navLinks = [
+  { label: "Trang chủ", href: "/" },
+  { label: "Sửa cửa cuốn", href: "/#dich-vu-sua-chua" },
+  { label: "Khu vực phục vụ", href: "/#khu-vuc-phuc-vu" },
+  { label: "Mẹo & kiến thức", href: "/#meo-kien-thuc" },
+  { label: "Giới thiệu", href: "/ve-chung-toi" },
+];
+
 export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
@@ -24,13 +31,31 @@ export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
 
   return (
     <header className="site-header-navy">
+      <div className="top-strip-navy">
+        <div className="container top-strip-navy-inner">
+          <div className="top-strip-left">
+            <span><Clock3 size={14} /> {site.hours}</span>
+            <a href={site.hotlineHref}><Phone size={14} /> {site.hotline}</a>
+            <a href={`mailto:${site.email}`}><Mail size={14} /> {site.email}</a>
+          </div>
+          <div className="top-strip-right">
+            <span><MapPin size={14} /> {site.serviceArea}</span>
+          </div>
+        </div>
+      </div>
       <div className="container nav-row-navy">
-        <Logo name={site.name} shortName={site.shortName} />
+        <PublicLogo name={site.name} shortName={site.shortName} />
 
         <nav className="desktop-nav-navy" aria-label="Điều hướng chính">
-          <Link href="/" className={isActive("/") ? "active" : ""}>
-            Trang chủ
-          </Link>
+          {navLinks.slice(0, 2).map((item) => (
+            <Link
+              href={item.href}
+              className={item.href === "/" && isActive("/") ? "active" : ""}
+              key={item.href}
+            >
+              {item.label}
+            </Link>
+          ))}
           <div className="product-nav-group">
             <Link
               href="/san-pham"
@@ -46,18 +71,15 @@ export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
               ))}
             </div>
           </div>
-          <Link href="/dich-vu" className={isActive("/dich-vu") ? "active" : ""}>
-            Dịch vụ
-          </Link>
-          <Link href="/ve-chung-toi" className={isActive("/ve-chung-toi") ? "active" : ""}>
-            Giới thiệu
-          </Link>
-          <Link href="/du-an" className={isActive("/du-an") ? "active" : ""}>
-            Dự án
-          </Link>
-          <Link href="/lien-he" className={isActive("/lien-he") ? "active" : ""}>
-            Liên hệ
-          </Link>
+          {navLinks.slice(2).map((item) => (
+            <Link
+              href={item.href}
+              className={item.href === "/ve-chung-toi" && isActive("/ve-chung-toi") ? "active" : ""}
+              key={item.href}
+            >
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
         <div className="header-contact">
@@ -75,7 +97,7 @@ export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
             className="button button-primary"
             style={{ padding: "0 18px", height: "40px", fontSize: "12px", display: "inline-flex", alignItems: "center", gap: "6px" }}
           >
-            Báo giá Zalo <ArrowRight size={14} />
+            Zalo tư vấn <ArrowRight size={14} />
           </a>
         </div>
 
@@ -92,7 +114,12 @@ export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
 
       {open && (
         <nav id="mobile-menu" className="mobile-nav-navy" aria-label="Điều hướng di động">
-          {mainNavigation.map((item) => (
+          {[
+            ...navLinks.slice(0, 2),
+            { label: "Sản phẩm", href: "/san-pham" },
+            ...navLinks.slice(2),
+            { label: "Liên hệ", href: "/lien-he" },
+          ].map((item) => (
             <Link
               key={item.href}
               href={item.href}

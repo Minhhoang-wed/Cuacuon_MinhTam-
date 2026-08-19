@@ -1,9 +1,9 @@
 "use client";
 
-import { Boxes, Building2, FolderTree, LayoutDashboard, Home, ImageIcon, LogOut, Settings, ExternalLink, ShieldCheck, User } from "lucide-react";
+import { Boxes, Building2, ExternalLink, FolderTree, Home, ImageIcon, LayoutDashboard, LogOut, Settings } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Logo } from "@/components/logo";
+import { AdminLogo } from "@/components/admin/admin-logo";
 
 const links = [
   { href: "/admin/dashboard", label: "Tổng quan", icon: LayoutDashboard },
@@ -24,7 +24,7 @@ export function AdminNav({ email }: { email: string; demo?: boolean }) {
     <aside className="admin-sidebar">
       <div className="admin-brand">
         <div className="admin-brand-info">
-          <Logo />
+          <AdminLogo />
         </div>
         <span className="admin-brand-badge">CMS</span>
       </div>

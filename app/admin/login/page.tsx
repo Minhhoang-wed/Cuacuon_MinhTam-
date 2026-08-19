@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { AlertCircle, ArrowLeft, ArrowRight, Boxes, Building2, KeyRound, Settings, ShieldCheck } from "lucide-react";
+import { AlertCircle, ArrowLeft, ArrowRight, Boxes, Building2, KeyRound, Settings } from "lucide-react";
 import Link from "next/link";
 import { isSupabaseConfigured } from "@/lib/supabase-rest";
 
@@ -26,13 +26,10 @@ export default async function AdminLoginPage({
   return (
     <main className="admin-login-page">
       <div className="admin-login-brand">
-        <span className="admin-login-mark">
-          <ShieldCheck size={26} />
-        </span>
-        <span>
-          <b>MINH TÂM</b>
-          <small>CONTENT MANAGEMENT SYSTEM</small>
-        </span>
+        <Link href="/" className="admin-login-logo" aria-label="Cua Cuon Minh Tam - Trang chu">
+          <img src="/logo/logo.png" alt="Cua Cuon Minh Tam" />
+        </Link>
+        <span className="admin-login-badge">CMS</span>
       </div>
 
       <div className="admin-login-grid">
