@@ -1,20 +1,22 @@
 "use client";
 
-import { Boxes, Building2, ExternalLink, FolderTree, Home, ImageIcon, LayoutDashboard, LogOut, Settings } from "lucide-react";
+import { Boxes, Building2, FolderTree, LayoutDashboard, Home, ImageIcon, LogOut, Settings, ExternalLink, Wrench, Newspaper, PhoneCall } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AdminLogo } from "@/components/admin/admin-logo";
 
 const links = [
   { href: "/admin/dashboard", label: "Tổng quan", icon: LayoutDashboard },
+  { href: "/admin/requests", label: "Yêu cầu đặt lịch", icon: PhoneCall },
   { href: "/admin/products", label: "Sản phẩm", icon: Boxes },
   { href: "/admin/categories", label: "Danh mục", icon: FolderTree },
+  { href: "/admin/services", label: "Dịch vụ sửa chữa", icon: Wrench },
   { href: "/admin/projects", label: "Dự án đã làm", icon: Building2 },
+  { href: "/admin/articles", label: "Tin tức & Cẩm nang", icon: Newspaper },
   { href: "/admin/media", label: "Thư viện ảnh", icon: ImageIcon },
   { href: "/admin/homepage", label: "Trang chủ", icon: Home },
   { href: "/admin/settings", label: "Cấu hình website", icon: Settings },
 ];
-
 
 export function AdminNav({ email }: { email: string; demo?: boolean }) {
   const pathname = usePathname();
@@ -71,5 +73,3 @@ export function AdminNav({ email }: { email: string; demo?: boolean }) {
     </aside>
   );
 }
-
-

@@ -3,7 +3,8 @@ import { ArrowRight, Clock3 } from "lucide-react";
 import Link from "next/link";
 import { CtaBand } from "@/components/cta-band";
 import { PageHero } from "@/components/page-hero";
-import { articles } from "@/data/content";
+import { getArticles } from "@/lib/catalog";
+import { publicAssetUrl } from "@/lib/supabase-rest";
 
 export const metadata: Metadata = {
   title: "Tin tức & hướng dẫn",
@@ -11,7 +12,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/tin-tuc" },
 };
 
-export default function NewsPage() {
+export default async function NewsPage() {
+  const articles = await getArticles();
+
   return (
     <>
       <PageHero
@@ -26,13 +29,28 @@ export default function NewsPage() {
             <div className="article-grid">
               {articles.map((article, index) => (
                 <article className="article-card" key={article.slug}>
-                  <div className={`article-cover tone-${index + 1}`}>
-                    <span>{article.category}</span>
-                    <b>{String(index + 1).padStart(2, "0")}</b>
-                  </div>
+                  {article.imageUrl ? (
+                    <div
+                      className="article-cover"
+                      style={{
+                        padding: 0,
+                        backgroundImage: `url(${publicAssetUrl(article.imageUrl) || article.imageUrl})`,
+                        backgroundSize: "cover",
+                        backgroundPosition: "center",
+                      }}
+                    >
+                      <span style={{ position: "relative", zIndex: 2 }}>{article.category}</span>
+                      <b style={{ position: "relative", zIndex: 2 }}>{String(index + 1).padStart(2, "0")}</b>
+                    </div>
+                  ) : (
+                    <div className={`article-cover tone-${(index % 4) + 1}`}>
+                      <span>{article.category}</span>
+                      <b>{String(index + 1).padStart(2, "0")}</b>
+                    </div>
+                  )}
                   <div className="article-body">
                     <div className="card-meta">
-                      <span>{article.date}</span>
+                      <span>{article.publishedAt}</span>
                       <span><Clock3 size={13} /> {article.readTime}</span>
                     </div>
                     <h2>{article.title}</h2>
@@ -57,4 +75,3 @@ export default function NewsPage() {
     </>
   );
 }
-

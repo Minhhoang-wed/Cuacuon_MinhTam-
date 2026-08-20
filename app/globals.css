@@ -823,9 +823,18 @@ img { max-width: 100%; }
 
 /* Status Badges */
 .status-badge { padding: 4px 10px; display: inline-flex; align-items: center; gap: 5px; border-radius: 999px; font-size: 12px; font-weight: 700; line-height: 1.3; }
-.status-badge.published { color: #15803d; background: #dcfce7; border: 1px solid #bbf7d0; }
-.status-badge.draft { color: #b45309; background: #fef3c7; border: 1px solid #fde68a; }
-.status-badge.archived { color: #475569; background: #f1f5f9; border: 1px solid #e2e8f0; }
+.status-badge.published, .status-badge.live, .status-badge.completed { color: #15803d; background: #dcfce7; border: 1px solid #bbf7d0; }
+.status-badge.draft, .status-badge.in_progress { color: #b45309; background: #fef3c7; border: 1px solid #fde68a; }
+.status-badge.archived, .status-badge.cancelled { color: #475569; background: #f1f5f9; border: 1px solid #e2e8f0; }
+.status-badge.new { color: #dc2626; background: #fee2e2; border: 1px solid #fecaca; }
+.status-badge.contacted { color: #0284c7; background: #e0f2fe; border: 1px solid #bae6fd; }
+
+.admin-item-cell { display: flex; align-items: center; gap: 12px; }
+.admin-item-icon { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.admin-item-info { min-width: 0; }
+.admin-item-info a, .admin-item-info strong { display: block; font-weight: 600; font-size: 14.5px; color: #0f172a; text-decoration: none; transition: color 0.15s; }
+.admin-item-info a:hover { color: #0284c7; }
+.admin-item-info small { display: block; margin-top: 2px; color: #64748b; font-size: 12px; font-family: ui-monospace, monospace; }
 
 /* Table Actions */
 .table-actions { display: flex; justify-content: flex-end; align-items: center; gap: 8px; }

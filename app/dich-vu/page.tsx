@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { ArrowRight, CheckCircle2, MessageCircle, Phone, ShieldCheck, Zap } from "lucide-react";
+import { ArrowRight, CheckCircle2, Clock3, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { CtaBand } from "@/components/cta-band";
 import { PageHero } from "@/components/page-hero";
 import { repairServices, servicePriceCategories } from "@/data/public-home";
-import { getSiteSettings } from "@/lib/catalog";
+import { getServices, getSiteSettings } from "@/lib/catalog";
 
 export const metadata: Metadata = {
   title: "Bảng báo giá dịch vụ sửa cửa cuốn Minh Tâm Door",
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ServicesPage() {
-  const site = await getSiteSettings();
+  const [services, site] = await Promise.all([getServices(), getSiteSettings()]);
 
   return (
     <>
@@ -46,6 +46,7 @@ export default async function ServicesPage() {
                     <span className="service-warranty">{service.warranty}</span>
                   </div>
                 </div>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={service.image} alt={service.title} />
               </article>
             ))}
@@ -62,7 +63,7 @@ export default async function ServicesPage() {
             <p>Áp dụng cho dịch vụ sửa chữa, cứu hộ và thay thế linh kiện cửa cuốn tận nơi tại TP.HCM.</p>
           </div>
 
-          {/* 4 Bảng giá chi tiết theo danh mục khách hàng cung cấp */}
+          {/* 4 Bảng giá chi tiết theo danh mục */}
           <div className="repair-price-tables-grid">
             {servicePriceCategories.map((cat) => (
               <div className="repair-price-category-card" key={cat.categoryTitle}>

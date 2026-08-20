@@ -1,4 +1,5 @@
 import { siteConfig } from "@/data/site";
+import { services as staticServices, articles as staticArticles, Service, Article } from "@/data/content";
 import { getSupabaseConfig, publicAssetUrl, supabaseFetch } from "@/lib/supabase-rest";
 
 export type PriceMode = "exact" | "from" | "contact" | "hidden";
@@ -10,6 +11,38 @@ export type CatalogProduct = {
   priceMode: PriceMode; priceAmount: number | null; priceLabel: string | null; currency: string; warranty: string;
   featured: boolean; status: "draft" | "published" | "archived"; seoTitle: string | null; seoDescription: string | null;
   accent: string; updatedAt?: string | null; images: CatalogImage[]; specs: CatalogSpec[];
+};
+
+export type CatalogService = {
+  id: string;
+  slug: string;
+  name: string;
+  summary: string;
+  description: string;
+  price: string;
+  duration: string;
+  warranty: string;
+  symptoms: string[];
+  process: string[];
+  accent: string;
+  sortOrder: number;
+  isActive: boolean;
+};
+
+export type CatalogArticle = {
+  id: string;
+  slug: string;
+  title: string;
+  category: string;
+  excerpt: string;
+  content: string[];
+  imageUrl: string | null;
+  readTime: string;
+  author: string;
+  isFeatured: boolean;
+  status: "draft" | "published" | "archived";
+  sortOrder: number;
+  publishedAt: string;
 };
 
 export type ManagedSiteConfig = { name: string; shortName: string; description: string; hotline: string; hotlineHref: string; zaloHref: string; email: string; address: string; hours: string; mapsHref: string; serviceArea: string; baseUrl: string; facebookHref: string; messengerHref: string };
@@ -67,7 +100,6 @@ export async function getProductBySlug(slug: string): Promise<CatalogProduct | n
     return null;
   }
 }
-
 
 export type CatalogProject = {
   id: string;
@@ -176,9 +208,195 @@ export async function getProjectBySlug(slug: string): Promise<CatalogProject | n
   }
 }
 
+// -------------------------------------------------------------
+// SERVICES (DỊCH VỤ)
+// -------------------------------------------------------------
+type DbService = {
+  id: string;
+  name: string;
+  slug: string;
+  summary: string;
+  description: string | null;
+  price: string;
+  duration: string;
+  warranty: string;
+  symptoms: string[] | string;
+  process: string[] | string;
+  accent: string | null;
+  sort_order: number;
+  is_active: boolean;
+};
+
+function mapService(row: DbService): CatalogService {
+  const parseList = (val: string[] | string | null | undefined): string[] => {
+    if (Array.isArray(val)) return val;
+    if (typeof val === "string") {
+      try { const parsed = JSON.parse(val); if (Array.isArray(parsed)) return parsed; } catch {}
+      return val.split("\n").map((s) => s.trim()).filter(Boolean);
+    }
+    return [];
+  };
+  return {
+    id: row.id,
+    slug: row.slug,
+    name: row.name,
+    summary: row.summary || "",
+    description: row.description || "",
+    price: row.price || "Khảo sát báo giá",
+    duration: row.duration || "30 - 60 phút",
+    warranty: row.warranty || "12 tháng",
+    symptoms: parseList(row.symptoms),
+    process: parseList(row.process),
+    accent: row.accent || "#10b981",
+    sortOrder: row.sort_order || 0,
+    isActive: row.is_active,
+  };
+}
+
+export async function getServices(): Promise<CatalogService[]> {
+  if (!getSupabaseConfig()) {
+    return staticServices.map((s, idx) => ({
+      id: `static-${idx}`,
+      slug: s.slug,
+      name: s.name,
+      summary: s.summary,
+      description: "",
+      price: s.price,
+      duration: s.duration,
+      warranty: s.warranty,
+      symptoms: s.symptoms,
+      process: s.process,
+      accent: "#10b981",
+      sortOrder: idx,
+      isActive: true,
+    }));
+  }
+  try {
+    const rows = await supabaseFetch<DbService[]>(
+      "/rest/v1/services?select=*&is_active=eq.true&order=sort_order.asc,created_at.asc",
+      { next: { revalidate: 300, tags: ["services"] } }
+    );
+    if (rows && rows.length > 0) return rows.map(mapService);
+  } catch (error) {
+    console.error("Lỗi khi tải dịch vụ từ Supabase:", error);
+  }
+  return staticServices.map((s, idx) => ({
+    id: `static-${idx}`,
+    slug: s.slug,
+    name: s.name,
+    summary: s.summary,
+    description: "",
+    price: s.price,
+    duration: s.duration,
+    warranty: s.warranty,
+    symptoms: s.symptoms,
+    process: s.process,
+    accent: "#10b981",
+    sortOrder: idx,
+    isActive: true,
+  }));
+}
+
+export async function getServiceBySlug(slug: string): Promise<CatalogService | null> {
+  const all = await getServices();
+  return all.find((s) => s.slug === slug) || null;
+}
+
+// -------------------------------------------------------------
+// ARTICLES (TIN TỨC / BÀI VIẾT)
+// -------------------------------------------------------------
+type DbArticle = {
+  id: string;
+  title: string;
+  slug: string;
+  category: string;
+  excerpt: string;
+  content: string[] | string;
+  image_url: string | null;
+  read_time: string;
+  author: string;
+  is_featured: boolean;
+  status: "draft" | "published" | "archived";
+  sort_order: number;
+  published_at: string;
+};
+
+function mapArticle(row: DbArticle): CatalogArticle {
+  const parseContent = (val: string[] | string | null | undefined): string[] => {
+    if (Array.isArray(val)) return val;
+    if (typeof val === "string") {
+      try { const parsed = JSON.parse(val); if (Array.isArray(parsed)) return parsed; } catch {}
+      return val.split("\n\n").map((s) => s.trim()).filter(Boolean);
+    }
+    return [];
+  };
+  return {
+    id: row.id,
+    slug: row.slug,
+    title: row.title,
+    category: row.category || "Tin tức",
+    excerpt: row.excerpt || "",
+    content: parseContent(row.content),
+    imageUrl: row.image_url,
+    readTime: row.read_time || "3 phút",
+    author: row.author || "Kỹ Thuật Viên An Tâm",
+    isFeatured: row.is_featured,
+    status: row.status,
+    sortOrder: row.sort_order || 0,
+    publishedAt: row.published_at ? new Date(row.published_at).toLocaleDateString("vi-VN") : "Gần đây",
+  };
+}
+
+export async function getArticles(): Promise<CatalogArticle[]> {
+  if (!getSupabaseConfig()) {
+    return staticArticles.map((a, idx) => ({
+      id: `static-${idx}`,
+      slug: a.slug,
+      title: a.title,
+      category: a.category,
+      excerpt: a.excerpt,
+      content: a.content,
+      imageUrl: null,
+      readTime: a.readTime,
+      author: "Kỹ Thuật Viên An Tâm",
+      isFeatured: idx === 0,
+      status: "published",
+      sortOrder: idx,
+      publishedAt: a.date,
+    }));
+  }
+  try {
+    const rows = await supabaseFetch<DbArticle[]>(
+      "/rest/v1/articles?select=*&status=eq.published&order=sort_order.asc,published_at.desc",
+      { next: { revalidate: 300, tags: ["articles"] } }
+    );
+    if (rows && rows.length > 0) return rows.map(mapArticle);
+  } catch (error) {
+    console.error("Lỗi khi tải bài viết từ Supabase:", error);
+  }
+  return staticArticles.map((a, idx) => ({
+    id: `static-${idx}`,
+    slug: a.slug,
+    title: a.title,
+    category: a.category,
+    excerpt: a.excerpt,
+    content: a.content,
+    imageUrl: null,
+    readTime: a.readTime,
+    author: "Kỹ Thuật Viên An Tâm",
+    isFeatured: idx === 0,
+    status: "published",
+    sortOrder: idx,
+    publishedAt: a.date,
+  }));
+}
+
+export async function getArticleBySlug(slug: string): Promise<CatalogArticle | null> {
+  const all = await getArticles();
+  return all.find((a) => a.slug === slug) || null;
+}
 
 export async function getCategoryBySlug(slug: string) { const categories = await getCategories(); return categories.find((item) => item.slug === slug) || null; }
-
 
 export async function getSiteSettings(): Promise<ManagedSiteConfig> {
   const fallback: ManagedSiteConfig = { ...siteConfig, facebookHref: "https://facebook.com/", messengerHref: "https://m.me/" };
