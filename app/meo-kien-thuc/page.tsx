@@ -16,10 +16,9 @@ export default function TipsAndKnowledgePage() {
   return (
     <>
       <PageHero
-        eyebrow="Cẩm nang hữu ích"
         title="Mẹo & Kiến Thức Sử Dụng Cửa Cuốn"
         description="Tổng hợp các kinh nghiệm nhận biết sự cố, mẹo vận hành an toàn và cách bảo trì cửa cuốn bền đẹp dài lâu."
-        image="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1600&q=82"
+        image="/images/tips-hero-banner.jpg"
       />
 
       {/* 3 Mẹo thực tế nổi bật */}
