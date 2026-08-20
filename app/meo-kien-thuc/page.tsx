@@ -3,8 +3,9 @@ import { ArrowRight, Clock3, FileText, Lightbulb } from "lucide-react";
 import Link from "next/link";
 import { CtaBand } from "@/components/cta-band";
 import { PageHero } from "@/components/page-hero";
-import { articles } from "@/data/content";
 import { repairTips } from "@/data/public-home";
+import { getArticles } from "@/lib/catalog";
+import { publicAssetUrl } from "@/lib/supabase-rest";
 
 export const metadata: Metadata = {
   title: "Mẹo & Kiến Thức Cửa Cuốn",
@@ -12,7 +13,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/meo-kien-thuc" },
 };
 
-export default function TipsAndKnowledgePage() {
+export default async function TipsAndKnowledgePage() {
+  const articles = await getArticles();
+
   return (
     <>
       <PageHero
@@ -32,6 +35,7 @@ export default function TipsAndKnowledgePage() {
           <div className="repair-tip-grid">
             {repairTips.map((tip) => (
               <article className="repair-tip-card" key={tip.title}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={tip.image} alt={tip.title} />
                 <div>
                   <span>{tip.tag}</span>
@@ -56,13 +60,28 @@ export default function TipsAndKnowledgePage() {
           <div className="article-grid">
             {articles.map((article, index) => (
               <article className="article-card" key={article.slug}>
-                <div className={`article-cover tone-${index + 1}`}>
-                  <span>{article.category}</span>
-                  <b>{String(index + 1).padStart(2, "0")}</b>
-                </div>
+                {article.imageUrl ? (
+                  <div
+                    className="article-cover"
+                    style={{
+                      padding: 0,
+                      backgroundImage: `url(${publicAssetUrl(article.imageUrl) || article.imageUrl})`,
+                      backgroundSize: "cover",
+                      backgroundPosition: "center",
+                    }}
+                  >
+                    <span style={{ position: "relative", zIndex: 2 }}>{article.category}</span>
+                    <b style={{ position: "relative", zIndex: 2 }}>{String(index + 1).padStart(2, "0")}</b>
+                  </div>
+                ) : (
+                  <div className={`article-cover tone-${(index % 4) + 1}`}>
+                    <span>{article.category}</span>
+                    <b>{String(index + 1).padStart(2, "0")}</b>
+                  </div>
+                )}
                 <div className="article-body">
                   <div className="card-meta">
-                    <span>{article.date}</span>
+                    <span>{article.publishedAt}</span>
                     <span><Clock3 size={13} /> {article.readTime}</span>
                   </div>
                   <h2>{article.title}</h2>
