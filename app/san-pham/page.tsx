@@ -34,10 +34,9 @@ export default async function ProductsPage({
   return (
     <>
       <PageHero
-        eyebrow="BỘ SƯU TẬP SẢN PHẨM"
         title="Thiết Bị Cửa Cuốn Chuẩn Mực & Bền Bỉ"
         description="Tra cứu theo từng dòng cửa khe thoáng, tấm liền, motor hoặc phụ kiện. Toàn bộ thông số, báo giá và chính sách bảo hành được quản lý minh bạch."
-        image="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?w=1600&q=82"
+        image="/images/product-hero-banner.jpg"
       />
 
       <section className="catalog-tools">

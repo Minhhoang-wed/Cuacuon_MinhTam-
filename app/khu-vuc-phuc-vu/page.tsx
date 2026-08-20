@@ -22,7 +22,8 @@ export default async function ServiceAreaPage() {
         eyebrow="Phủ sóng toàn TP.HCM"
         title="Hệ Thống Cửa Hàng & Mạng Lưới Kỹ Thuật Tận Nơi"
         description="Minh Tâm Door sở hữu 2 cửa hàng trực tiếp và đội ngũ kỹ thuật viên thường trực tại tất cả các quận huyện TP.HCM, sẵn sàng có mặt nhanh sau 15 - 30 phút."
-        image="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1600&q=82"
+        image="/images/area-hero-banner.jpg"
+        cardOverlay={true}
       />
 
       <section className="repair-area-band" style={{ padding: "70px 0 90px", background: "var(--bg-stone)" }}>

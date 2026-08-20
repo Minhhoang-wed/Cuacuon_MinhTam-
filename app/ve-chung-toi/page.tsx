@@ -13,10 +13,9 @@ export default function AboutPage() {
   return (
     <>
       <PageHero
-        eyebrow="Câu chuyện của chúng tôi"
         title="Tận tâm trong từng công trình."
         description="Từ một yêu cầu sửa chữa nhỏ đến hệ cửa cho nhà xưởng, chúng tôi luôn bắt đầu bằng khảo sát rõ ràng và kết thúc bằng bàn giao minh bạch."
-        image="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=1600&q=82"
+        image="/images/about-hero-banner.jpg"
       />
       <section className="section about-intro">
         <div className="container about-intro-grid">

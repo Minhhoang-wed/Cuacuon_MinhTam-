@@ -12,6 +12,7 @@ import {
   Zap,
 } from "lucide-react";
 import Link from "next/link";
+import { CinematicHeroSlider } from "@/components/cinematic-hero-slider";
 import {
   repairIssues,
   repairServices,
@@ -54,34 +55,12 @@ export default async function HomePage() {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusiness) }} />
 
-      {/* Hero Banner phong cách Card vòm điện ảnh cao cấp (Talently Style) */}
-      <section className="cinematic-hero-section" id="sua-cua-cuon">
-        <div className="container">
-          <div className="cinematic-hero-card">
-            <div className="cinematic-hero-content">
-              <span className="cinematic-hero-badge">
-                CỨU HỘ & SỬA CỬA CUỐN 24/7 TOÀN TP.HCM
-              </span>
-              <h1 className="cinematic-hero-title">
-                Cửa cuốn gặp sự cố?
-                <em>Minh Tâm hỗ trợ sửa chữa tận nơi.</em>
-              </h1>
-              <p className="cinematic-hero-desc">
-                Tiếp nhận mọi sự cố cửa cuốn kẹt nan, hỏng motor, lỗi remote, lệch ray, đứt lò xo... 
-                Kỹ thuật viên có mặt nhanh sau 15 – 30 phút tại tất cả các quận huyện TP.HCM.
-              </p>
-              <div className="cinematic-hero-actions">
-                <a href={site.hotlineHref} className="cinematic-btn-primary">
-                  <Phone size={18} /> Gọi cứu hộ ngay: {site.hotline}
-                </a>
-                <a href={site.zaloHref} target="_blank" rel="noreferrer" className="cinematic-btn-secondary">
-                  <MessageCircle size={18} /> Zalo tư vấn miễn phí
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* Hero Banner phong cách Card vòm tự động chuyển ảnh mỗi 3 giây (Fade Transition) */}
+      <CinematicHeroSlider
+        hotlineHref={site.hotlineHref}
+        hotline={site.hotline}
+        zaloHref={site.zaloHref}
+      />
 
       <section className="repair-section repair-trust-section" id="vi-sao-chon-minh-tam">
         <div className="container">
