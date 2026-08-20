@@ -37,16 +37,24 @@ export default async function ServicesPage() {
           <div className="repair-service-grid">
             {repairServices.map((service, index) => (
               <article className="repair-service-card" key={service.title}>
+                <div className="repair-service-image-wrap">
+                  <img src={service.image} alt={service.title} />
+                  <span className="repair-service-badge">{String(index + 1).padStart(2, "0")} • CỨU HỘ</span>
+                </div>
                 <div className="repair-service-copy">
-                  <small>{String(index + 1).padStart(2, "0")}</small>
+                  <span className="repair-service-category">DỊCH VỤ SỬA CHỮA</span>
                   <h3>{service.title}</h3>
                   <p>{service.description}</p>
                   <div className="repair-service-price-stack">
                     <b className="service-price">{service.price}</b>
-                    <span className="service-warranty">{service.warranty}</span>
+                    {service.warranty && (
+                      <>
+                        <span className="service-divider">|</span>
+                        <span className="service-warranty">{service.warranty}</span>
+                      </>
+                    )}
                   </div>
                 </div>
-                <img src={service.image} alt={service.title} />
               </article>
             ))}
           </div>

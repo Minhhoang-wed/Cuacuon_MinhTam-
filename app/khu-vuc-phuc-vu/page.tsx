@@ -26,7 +26,7 @@ export default async function ServiceAreaPage() {
         cardOverlay={true}
       />
 
-      <section className="repair-area-band" style={{ padding: "70px 0 90px", background: "var(--bg-stone)" }}>
+      <section className="repair-area-band">
         <div className="container">
           <div className="repair-section-heading">
             <span>Điểm phục vụ trực tiếp</span>
@@ -35,7 +35,7 @@ export default async function ServiceAreaPage() {
           </div>
 
           {/* 2 Cửa hàng trực tiếp */}
-          <div className="direct-stores-grid" style={{ marginBottom: "50px" }}>
+          <div className="direct-stores-grid">
             {directStores.map((store) => (
               <div className="direct-store-card" key={store.branch}>
                 <div className="direct-store-badge">
@@ -59,8 +59,8 @@ export default async function ServiceAreaPage() {
             <p>Kỹ thuật viên tại chỗ có mặt sau 15 – 30 phút, quý khách ở bất kỳ quận nào cũng không phải chờ đợi lâu.</p>
           </div>
 
-          <div className="repair-area-panel" style={{ background: "#ffffff", padding: "36px 30px" }}>
-            <div className="repair-area-panel-heading" style={{ marginBottom: "24px" }}>
+          <div className="repair-area-panel">
+            <div className="repair-area-panel-heading">
               <span>Đội kỹ thuật lưu động 24/7</span>
               <p>Kỹ thuật viên túc trực tại chỗ ở từng quận huyện · 15 - 30 phút có mặt tận nơi xử lý sự cố.</p>
             </div>
