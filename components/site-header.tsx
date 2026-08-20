@@ -1,9 +1,9 @@
 "use client";
 
-import { ArrowRight, ChevronDown, Clock3, Mail, MapPin, Menu, Phone, X } from "lucide-react";
+import { ArrowRight, ChevronDown, Clock3, Mail, MapPin, Menu, MessageCircle, Phone, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PublicLogo } from "@/components/public-logo";
 import type { ManagedSiteConfig } from "@/lib/catalog";
 
@@ -28,6 +28,21 @@ export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+
+  // Lock body scroll and toggle menu class when mobile menu is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = "hidden";
+      document.body.classList.add("mobile-menu-open");
+    } else {
+      document.body.style.overflow = "";
+      document.body.classList.remove("mobile-menu-open");
+    }
+    return () => {
+      document.body.style.overflow = "";
+      document.body.classList.remove("mobile-menu-open");
+    };
+  }, [open]);
 
   return (
     <header className="site-header-navy">
@@ -83,67 +98,140 @@ export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
         </nav>
 
         <div className="header-contact">
-          <a href={site.hotlineHref} className="header-phone-icon" aria-label={`Gọi ${site.hotline}`}>
+          <a href={site.hotlineHref} className="header-phone-icon" aria-label={`Gọi ngay ${site.hotline}`}>
             <Phone size={17} />
           </a>
-          <a href={site.hotlineHref} className="header-phone-copy">
-            <small>Hotline 24/7</small>
+          <div className="header-phone-copy">
+            <small>HOTLINE 24/7</small>
             <b>{site.hotline}</b>
-          </a>
+          </div>
           <a
             href={site.zaloHref}
             target="_blank"
             rel="noreferrer"
             className="header-zalo-btn"
           >
-            <span>Zalo tư vấn</span>
+            <span>ZALO TƯ VẤN</span>
             <ArrowRight size={15} />
           </a>
         </div>
 
         <button
+          type="button"
           className="menu-button-navy"
-          onClick={() => setOpen(!open)}
+          onClick={() => setOpen(true)}
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label="Mở menu"
         >
-          {open ? <X size={22} /> : <Menu size={22} />}
+          <Menu size={22} />
         </button>
       </div>
 
       {open && (
-        <nav id="mobile-menu" className="mobile-nav-navy" aria-label="Điều hướng di động">
-          {[
-            ...navLinks.slice(0, 2),
-            { label: "Sản phẩm", href: "/san-pham" },
-            ...navLinks.slice(2),
-            { label: "Liên hệ", href: "/lien-he" },
-          ].map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
+        <div id="mobile-menu" className="mobile-nav-drawer" role="dialog" aria-modal="true" aria-label="Menu điều hướng">
+          {/* Sticky Drawer Topbar with Close Button */}
+          <div className="mobile-drawer-topbar">
+            <PublicLogo name={site.name} shortName={site.shortName} />
+            <button
+              type="button"
+              className="mobile-drawer-close-btn"
               onClick={() => setOpen(false)}
-              className={isActive(item.href) ? "active" : ""}
+              aria-label="Đóng menu"
             >
-              {item.label}
-            </Link>
-          ))}
-          <a
-            href={site.hotlineHref}
-            onClick={() => setOpen(false)}
-            style={{
-              padding: "14px 24px",
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              fontWeight: 700,
-              color: "var(--color-terracotta)",
-            }}
-          >
-            <Phone size={16} /> Hotline: {site.hotline}
-          </a>
-        </nav>
+              <X size={22} />
+            </button>
+          </div>
+
+          {/* Scrollable Drawer Body */}
+          <div className="mobile-drawer-body">
+            <div className="mobile-nav-links">
+              <Link
+                href="/"
+                onClick={() => setOpen(false)}
+                className={isActive("/") ? "active" : ""}
+              >
+                Trang chủ
+              </Link>
+              <Link
+                href="/dich-vu"
+                onClick={() => setOpen(false)}
+                className={isActive("/dich-vu") ? "active" : ""}
+              >
+                Sửa cửa cuốn 24/7
+              </Link>
+
+              <div className="mobile-nav-subgroup">
+                <Link
+                  href="/san-pham"
+                  onClick={() => setOpen(false)}
+                  className={`mobile-nav-parent ${isActive("/san-pham") ? "active" : ""}`}
+                >
+                  Sản phẩm cửa cuốn
+                </Link>
+                <div className="mobile-sub-items">
+                  {productNavigation.map((prod) => (
+                    <Link
+                      key={prod.href}
+                      href={prod.href}
+                      onClick={() => setOpen(false)}
+                    >
+                      • {prod.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              <Link
+                href="/khu-vuc-phuc-vu"
+                onClick={() => setOpen(false)}
+                className={isActive("/khu-vuc-phuc-vu") ? "active" : ""}
+              >
+                Khu vực phục vụ
+              </Link>
+              <Link
+                href="/meo-kien-thuc"
+                onClick={() => setOpen(false)}
+                className={isActive("/meo-kien-thuc") ? "active" : ""}
+              >
+                Mẹo & kiến thức
+              </Link>
+              <Link
+                href="/ve-chung-toi"
+                onClick={() => setOpen(false)}
+                className={isActive("/ve-chung-toi") ? "active" : ""}
+              >
+                Giới thiệu
+              </Link>
+              <Link
+                href="/lien-he"
+                onClick={() => setOpen(false)}
+                className={isActive("/lien-he") ? "active" : ""}
+              >
+                Liên hệ
+              </Link>
+            </div>
+
+            <div className="mobile-nav-actions">
+              <a
+                href={site.hotlineHref}
+                className="mobile-nav-call-btn"
+                onClick={() => setOpen(false)}
+              >
+                <Phone size={18} /> Gọi cứu hộ: {site.hotline}
+              </a>
+              <a
+                href={site.zaloHref}
+                target="_blank"
+                rel="noreferrer"
+                className="mobile-nav-zalo-btn"
+                onClick={() => setOpen(false)}
+              >
+                <MessageCircle size={18} /> Zalo tư vấn miễn phí
+              </a>
+            </div>
+          </div>
+        </div>
       )}
     </header>
   );
