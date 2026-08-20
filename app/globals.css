@@ -1927,19 +1927,24 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
 }
 .footer-maison-trust {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 8px;
-  margin-top: 18px;
-  padding: 8px 14px;
+  margin-top: 16px;
+  padding: 8px 12px;
   background: rgba(245, 158, 11, 0.08);
-  border: 1px solid rgba(245, 158, 11, 0.2);
-  border-radius: 8px;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 4px;
   color: #fde68a;
   font-size: 12.5px;
   font-weight: 500;
+  line-height: 1.45;
+}
+.footer-maison-trust svg {
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 .footer-maison-actions {
-  margin-top: 20px;
+  margin-top: 18px;
 }
 .footer-zalo-btn {
   display: inline-flex;
@@ -1949,7 +1954,7 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
   background: rgba(0, 104, 255, 0.15);
   border: 1px solid rgba(0, 104, 255, 0.4);
   color: #93c5fd;
-  border-radius: 8px;
+  border-radius: 4px;
   font-size: 13.5px;
   font-weight: 600;
   text-decoration: none;
@@ -4058,17 +4063,17 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
 }
 .public-site .footer-maison-trust {
   color: #fef08a;
-  border: 1px solid rgba(234, 179, 8, 0.25);
+  border: 1px solid rgba(234, 179, 8, 0.3);
   background: rgba(234, 179, 8, 0.08);
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 8px 12px;
-  font-size: 12px;
+  font-size: 12.5px;
 }
 .public-site .footer-zalo-btn {
   color: #38bdf8;
-  border: 1px solid rgba(56, 189, 248, 0.35);
+  border: 1px solid rgba(56, 189, 248, 0.4);
   background: rgba(56, 189, 248, 0.1);
-  border-radius: 8px;
+  border-radius: 4px;
 }
 .public-site .footer-zalo-btn:hover {
   color: #ffffff;
