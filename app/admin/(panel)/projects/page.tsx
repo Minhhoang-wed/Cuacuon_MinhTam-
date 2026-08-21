@@ -30,13 +30,12 @@ export default async function AdminProjectsPage({
 
       <header className="admin-page-header">
         <div>
-          <span>Công trình thực tế</span>
           <h1>Dự án đã hoàn thành ({projects.length})</h1>
           <p>Quản lý các công trình, hình ảnh bàn giao thực tế và feedback khách hàng.</p>
         </div>
         <Link href="/admin/projects/new" className="button button-primary">
-          <Plus size={18} />
-          <span>Thêm dự án mới</span>
+          <Plus size={14} />
+          <span>Thêm dự án</span>
         </Link>
       </header>
 
@@ -95,10 +94,10 @@ export default async function AdminProjectsPage({
                           : "Lưu trữ"}
                       </span>
                     </td>
-                    <td>
+                    <td style={{ whiteSpace: "nowrap" }}>
                       {project.is_featured ? (
-                        <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: "#d97706", fontSize: 13, fontWeight: 600 }}>
-                          <Star size={14} fill="#d97706" /> Nổi bật
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: 5, color: "#d97706", fontSize: 12, fontWeight: 600, background: "#fffbeb", padding: "3px 8px", borderRadius: "6px", whiteSpace: "nowrap", flexShrink: 0 }}>
+                          <Star size={13} fill="#d97706" /> Nổi bật
                         </span>
                       ) : (
                         <span style={{ color: "#94a3b8" }}>—</span>

@@ -3,9 +3,9 @@ export const siteConfig = {
   shortName: "MINH TÂM",
   description:
     "Dịch vụ sửa chữa, bảo trì và lắp đặt cửa cuốn tận nơi tại TP.HCM. Tiếp nhận yêu cầu 24/7, khảo sát rõ ràng, bảo hành minh bạch.",
-  hotline: "0909 123 456",
-  hotlineHref: "tel:0909123456",
-  zaloHref: "https://zalo.me/0909123456",
+  hotline: "0327 359 368",
+  hotlineHref: "tel:0327359368",
+  zaloHref: "https://zalo.me/0327359368",
   email: "hello@cuacuonantam.vn",
   address: "123 Đường Minh Họa, TP. Hồ Chí Minh",
   hours: "Tiếp nhận 24/7",

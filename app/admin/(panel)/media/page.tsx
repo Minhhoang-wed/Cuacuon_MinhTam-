@@ -1,7 +1,8 @@
-import { CheckCircle2, Image as ImageIcon, ImagePlus, Trash2, Upload } from "lucide-react";
-import { deleteMedia, uploadMedia } from "@/lib/admin-actions";
+import { CheckCircle2, Image as ImageIcon, ImagePlus, Trash2 } from "lucide-react";
+import { deleteMedia } from "@/lib/admin-actions";
 import { getAdminMedia } from "@/lib/admin-data";
 import { isSupabaseConfigured, publicAssetUrl } from "@/lib/supabase-rest";
+import { MediaUploadForm } from "@/components/admin/media-upload-form";
 
 export default async function AdminMediaPage({
   searchParams,
@@ -37,29 +38,7 @@ export default async function AdminMediaPage({
           <p>Hỗ trợ định dạng JPG, PNG, WebP · Dung lượng tối đa 5MB/ảnh · Có thể chọn tối đa 10 ảnh cùng lúc.</p>
         </div>
 
-        <form action={uploadMedia}>
-          <label>
-            <span>Văn bản thay thế (Alt text SEO)</span>
-            <input name="alt_text" placeholder="VD: Lắp đặt cửa cuốn khe thoáng tại Bình Thạnh" />
-          </label>
-
-          <label className="admin-upload">
-            <Upload size={24} />
-            <span>Bấm hoặc kéo thả file hình ảnh vào đây</span>
-            <input
-              type="file"
-              name="images"
-              accept="image/jpeg,image/png,image/webp"
-              multiple
-              required
-            />
-          </label>
-
-          <button className="button button-primary" style={{ width: "100%", height: 44 }}>
-            <Upload size={18} />
-            <span>Bắt đầu tải lên thư viện</span>
-          </button>
-        </form>
+        <MediaUploadForm demo={demo} />
       </section>
 
       {/* Lưới hình ảnh */}

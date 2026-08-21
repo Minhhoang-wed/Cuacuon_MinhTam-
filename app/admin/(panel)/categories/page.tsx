@@ -23,7 +23,6 @@ export default async function AdminCategoriesPage({
 
       <header className="admin-page-header">
         <div>
-          <span>Quản lý Catalog</span>
           <h1>Danh mục sản phẩm ({categories.length})</h1>
           <p>Phân loại các dòng cửa cuốn thành các nhóm rõ ràng giúp khách hàng dễ tìm kiếm.</p>
         </div>
@@ -34,15 +33,25 @@ export default async function AdminCategoriesPage({
         <section className="admin-panel">
           <div className="admin-panel-heading">
             <div>
-              <span>Hiện có</span>
               <h2>Danh sách {categories.length} nhóm sản phẩm</h2>
             </div>
           </div>
 
-          <div className="category-admin-list">
+          <div className="category-admin-list" style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             {categories.map((category) => (
-              <article key={category.id}>
-                <form action={saveCategory} className="category-edit-form">
+              <article
+                key={category.id}
+                style={{
+                  padding: "18px 20px",
+                  border: "1px solid var(--adm-border)",
+                  borderRadius: "12px",
+                  background: "var(--adm-surface)",
+                  boxShadow: "var(--adm-shadow-sm)",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <form id={`cat-form-${category.id}`} action={saveCategory} className="category-edit-form">
                   <input type="hidden" name="id" value={category.id} />
                   <div className="admin-fields two">
                     <label>
@@ -75,23 +84,53 @@ export default async function AdminCategoriesPage({
                       <span>Đang kích hoạt hiển thị</span>
                     </label>
                   </div>
+                </form>
 
-                  <button className="button button-dark" disabled={demo}>
-                    <Save size={16} />
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    marginTop: "16px",
+                    paddingTop: "14px",
+                    borderTop: "1px solid #f1f5f9",
+                  }}
+                >
+                  <button
+                    form={`cat-form-${category.id}`}
+                    type="submit"
+                    className="button button-dark"
+                    disabled={demo}
+                  >
+                    <Save size={14} />
                     <span>Lưu thay đổi</span>
                   </button>
-                </form>
 
-                <form action={deleteCategory} className="category-delete-form">
-                  <input type="hidden" name="id" value={category.id} />
-                  <button
-                    disabled={demo}
-                    title={demo ? "Khóa ở chế độ xem trước" : "Xóa danh mục (chỉ xóa được danh mục trống)"}
-                    aria-label={`Xóa danh mục ${category.name}`}
-                  >
-                    <Trash2 size={16} />
-                  </button>
-                </form>
+                  <form action={deleteCategory} className="category-delete-form" style={{ margin: 0 }}>
+                    <input type="hidden" name="id" value={category.id} />
+                    <button
+                      type="submit"
+                      disabled={demo}
+                      title={demo ? "Khóa ở chế độ xem trước" : "Xóa danh mục (chỉ xóa được danh mục trống)"}
+                      aria-label={`Xóa danh mục ${category.name}`}
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        width: "31px",
+                        height: "31px",
+                        borderRadius: "6px",
+                        border: "1px solid #fca5a5",
+                        background: "#fef2f2",
+                        color: "#dc2626",
+                        cursor: demo ? "not-allowed" : "pointer",
+                        transition: "all .15s",
+                      }}
+                    >
+                      <Trash2 size={15} />
+                    </button>
+                  </form>
+                </div>
               </article>
             ))}
           </div>
@@ -99,7 +138,7 @@ export default async function AdminCategoriesPage({
 
         {/* Thêm mới danh mục */}
         <aside className="admin-form-card sticky-card">
-          <FolderPlus size={30} />
+          <FolderPlus size={26} />
           <h2>Thêm danh mục mới</h2>
 
           <form action={saveCategory}>
@@ -135,7 +174,7 @@ export default async function AdminCategoriesPage({
             </div>
 
             <button className="button button-primary" style={{ width: "100%", marginTop: 14 }} disabled={demo}>
-              <Plus size={18} />
+              <Plus size={14} />
               <span>Thêm danh mục</span>
             </button>
           </form>

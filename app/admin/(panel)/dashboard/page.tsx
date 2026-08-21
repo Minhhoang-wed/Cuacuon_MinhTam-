@@ -91,15 +91,12 @@ export default async function AdminDashboardPage() {
       {/* ── Greeting Banner ── */}
       <div className="admin-greeting-banner">
         <div className="admin-greeting-text">
-          <h2>{greetingEmoji} {greeting}, Minh Hoàng!</h2>
+          <h2>{greeting}, Minh Hoàng!</h2>
           <p>Hệ thống CMS Minh Tâm Door đang hoạt động tốt · Hôm nay {dateStr}</p>
         </div>
         <div className="admin-greeting-meta">
           <span className="admin-greeting-pill gold">
             <ShieldCheck size={14} /> Quản trị viên
-          </span>
-          <span className="admin-greeting-pill sky">
-            <Sparkles size={13} /> CMS v2.0
           </span>
         </div>
       </div>
@@ -107,9 +104,6 @@ export default async function AdminDashboardPage() {
       {/* ── Top Action Bar ── */}
       <header className="admin-page-header" style={{ marginBottom: 22 }}>
         <div>
-          <span>
-            <Sparkles size={13} /> Trung tâm điều khiển
-          </span>
           <h1>Tổng quan hệ thống</h1>
           <p>Quản lý dịch vụ, bảng giá, sản phẩm và nội dung website của bạn.</p>
         </div>
@@ -127,10 +121,6 @@ export default async function AdminDashboardPage() {
 
       {/* 1. Quick Actions Strip */}
       <section className="admin-quick-actions">
-        <div className="admin-quick-actions-title">
-          <Sparkles size={16} color="#2563eb" />
-          <span>Thao tác nhanh:</span>
-        </div>
         <div className="admin-quick-actions-buttons">
           <Link href="/admin/services/new" className="button button-ghost button-small">
             <Plus size={14} /> Thêm Dịch vụ
@@ -168,12 +158,11 @@ export default async function AdminDashboardPage() {
       </section>
 
       {/* 3. Two-Column Activity Feeds */}
-      <div className="admin-two-column" style={{ gridTemplateColumns: "1fr 1fr", gap: "24px" }}>
+      <div className="admin-two-column" style={{ gridTemplateColumns: "1fr 1fr", gap: "18px", alignItems: "stretch" }}>
         {/* Cột 1: Dịch vụ sửa chữa & Báo giá */}
-        <section className="admin-panel">
-          <div className="admin-panel-heading">
+        <section className="admin-panel" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+          <div className="admin-panel-heading" style={{ marginBottom: 14 }}>
             <div>
-              <span>Kỹ thuật chuyên sâu</span>
               <h2>Dịch vụ sửa chữa ({services.length})</h2>
             </div>
             <Link href="/admin/services">
@@ -182,19 +171,20 @@ export default async function AdminDashboardPage() {
             </Link>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            {services.slice(0, 6).map((service) => (
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px", flex: 1 }}>
+            {services.slice(0, 4).map((service) => (
               <div
                 key={service.id}
                 style={{
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  padding: "10px 12px",
+                  padding: "9px 12px",
+                  height: "62px",
                   borderRadius: "10px",
                   border: "1px solid #f1f5f9",
                   background: "#ffffff",
-                  gap: "12px",
+                  gap: "10px",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "10px", minWidth: 0 }}>
@@ -203,8 +193,8 @@ export default async function AdminDashboardPage() {
                       src={service.image_url}
                       alt={service.name}
                       style={{
-                        width: 38,
-                        height: 38,
+                        width: 36,
+                        height: 36,
                         borderRadius: 8,
                         objectFit: "cover",
                         border: "1px solid #e2e8f0",
@@ -213,8 +203,8 @@ export default async function AdminDashboardPage() {
                   ) : (
                     <div
                       style={{
-                        width: 38,
-                        height: 38,
+                        width: 36,
+                        height: 36,
                         borderRadius: 8,
                         background: "#ecfdf5",
                         color: "#059669",
@@ -222,14 +212,14 @@ export default async function AdminDashboardPage() {
                         placeItems: "center",
                       }}
                     >
-                      <Wrench size={18} />
+                      <Wrench size={16} />
                     </div>
                   )}
                   <div style={{ minWidth: 0 }}>
                     <Link
                       href={`/admin/services/${service.id}`}
                       style={{
-                        fontSize: "13.5px",
+                        fontSize: "13px",
                         fontWeight: 600,
                         color: "#0f172a",
                         display: "block",
@@ -240,13 +230,13 @@ export default async function AdminDashboardPage() {
                     >
                       {service.name}
                     </Link>
-                    <small style={{ color: "#059669", fontSize: "12px", fontWeight: 600 }}>
+                    <small style={{ color: "#059669", fontSize: "11.5px", fontWeight: 600 }}>
                       {service.price}
                     </small>
                   </div>
                 </div>
 
-                <span style={{ fontSize: "12px", color: "#64748b", display: "inline-flex", alignItems: "center", gap: "4px" }}>
+                <span style={{ fontSize: "11.5px", color: "#64748b", display: "inline-flex", alignItems: "center", gap: "4px", whiteSpace: "nowrap", flexShrink: 0 }}>
                   <ShieldCheck size={13} color="#059669" /> {service.warranty}
                 </span>
               </div>
@@ -255,10 +245,9 @@ export default async function AdminDashboardPage() {
         </section>
 
         {/* Cột 2: Sản phẩm cửa cuốn mới nhất */}
-        <section className="admin-panel">
-          <div className="admin-panel-heading">
+        <section className="admin-panel" style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+          <div className="admin-panel-heading" style={{ marginBottom: 14 }}>
             <div>
-              <span>Catalog cửa cuốn</span>
               <h2>Sản phẩm nổi bật ({products.length})</h2>
             </div>
             <Link href="/admin/products">
@@ -267,19 +256,20 @@ export default async function AdminDashboardPage() {
             </Link>
           </div>
 
-          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            {products.slice(0, 6).map((product) => (
-              <div
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px", flex: 1 }}>
+            {products.slice(0, 4).map((product) => (
+                <div
                 key={product.id}
                 style={{
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  padding: "10px 12px",
+                  padding: "9px 12px",
+                  height: "62px",
                   borderRadius: "10px",
                   border: "1px solid #f1f5f9",
                   background: "#ffffff",
-                  gap: "12px",
+                  gap: "10px",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: "10px", minWidth: 0 }}>
@@ -288,8 +278,8 @@ export default async function AdminDashboardPage() {
                       src={publicAssetUrl(product.images[0].storage_path) || product.images[0].storage_path}
                       alt={product.name}
                       style={{
-                        width: 38,
-                        height: 38,
+                        width: 36,
+                        height: 36,
                         borderRadius: 8,
                         objectFit: "cover",
                         border: "1px solid #e2e8f0",
@@ -298,8 +288,8 @@ export default async function AdminDashboardPage() {
                   ) : (
                     <div
                       style={{
-                        width: 38,
-                        height: 38,
+                        width: 36,
+                        height: 36,
                         borderRadius: 8,
                         background: "#eff6ff",
                         color: "#2563eb",
@@ -307,14 +297,14 @@ export default async function AdminDashboardPage() {
                         placeItems: "center",
                       }}
                     >
-                      <Boxes size={18} />
+                      <Boxes size={16} />
                     </div>
                   )}
                   <div style={{ minWidth: 0 }}>
                     <Link
                       href={`/admin/products/${product.id}`}
                       style={{
-                        fontSize: "13.5px",
+                        fontSize: "13px",
                         fontWeight: 600,
                         color: "#0f172a",
                         display: "block",
@@ -325,13 +315,13 @@ export default async function AdminDashboardPage() {
                     >
                       {product.name}
                     </Link>
-                    <small style={{ color: "#64748b", fontSize: "12px" }}>
+                    <small style={{ color: "#64748b", fontSize: "11.5px" }}>
                       {product.category?.name || "Cửa cuốn"}
                     </small>
                   </div>
                 </div>
 
-                <span className={`status-badge ${product.status}`}>
+                <span className={`status-badge ${product.status}`} style={{ fontSize: "11px", padding: "2px 8px", whiteSpace: "nowrap", flexShrink: 0 }}>
                   {product.status === "published" ? "Hiển thị" : "Bản nháp"}
                 </span>
               </div>
