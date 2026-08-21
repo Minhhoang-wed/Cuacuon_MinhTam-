@@ -52,8 +52,15 @@ export default async function ServicesPage() {
           <div className="repair-service-grid">
             {services.map((service, index) => (
               <article className="repair-service-card" key={service.id || service.slug}>
+                <div className="repair-service-image-wrap">
+                  <img
+                    src={service.imageUrl || "/services/sua-cua-bi-ket.png"}
+                    alt={service.name}
+                  />
+                  <span className="repair-service-badge">{String(index + 1).padStart(2, "0")} • CỨU HỘ</span>
+                </div>
                 <div className="repair-service-copy">
-                  <small>{String(index + 1).padStart(2, "0")}</small>
+                  <span className="repair-service-category">DỊCH VỤ SỬA CHỮA</span>
                   <h3>
                     <Link href={`/dich-vu/${service.slug}`} style={{ color: "inherit", textDecoration: "none" }}>
                       {service.name}
@@ -62,14 +69,14 @@ export default async function ServicesPage() {
                   <p>{service.summary}</p>
                   <div className="repair-service-price-stack">
                     <b className="service-price">{service.price}</b>
-                    <span className="service-warranty">{service.warranty}</span>
+                    {service.warranty && (
+                      <>
+                        <span className="service-divider">|</span>
+                        <span className="service-warranty">{service.warranty}</span>
+                      </>
+                    )}
                   </div>
                 </div>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={service.imageUrl || "/services/sua-cua-bi-ket.png"}
-                  alt={service.name}
-                />
               </article>
             ))}
           </div>
