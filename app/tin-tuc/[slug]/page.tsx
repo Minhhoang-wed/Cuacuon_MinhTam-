@@ -30,8 +30,53 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
   const item = await getArticleBySlug(slug);
   if (!item) notFound();
 
+  const articleImage = item.imageUrl ? publicAssetUrl(item.imageUrl) || item.imageUrl : "/og.png";
+
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: item.title,
+    description: item.excerpt,
+    image: articleImage,
+    datePublished: item.publishedAt,
+    author: {
+      "@type": "Organization",
+      name: "Minh Tâm Door",
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Cửa Cuốn Minh Tâm 24H",
+      logo: {
+        "@type": "ImageObject",
+        url: "/logo/logo.png",
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `/tin-tuc/${slug}`,
+    },
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Trang chủ", item: "/" },
+      { "@type": "ListItem", position: 2, name: "Tin tức & Cẩm nang", item: "/tin-tuc" },
+      { "@type": "ListItem", position: 3, name: item.title, item: `/tin-tuc/${slug}` },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <article>
         <header className="article-hero">
           <div className="narrow-container">

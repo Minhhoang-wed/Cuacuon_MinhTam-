@@ -29,6 +29,7 @@ export type CatalogService = {
   accent: string;
   sortOrder: number;
   isActive: boolean;
+  updatedAt?: string | null;
 };
 
 export type CatalogStoreBranch = {
@@ -116,6 +117,11 @@ export type ManagedSiteConfig = {
   twitterImageUrl?: string;
   robotsIndex?: "index" | "noindex";
   robotsFollow?: "follow" | "nofollow";
+  structuredBusinessName?: string;
+  structuredPhone?: string;
+  structuredAddressLocality?: string;
+  structuredAddressRegion?: string;
+  structuredPriceRange?: string;
 };
 export type HomepageContent = { heroEyebrow: string; heroTitle: string; heroEmphasis: string; heroDescription: string; heroCtaLabel: string; introTitle: string; introText: string };
 
@@ -297,6 +303,7 @@ type DbService = {
   accent: string | null;
   sort_order: number;
   is_active: boolean;
+  updated_at?: string | null;
 };
 
 function mapService(row: DbService): CatalogService {
@@ -329,6 +336,7 @@ function mapService(row: DbService): CatalogService {
     accent: row.accent || "#10b981",
     sortOrder: row.sort_order || 0,
     isActive: row.is_active,
+    updatedAt: row.updated_at || null,
   };
 }
 
@@ -658,6 +666,11 @@ export async function getSiteSettings(): Promise<ManagedSiteConfig> {
     twitterImageUrl: "/og.png",
     robotsIndex: "index",
     robotsFollow: "follow",
+    structuredBusinessName: siteConfig.name,
+    structuredPhone: siteConfig.hotline,
+    structuredAddressLocality: "TP. Hồ Chí Minh",
+    structuredAddressRegion: "VN-SG",
+    structuredPriceRange: "$$",
   };
   if (!getSupabaseConfig()) return fallback;
   try {
@@ -695,6 +708,11 @@ export async function getSiteSettings(): Promise<ManagedSiteConfig> {
       twitterImageUrl: row.twitter_image_url || fallback.twitterImageUrl,
       robotsIndex: (row.robots_index as any) || fallback.robotsIndex,
       robotsFollow: (row.robots_follow as any) || fallback.robotsFollow,
+      structuredBusinessName: row.structured_business_name || fallback.structuredBusinessName,
+      structuredPhone: row.structured_phone || fallback.structuredPhone,
+      structuredAddressLocality: row.structured_address_locality || fallback.structuredAddressLocality,
+      structuredAddressRegion: row.structured_address_region || fallback.structuredAddressRegion,
+      structuredPriceRange: row.structured_price_range || fallback.structuredPriceRange,
     };
   } catch {
     return fallback;

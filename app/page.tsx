@@ -43,12 +43,21 @@ export default async function HomePage() {
   const localBusiness = {
     "@context": "https://schema.org",
     "@type": "HomeAndConstructionBusiness",
-    name: site.name,
-    url: site.baseUrl,
-    telephone: site.hotline,
-    address: site.address,
+    name: site.structuredBusinessName || site.name,
+    url: site.seoCanonicalBase || site.baseUrl,
+    telephone: site.structuredPhone || site.hotline,
+    priceRange: site.structuredPriceRange || "$$",
+    image: site.ogImageUrl ? (site.ogImageUrl.startsWith("http") ? site.ogImageUrl : `${site.baseUrl}${site.ogImageUrl}`) : `${site.baseUrl}/og.png`,
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: site.address,
+      addressLocality: site.structuredAddressLocality || "TP. Hồ Chí Minh",
+      addressRegion: site.structuredAddressRegion || "VN-SG",
+      addressCountry: "VN",
+    },
     areaServed: site.serviceArea,
     openingHours: "Mo-Su 00:00-23:59",
+    sameAs: [site.facebookHref, site.zaloHref].filter(Boolean),
   };
 
   return (
