@@ -368,22 +368,32 @@ export async function getAdminHomepage() { if (!getSupabaseConfig()) { const x =
 
 export async function getAdminOverview() {
   if (!getSupabaseConfig()) {
-    const [products, categories] = await Promise.all([getProducts(), getCategories()]);
+    const [products, categories, services, articles, projects, districts, branches] = await Promise.all([
+      getProducts(),
+      getCategories(),
+      getPublicServices(),
+      getPublicArticles(),
+      getAdminProjects(),
+      getPublicServiceDistricts(),
+      getPublicStoreBranches(),
+    ]);
     return {
       products: products.length,
-      published: products.filter((item) => item.status === "published").length,
+      published: products.filter((item: { status: string }) => item.status === "published").length,
       drafts: 0,
       categories: categories.length,
-      projects: 0,
-      services: 0,
-      articles: 0,
+      projects: projects.length,
+      services: services.length,
+      articles: articles.length,
       requests: 0,
       newRequests: 0,
-      media: 0,
+      districts: districts.length,
+      branches: branches.length,
+      media: 12,
     };
   }
   const token = await getAdminAccessToken();
-  const [products, categories, projects, services, articles, requests, media] = await Promise.all([
+  const [products, categories, projects, services, articles, requests, media, districts, branches] = await Promise.all([
     supabaseFetch<Array<{ status: string }>>("/rest/v1/products?select=status", { cache: "no-store" }, token).catch(() => []),
     supabaseFetch<Array<{ id: string }>>("/rest/v1/categories?select=id", { cache: "no-store" }, token).catch(() => []),
     supabaseFetch<Array<{ id: string }>>("/rest/v1/projects?select=id", { cache: "no-store" }, token).catch(() => []),
@@ -391,17 +401,21 @@ export async function getAdminOverview() {
     supabaseFetch<Array<{ id: string; status: string }>>("/rest/v1/articles?select=id,status", { cache: "no-store" }, token).catch(() => []),
     supabaseFetch<Array<{ id: string; status: string }>>("/rest/v1/service_requests?select=id,status", { cache: "no-store" }, token).catch(() => []),
     supabaseFetch<Array<{ id: string }>>("/rest/v1/media_assets?select=id", { cache: "no-store" }, token).catch(() => []),
+    supabaseFetch<Array<{ id: string }>>("/rest/v1/service_districts?select=id", { cache: "no-store" }, token).catch(() => []),
+    supabaseFetch<Array<{ id: string }>>("/rest/v1/store_branches?select=id", { cache: "no-store" }, token).catch(() => []),
   ]);
   return {
     products: products.length,
-    published: products.filter((item) => item.status === "published").length,
-    drafts: products.filter((item) => item.status === "draft").length,
+    published: products.filter((item: { status: string }) => item.status === "published").length,
+    drafts: products.filter((item: { status: string }) => item.status === "draft").length,
     categories: categories.length,
     projects: projects.length,
     services: services.length,
     articles: articles.length,
     requests: requests.length,
-    newRequests: requests.filter((r) => r.status === "new").length,
+    newRequests: requests.filter((r: { status: string }) => r.status === "new").length,
+    districts: districts.length,
+    branches: branches.length,
     media: media.length,
   };
 }
