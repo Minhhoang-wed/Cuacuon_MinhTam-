@@ -51,7 +51,7 @@ export default async function AdminDashboardPage() {
     },
     {
       label: "Mạng lưới phục vụ",
-      value: `${overview.branches || 2} Cửa hàng / ${overview.districts || 23} Quận`,
+      value: `${overview.branches || 2} CH / ${overview.districts || 23} Quận`,
       sub: "Phủ sóng toàn TP.HCM",
       icon: MapPin,
       color: "purple",
@@ -75,18 +75,43 @@ export default async function AdminDashboardPage() {
     },
   ];
 
+  // Dynamic greeting based on Vietnam time (UTC+7)
+  const nowVN = new Date(Date.now() + 7 * 3600 * 1000);
+  const hour = nowVN.getUTCHours();
+  const greeting =
+    hour < 12 ? "Chào buổi sáng" : hour < 18 ? "Chào buổi chiều" : "Chào buổi tối";
+  const greetingEmoji = hour < 12 ? "☀️" : hour < 18 ? "🌤️" : "🌙";
+
+  const weekdays = ["Chủ nhật", "Thứ hai", "Thứ ba", "Thứ tư", "Thứ năm", "Thứ sáu", "Thứ bảy"];
+  const weekday = weekdays[nowVN.getUTCDay()];
+  const dateStr = `${weekday}, ${nowVN.getUTCDate().toString().padStart(2, "0")}/${(nowVN.getUTCMonth() + 1).toString().padStart(2, "0")}/${nowVN.getUTCFullYear()}`;
+
   return (
     <>
-      {/* Top Header */}
-      <header className="admin-page-header">
+      {/* ── Greeting Banner ── */}
+      <div className="admin-greeting-banner">
+        <div className="admin-greeting-text">
+          <h2>{greetingEmoji} {greeting}, Minh Hoàng!</h2>
+          <p>Hệ thống CMS Minh Tâm Door đang hoạt động tốt · Hôm nay {dateStr}</p>
+        </div>
+        <div className="admin-greeting-meta">
+          <span className="admin-greeting-pill gold">
+            <ShieldCheck size={14} /> Quản trị viên
+          </span>
+          <span className="admin-greeting-pill sky">
+            <Sparkles size={13} /> CMS v2.0
+          </span>
+        </div>
+      </div>
+
+      {/* ── Top Action Bar ── */}
+      <header className="admin-page-header" style={{ marginBottom: 22 }}>
         <div>
           <span>
-            <Sparkles size={14} /> Trung tâm điều khiển
+            <Sparkles size={13} /> Trung tâm điều khiển
           </span>
-          <h1>Hệ thống Quản trị CMS Minh Tâm Door</h1>
-          <p>
-            Chào mừng bạn trở lại! Quản lý thông tin dịch vụ, bảng giá, sản phẩm và nội dung website.
-          </p>
+          <h1>Tổng quan hệ thống</h1>
+          <p>Quản lý dịch vụ, bảng giá, sản phẩm và nội dung website của bạn.</p>
         </div>
         <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
           <Link href="/admin/services/new" className="button button-primary button-small">
@@ -95,7 +120,7 @@ export default async function AdminDashboardPage() {
           </Link>
           <Link href="/" target="_blank" className="button button-ghost button-small">
             <ExternalLink size={15} />
-            <span>Xem website ngoài</span>
+            <span>Xem website</span>
           </Link>
         </div>
       </header>
