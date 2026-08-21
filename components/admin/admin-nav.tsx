@@ -1,14 +1,16 @@
 "use client";
 
-import { Boxes, Building2, FolderTree, LayoutDashboard, Home, ImageIcon, LogOut, Settings, ExternalLink, Wrench, Newspaper } from "lucide-react";
+import { Boxes, Building2, FolderTree, LayoutDashboard, Home, ImageIcon, LogOut, Settings, ExternalLink, Wrench, Newspaper, MapPin, PhoneCall } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AdminLogo } from "@/components/admin/admin-logo";
 
 const links = [
   { href: "/admin/dashboard", label: "Tổng quan", icon: LayoutDashboard },
+  { href: "/admin/requests", label: "Đơn đặt lịch", icon: PhoneCall },
   { href: "/admin/homepage", label: "Trang chủ", icon: Home },
-  { href: "/admin/services", label: "Dịch vụ sửa chữa", icon: Wrench },
+  { href: "/admin/services", label: "Dịch vụ & Báo giá", icon: Wrench },
+  { href: "/admin/service-areas", label: "Khu vực phục vụ", icon: MapPin },
   { href: "/admin/products", label: "Sản phẩm", icon: Boxes },
   { href: "/admin/categories", label: "Danh mục", icon: FolderTree },
   { href: "/admin/articles", label: "Mẹo & Cẩm nang", icon: Newspaper },

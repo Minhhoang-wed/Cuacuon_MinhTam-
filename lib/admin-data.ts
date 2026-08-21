@@ -1,5 +1,5 @@
 import { getAdminAccessToken } from "@/lib/admin-auth";
-import { getCategories, getHomepageContent, getProducts, getSiteSettings, getServices as getPublicServices, getArticles as getPublicArticles } from "@/lib/catalog";
+import { getCategories, getHomepageContent, getProducts, getSiteSettings, getServices as getPublicServices, getArticles as getPublicArticles, getStoreBranches as getPublicStoreBranches, getServiceDistricts as getPublicServiceDistricts, getServicePricing as getPublicServicePricing } from "@/lib/catalog";
 import { getSupabaseConfig, supabaseFetch } from "@/lib/supabase-rest";
 
 export type AdminCategoryRow = { id: string; name: string; slug: string; description: string | null; image_path: string | null; sort_order: number; is_active: boolean };
@@ -34,6 +34,7 @@ export type AdminServiceRow = {
   price: string;
   duration: string;
   warranty: string;
+  image_url: string | null;
   symptoms: string[];
   process: string[];
   accent: string | null;
@@ -41,6 +42,44 @@ export type AdminServiceRow = {
   is_active: boolean;
   updated_at: string;
   created_at: string;
+};
+
+export type AdminStoreBranchRow = {
+  id: string;
+  branch_name: string;
+  address: string;
+  hotline: string;
+  note: string | null;
+  badge: string | null;
+  sort_order: number;
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type AdminServiceDistrictRow = {
+  id: string;
+  district_name: string;
+  address_landmark: string;
+  response_time: string;
+  note: string | null;
+  is_hotspot: boolean;
+  sort_order: number;
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export type AdminServicePriceItemRow = {
+  id: string;
+  category_name: string;
+  item_name: string;
+  price: string;
+  warranty: string;
+  sort_order: number;
+  is_active: boolean;
+  created_at?: string;
+  updated_at?: string;
 };
 
 export type AdminArticleRow = {
@@ -115,48 +154,144 @@ export async function getAdminProject(id: string): Promise<AdminProjectRow | nul
 }
 
 export async function getAdminServices(): Promise<AdminServiceRow[]> {
-  if (!getSupabaseConfig()) {
-    const pub = await getPublicServices();
-    return pub.map((s, idx) => ({
-      id: `local-${idx}`,
-      name: s.name,
-      slug: s.slug,
-      summary: s.summary,
-      description: null,
-      price: s.price,
-      duration: s.duration,
-      warranty: s.warranty,
-      symptoms: s.symptoms,
-      process: s.process,
-      accent: "#10b981",
-      sort_order: idx,
-      is_active: true,
-      updated_at: new Date().toISOString(),
-      created_at: new Date().toISOString(),
-    }));
-  }
-  const token = await getAdminAccessToken();
+  const pub = await getPublicServices();
+  const fallback = pub.map((s, idx) => ({
+    id: `local-${idx}`,
+    name: s.name,
+    slug: s.slug,
+    summary: s.summary,
+    description: null,
+    price: s.price,
+    duration: s.duration,
+    warranty: s.warranty,
+    image_url: s.imageUrl || null,
+    symptoms: s.symptoms,
+    process: s.process,
+    accent: "#10b981",
+    sort_order: idx,
+    is_active: true,
+    updated_at: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+  }));
+
+  if (!getSupabaseConfig()) return fallback;
   try {
-    return await supabaseFetch<AdminServiceRow[]>("/rest/v1/services?select=*&order=sort_order.asc,created_at.desc", { cache: "no-store" }, token);
+    const token = await getAdminAccessToken();
+    const rows = await supabaseFetch<AdminServiceRow[]>("/rest/v1/services?select=*&order=sort_order.asc,created_at.desc", { cache: "no-store" }, token);
+    if (rows && rows.length > 0) return rows;
   } catch (error) {
-    console.error("Lỗi khi tải dịch vụ:", error);
-    return [];
+    console.warn("Chưa tải được bảng services từ Supabase, dùng dữ liệu mặc định:", error);
   }
+  return fallback;
 }
 
 export async function getAdminService(id: string): Promise<AdminServiceRow | null> {
-  if (!getSupabaseConfig()) {
-    const all = await getAdminServices();
-    return all.find((s) => s.id === id) || null;
+  const all = await getAdminServices();
+  const fallback = all.find((s) => s.id === id) || null;
+  if (!getSupabaseConfig() || id.startsWith("local-") || id.startsWith("static-")) {
+    return fallback;
   }
-  const token = await getAdminAccessToken();
   try {
+    const token = await getAdminAccessToken();
     const rows = await supabaseFetch<AdminServiceRow[]>(`/rest/v1/services?id=eq.${encodeURIComponent(id)}&limit=1`, { cache: "no-store" }, token);
-    return rows[0] || null;
+    return rows[0] || fallback;
   } catch (error) {
-    console.error("Lỗi khi tải chi tiết dịch vụ:", error);
-    return null;
+    console.warn("Lỗi khi tải chi tiết dịch vụ:", error);
+    return fallback;
   }
+}
+
+export async function getAdminStoreBranches(): Promise<AdminStoreBranchRow[]> {
+  const pub = await getPublicStoreBranches();
+  const fallback = pub.map((b, idx) => ({
+    id: b.id || `local-branch-${idx}`,
+    branch_name: b.branchName,
+    address: b.address,
+    hotline: b.hotline,
+    note: b.note,
+    badge: b.badge,
+    sort_order: b.sortOrder,
+    is_active: b.isActive,
+  }));
+
+  if (!getSupabaseConfig()) return fallback;
+  try {
+    const token = await getAdminAccessToken();
+    const rows = await supabaseFetch<AdminStoreBranchRow[]>("/rest/v1/store_branches?select=*&order=sort_order.asc,created_at.asc", { cache: "no-store" }, token);
+    if (rows && rows.length > 0) return rows;
+  } catch (error) {
+    console.warn("Chưa có bảng store_branches trong Supabase, dùng dữ liệu mặc định.");
+  }
+  return fallback;
+}
+
+export async function getAdminStoreBranch(id: string): Promise<AdminStoreBranchRow | null> {
+  const all = await getAdminStoreBranches();
+  const fallback = all.find((b) => b.id === id) || null;
+  if (!getSupabaseConfig() || id.startsWith("local-") || id.startsWith("static-")) {
+    return fallback;
+  }
+  try {
+    const token = await getAdminAccessToken();
+    const rows = await supabaseFetch<AdminStoreBranchRow[]>(`/rest/v1/store_branches?id=eq.${encodeURIComponent(id)}&limit=1`, { cache: "no-store" }, token);
+    return rows[0] || fallback;
+  } catch (error) {
+    console.warn("Lỗi khi tải chi nhánh:", error);
+    return fallback;
+  }
+}
+
+export async function getAdminServiceDistricts(): Promise<AdminServiceDistrictRow[]> {
+  const pub = await getPublicServiceDistricts();
+  const fallback = pub.map((d, idx) => ({
+    id: d.id || `local-district-${idx}`,
+    district_name: d.districtName,
+    address_landmark: d.addressLandmark,
+    response_time: d.responseTime,
+    note: d.note,
+    is_hotspot: d.isHotspot,
+    sort_order: d.sortOrder,
+    is_active: d.isActive,
+  }));
+
+  if (!getSupabaseConfig()) return fallback;
+  try {
+    const token = await getAdminAccessToken();
+    const rows = await supabaseFetch<AdminServiceDistrictRow[]>("/rest/v1/service_districts?select=*&order=sort_order.asc,created_at.asc", { cache: "no-store" }, token);
+    if (rows && rows.length > 0) return rows;
+  } catch (error) {
+    console.warn("Chưa có bảng service_districts trong Supabase, dùng dữ liệu mặc định.");
+  }
+  return fallback;
+}
+
+export async function getAdminServicePriceItems(): Promise<AdminServicePriceItemRow[]> {
+  const pub = await getPublicServicePricing();
+  const fallback: AdminServicePriceItemRow[] = [];
+  let idx = 0;
+  for (const cat of pub) {
+    for (const item of cat.items) {
+      fallback.push({
+        id: item.id || `local-price-${idx++}`,
+        category_name: cat.categoryTitle,
+        item_name: item.name,
+        price: item.price,
+        warranty: item.warranty,
+        sort_order: idx,
+        is_active: true,
+      });
+    }
+  }
+
+  if (!getSupabaseConfig()) return fallback;
+  try {
+    const token = await getAdminAccessToken();
+    const rows = await supabaseFetch<AdminServicePriceItemRow[]>("/rest/v1/service_price_items?select=*&order=category_name.asc,sort_order.asc", { cache: "no-store" }, token);
+    if (rows && rows.length > 0) return rows;
+  } catch (error) {
+    console.warn("Chưa có bảng service_price_items trong Supabase, dùng dữ liệu mặc định.");
+  }
+  return fallback;
 }
 
 export async function getAdminArticles(): Promise<AdminArticleRow[]> {

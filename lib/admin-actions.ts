@@ -231,6 +231,13 @@ export async function saveService(form: FormData) {
   const symptoms = value(form, "symptoms").split("\n").map((s) => s.trim()).filter(Boolean);
   const process = value(form, "process").split("\n").map((s) => s.trim()).filter(Boolean);
 
+  let imageUrl = optional(form, "image_url");
+  const imageFile = form.get("image");
+  if (imageFile instanceof File && imageFile.size > 0) {
+    const path = await uploadObject(imageFile, "services", token);
+    imageUrl = path;
+  }
+
   const payload = {
     name,
     slug: slugify(value(form, "slug") || name),
@@ -239,6 +246,7 @@ export async function saveService(form: FormData) {
     price: value(form, "price") || "Khảo sát báo giá",
     duration: value(form, "duration") || "30 - 60 phút",
     warranty: value(form, "warranty") || "12 tháng",
+    image_url: imageUrl,
     symptoms: JSON.stringify(symptoms),
     process: JSON.stringify(process),
     accent: value(form, "accent") || "#10b981",
@@ -275,6 +283,163 @@ export async function deleteService(form: FormData) {
   revalidatePath("/dich-vu");
   revalidatePath("/admin/services");
   redirect("/admin/services?deleted=1");
+}
+
+// ----------------------------------------------------------------------
+// SERVICE PRICE ITEMS (BẢNG BÁO GIÁ DỊCH VỤ)
+// ----------------------------------------------------------------------
+export async function saveServicePriceItem(form: FormData) {
+  await requireAdmin();
+  const token = await getAdminAccessToken();
+  const id = value(form, "id");
+  const category_name = value(form, "category_name") || "1. Bảng giá sửa chữa cơ bản & cứu hộ cửa cuốn";
+  const item_name = value(form, "item_name");
+  const price = value(form, "price");
+  const warranty = value(form, "warranty") || "3 – 6 tháng";
+  const sort_order = Number(value(form, "sort_order") || 0);
+  const is_active = form.get("is_active") === "true" || form.get("is_active") === "on";
+
+  if (item_name.length < 2 || !price) throw new Error("Cần nhập tên hạng mục và mức giá.");
+
+  const payload = {
+    category_name,
+    item_name,
+    price,
+    warranty,
+    sort_order,
+    is_active,
+    updated_at: new Date().toISOString(),
+  };
+
+  if (id && !id.startsWith("local-") && !id.startsWith("static-")) {
+    await supabaseFetch(`/rest/v1/service_price_items?id=eq.${encodeURIComponent(id)}`, { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify(payload) }, token);
+  } else {
+    await supabaseFetch("/rest/v1/service_price_items", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify(payload) }, token);
+  }
+
+  revalidateTag("service-pricing", "max");
+  revalidatePath("/dich-vu");
+  revalidatePath("/admin/services");
+  redirect("/admin/services?pricing_saved=1");
+}
+
+export async function deleteServicePriceItem(form: FormData) {
+  await requireAdmin();
+  const token = await getAdminAccessToken();
+  const id = value(form, "id");
+  if (!id) throw new Error("Thiếu mã hạng mục giá cần xóa.");
+
+  await supabaseFetch(`/rest/v1/service_price_items?id=eq.${encodeURIComponent(id)}`, { method: "DELETE", headers: { Prefer: "return=minimal" } }, token);
+  revalidateTag("service-pricing", "max");
+  revalidatePath("/dich-vu");
+  revalidatePath("/admin/services");
+  redirect("/admin/services?pricing_deleted=1");
+}
+
+// ----------------------------------------------------------------------
+// STORE BRANCHES (CHI NHÁNH CỬA HÀNG)
+// ----------------------------------------------------------------------
+export async function saveStoreBranch(form: FormData) {
+  await requireAdmin();
+  const token = await getAdminAccessToken();
+  const id = value(form, "id");
+  const branch_name = value(form, "branch_name");
+  const address = value(form, "address");
+  const hotline = value(form, "hotline") || "0327.359.368";
+  const note = optional(form, "note") || "Cửa hàng trưng bày & Trung tâm kỹ thuật";
+  const badge = optional(form, "badge") || "Cửa hàng trực tiếp";
+  const sort_order = Number(value(form, "sort_order") || 0);
+  const is_active = form.get("is_active") === "true" || form.get("is_active") === "on";
+
+  if (branch_name.length < 2 || address.length < 3) throw new Error("Cần nhập tên chi nhánh và địa chỉ.");
+
+  const payload = {
+    branch_name,
+    address,
+    hotline,
+    note,
+    badge,
+    sort_order,
+    is_active,
+    updated_at: new Date().toISOString(),
+  };
+
+  if (id && !id.startsWith("local-") && !id.startsWith("static-")) {
+    await supabaseFetch(`/rest/v1/store_branches?id=eq.${encodeURIComponent(id)}`, { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify(payload) }, token);
+  } else {
+    await supabaseFetch("/rest/v1/store_branches", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify(payload) }, token);
+  }
+
+  revalidateTag("store-branches", "max");
+  revalidatePath("/khu-vuc-phuc-vu");
+  revalidatePath("/admin/service-areas");
+  redirect("/admin/service-areas?branch_saved=1");
+}
+
+export async function deleteStoreBranch(form: FormData) {
+  await requireAdmin();
+  const token = await getAdminAccessToken();
+  const id = value(form, "id");
+  if (!id) throw new Error("Thiếu mã chi nhánh cần xóa.");
+
+  await supabaseFetch(`/rest/v1/store_branches?id=eq.${encodeURIComponent(id)}`, { method: "DELETE", headers: { Prefer: "return=minimal" } }, token);
+  revalidateTag("store-branches", "max");
+  revalidatePath("/khu-vuc-phuc-vu");
+  revalidatePath("/admin/service-areas");
+  redirect("/admin/service-areas?branch_deleted=1");
+}
+
+// ----------------------------------------------------------------------
+// SERVICE DISTRICTS (QUẬN HUYỆN TÚC TRỰC)
+// ----------------------------------------------------------------------
+export async function saveServiceDistrict(form: FormData) {
+  await requireAdmin();
+  const token = await getAdminAccessToken();
+  const id = value(form, "id");
+  const district_name = value(form, "district_name");
+  const address_landmark = value(form, "address_landmark");
+  const response_time = value(form, "response_time") || "Có mặt sau 15 – 25 phút";
+  const note = optional(form, "note") || "Trạm trực kỹ thuật";
+  const is_hotspot = form.get("is_hotspot") === "true" || form.get("is_hotspot") === "on";
+  const sort_order = Number(value(form, "sort_order") || 0);
+  const is_active = form.get("is_active") === "true" || form.get("is_active") === "on";
+
+  if (district_name.length < 2 || address_landmark.length < 2) throw new Error("Cần nhập tên quận huyện và địa chỉ điểm chốt.");
+
+  const payload = {
+    district_name,
+    address_landmark,
+    response_time,
+    note,
+    is_hotspot,
+    sort_order,
+    is_active,
+    updated_at: new Date().toISOString(),
+  };
+
+  if (id && !id.startsWith("local-") && !id.startsWith("static-")) {
+    await supabaseFetch(`/rest/v1/service_districts?id=eq.${encodeURIComponent(id)}`, { method: "PATCH", headers: { Prefer: "return=minimal" }, body: JSON.stringify(payload) }, token);
+  } else {
+    await supabaseFetch("/rest/v1/service_districts", { method: "POST", headers: { Prefer: "return=minimal" }, body: JSON.stringify(payload) }, token);
+  }
+
+  revalidateTag("service-districts", "max");
+  revalidatePath("/khu-vuc-phuc-vu");
+  revalidatePath("/admin/service-areas");
+  redirect("/admin/service-areas?district_saved=1");
+}
+
+export async function deleteServiceDistrict(form: FormData) {
+  await requireAdmin();
+  const token = await getAdminAccessToken();
+  const id = value(form, "id");
+  if (!id) throw new Error("Thiếu mã quận huyện cần xóa.");
+
+  await supabaseFetch(`/rest/v1/service_districts?id=eq.${encodeURIComponent(id)}`, { method: "DELETE", headers: { Prefer: "return=minimal" } }, token);
+  revalidateTag("service-districts", "max");
+  revalidatePath("/khu-vuc-phuc-vu");
+  revalidatePath("/admin/service-areas");
+  redirect("/admin/service-areas?district_deleted=1");
 }
 
 // ----------------------------------------------------------------------

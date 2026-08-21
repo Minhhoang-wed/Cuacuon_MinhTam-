@@ -5,6 +5,7 @@ export type Service = {
   price: string;
   duration: string;
   warranty: string;
+  imageUrl?: string;
   symptoms: string[];
   process: string[];
 };
@@ -40,9 +41,74 @@ export type Article = {
   content: string[];
 };
 
-
-// Sẵn sàng để nhập dữ liệu thực tế của bạn
-export const services: Service[] = [];
+export const services: Service[] = [
+  {
+    slug: "sua-cua-cuon-bi-ket",
+    name: "Sửa cửa cuốn bị kẹt",
+    summary: "Xử lý cửa kẹt nan, xổ lô, lệch ray, không lên xuống được an toàn, nhanh chóng.",
+    price: "300.000 – 800.000đ",
+    duration: "20 - 45 phút",
+    warranty: "3 – 6 tháng",
+    imageUrl: "/services/sua-cua-bi-ket.png",
+    symptoms: ["Cửa dừng giữa chừng không lên xuống được", "Nan cửa bị kẹt, xô nan hoặc bung ray", "Cửa kêu to và kẹt cứng khi đóng mở"],
+    process: ["Tiếp nhận thông tin và định vị sự cố", "Kỹ thuật viên đến hiện trường trong 15-30 phút", "Nắn chỉnh nan, tra dầu mỡ và căn chỉnh ray", "Vận hành thử nghiệm và bàn giao"],
+  },
+  {
+    slug: "sua-motor-cua-cuon",
+    name: "Sửa motor cửa cuốn",
+    summary: "Sửa motor kẹt cơ, hỏng tụ, cháy cuộn dây, thay vỉ mạch hành trình chính hãng.",
+    price: "350.000 – 800.000đ",
+    duration: "30 - 60 phút",
+    warranty: "3 – 6 tháng",
+    imageUrl: "/services/sua-motor.png",
+    symptoms: ["Motor phát tiếng kêu bất thường nhưng cửa không chạy", "Motor nóng nhanh, yếu tải không kéo được cửa", "Hỏng bộ điều khiển từ xa hoặc rơ-le"],
+    process: ["Kiểm tra cuộn dây, tụ điện và vỉ mạch", "Thay thế linh kiện chính hãng tại chỗ", "Căn chỉnh lại hành trình ngắt an toàn", "Bàn giao bảo hành 3-6 tháng"],
+  },
+  {
+    slug: "sua-remote-hop-nhan",
+    name: "Sửa remote & hộp nhận",
+    summary: "Khắc phục remote chập chờn, làm thêm remote mã gạt/nhảy, đổi mã khóa an toàn.",
+    price: "150.000 – 550.000đ",
+    duration: "15 - 30 phút",
+    warranty: "6 – 12 tháng",
+    imageUrl: "/services/sua-remote.png",
+    symptoms: ["Remote bấm đèn sáng nhưng cửa không nhận lệnh", "Khoảng cách bắt sóng bị ngắn đi đáng kể", "Cần làm thêm chìa remote dự phòng"],
+    process: ["Đo tần số sóng điều khiển", "Cài đặt đồng bộ hộp nhận và tay remote mới", "Reset mã khóa cũ đảm bảo an ninh tuyệt đối", "Kiểm tra tầm bắt sóng và bàn giao"],
+  },
+  {
+    slug: "thay-nan-lo-xo-cua",
+    name: "Thay nan & lò xo cửa",
+    summary: "Gỡ xô nan, nắn phẳng nan móp gãy, thay bộ lò xo trợ lực kéo tay cao cấp.",
+    price: "800.000 – 1.500.000đ",
+    duration: "45 - 90 phút",
+    warranty: "6 – 12 tháng",
+    imageUrl: "/services/thay-nan.png",
+    symptoms: ["Nan cửa bị đứt gãy khớp nối", "Lò xo cửa kéo tay bị đứt hoặc nhão", "Cửa kéo nặng bất thường, dễ tuột rơi"],
+    process: ["Tháo dỡ phần nan hỏng an toàn", "Thay thế nan cùng kích thước hoặc thay lò xo mới", "Cân chỉnh lực đàn hồi đồng đều hai bên", "Nghiệm thu đóng mở êm ái"],
+  },
+  {
+    slug: "sua-ray-chinh-hanh-trinh",
+    name: "Sửa ray & chỉnh hành trình",
+    summary: "Căn chỉnh, thay mới ray dẫn hướng bị lệch, móp, tra dầu mỡ bảo dưỡng trơn tru.",
+    price: "400.000 – 900.000đ",
+    duration: "30 - 60 phút",
+    warranty: "3 – 6 tháng",
+    imageUrl: "/services/sua-ray.png",
+    symptoms: ["Ray dẫn hướng bị bung mối hàn, cong vênh", "Cửa đóng không chạm sàn hoặc mở vọt lên trên", "Nan cửa cọ sát vào ray phát tiếng rít chói tai"],
+    process: ["Gia cố và nắn chỉnh ray dẫn hướng", "Cài đặt lại công tắc hành trình rơ-le", "Tra mỡ bôi trơn chuyên dụng chịu nhiệt", "Chạy thử nhiều chu kỳ hoàn tất"],
+  },
+  {
+    slug: "sua-binh-luu-dien-ups",
+    name: "Sửa bình lưu điện (UPS)",
+    summary: "Sửa UPS lỗi không sạc, thay cặp ắc quy mới, thay bộ UPS chính hãng giá tốt.",
+    price: "350.000 – 1.200.000đ",
+    duration: "30 - 45 phút",
+    warranty: "6 – 24 tháng",
+    imageUrl: "/services/binh-luu-dien.png",
+    symptoms: ["Mất điện không điều khiển mở cửa được", "Bình lưu điện kêu bíp liên tục hoặc báo đèn đỏ", "Ắc quy bị chai, phồng nạp không vào điện"],
+    process: ["Đo kiểm tra dung lượng cặp bình ắc quy", "Thay thế ắc quy chuyên dụng hoặc sửa mạch sạc", "Test cắt điện lưới vận hành thử đóng/mở", "Dán tem bảo hành và hướng dẫn bảo dưỡng"],
+  },
+];
 
 export const products: Product[] = [
   {

@@ -113,6 +113,36 @@ export function AdminServiceForm({ service }: { service?: AdminServiceRow | null
               placeholder={`Tiếp nhận thông tin và định vị sự cố\nKỹ thuật viên đến hiện trường trong 15-30 phút\nKiểm tra toàn diện, báo giá trước khi làm\nTiến hành sửa chữa, thay linh kiện chính hãng\nBàn giao phiếu bảo hành`}
             />
           </label>
+        </div>
+      </section>
+
+      {/* Ảnh dịch vụ & Cấu hình hiển thị */}
+      <section className="admin-form-card">
+        <div className="admin-form-section-title">
+          <div>
+            <span>Hình ảnh & Hiển thị</span>
+            <h2>Ảnh minh họa dịch vụ & Trạng thái</h2>
+          </div>
+        </div>
+
+        <div className="admin-fields">
+          <label>
+            <span>Tải lên ảnh minh họa mới (JPG, PNG, WebP tối đa 5MB)</span>
+            <input
+              type="file"
+              name="image"
+              accept="image/jpeg,image/png,image/webp"
+            />
+          </label>
+
+          <label>
+            <span>Đường dẫn ảnh (URL hoặc đường dẫn sẵn có trong hệ thống)</span>
+            <input
+              name="image_url"
+              defaultValue={service?.image_url || ""}
+              placeholder="VD: /services/sua-cua-bi-ket.png hoặc tải ảnh ở trên"
+            />
+          </label>
 
           <div className="admin-fields two">
             <label>

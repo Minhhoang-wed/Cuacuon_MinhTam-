@@ -1,5 +1,6 @@
 import { siteConfig } from "@/data/site";
 import { services as staticServices, articles as staticArticles, Service, Article } from "@/data/content";
+import { directStores, serviceAreaPoints, servicePriceCategories } from "@/data/public-home";
 import { getSupabaseConfig, publicAssetUrl, supabaseFetch } from "@/lib/supabase-rest";
 
 export type PriceMode = "exact" | "from" | "contact" | "hidden";
@@ -22,11 +23,54 @@ export type CatalogService = {
   price: string;
   duration: string;
   warranty: string;
+  imageUrl?: string | null;
   symptoms: string[];
   process: string[];
   accent: string;
   sortOrder: number;
   isActive: boolean;
+};
+
+export type CatalogStoreBranch = {
+  id: string;
+  branchName: string;
+  address: string;
+  hotline: string;
+  note: string;
+  badge: string;
+  sortOrder: number;
+  isActive: boolean;
+};
+
+export type CatalogServiceDistrict = {
+  id: string;
+  districtName: string;
+  addressLandmark: string;
+  responseTime: string;
+  note: string;
+  isHotspot: boolean;
+  sortOrder: number;
+  isActive: boolean;
+};
+
+export type CatalogServicePriceItem = {
+  id: string;
+  categoryName: string;
+  itemName: string;
+  price: string;
+  warranty: string;
+  sortOrder: number;
+  isActive: boolean;
+};
+
+export type CatalogServicePriceCategory = {
+  categoryTitle: string;
+  items: Array<{
+    id?: string;
+    name: string;
+    price: string;
+    warranty: string;
+  }>;
 };
 
 export type CatalogArticle = {
@@ -220,6 +264,7 @@ type DbService = {
   price: string;
   duration: string;
   warranty: string;
+  image_url: string | null;
   symptoms: string[] | string;
   process: string[] | string;
   accent: string | null;
@@ -236,6 +281,12 @@ function mapService(row: DbService): CatalogService {
     }
     return [];
   };
+  const imageUrl = row.image_url
+    ? (row.image_url.startsWith("/") || row.image_url.startsWith("http")
+        ? row.image_url
+        : publicAssetUrl(row.image_url))
+    : null;
+
   return {
     id: row.id,
     slug: row.slug,
@@ -245,6 +296,7 @@ function mapService(row: DbService): CatalogService {
     price: row.price || "Khảo sát báo giá",
     duration: row.duration || "30 - 60 phút",
     warranty: row.warranty || "12 tháng",
+    imageUrl,
     symptoms: parseList(row.symptoms),
     process: parseList(row.process),
     accent: row.accent || "#10b981",
@@ -264,6 +316,7 @@ export async function getServices(): Promise<CatalogService[]> {
       price: s.price,
       duration: s.duration,
       warranty: s.warranty,
+      imageUrl: s.imageUrl || null,
       symptoms: s.symptoms,
       process: s.process,
       accent: "#10b981",
@@ -289,6 +342,7 @@ export async function getServices(): Promise<CatalogService[]> {
     price: s.price,
     duration: s.duration,
     warranty: s.warranty,
+    imageUrl: s.imageUrl || null,
     symptoms: s.symptoms,
     process: s.process,
     accent: "#10b981",
@@ -300,6 +354,168 @@ export async function getServices(): Promise<CatalogService[]> {
 export async function getServiceBySlug(slug: string): Promise<CatalogService | null> {
   const all = await getServices();
   return all.find((s) => s.slug === slug) || null;
+}
+
+// -------------------------------------------------------------
+// SERVICE PRICING (BẢNG BÁO GIÁ DỊCH VỤ)
+// -------------------------------------------------------------
+type DbServicePriceItem = {
+  id: string;
+  category_name: string;
+  item_name: string;
+  price: string;
+  warranty: string;
+  sort_order: number;
+  is_active: boolean;
+};
+
+export async function getServicePricing(): Promise<CatalogServicePriceCategory[]> {
+  if (!getSupabaseConfig()) {
+    return servicePriceCategories as unknown as CatalogServicePriceCategory[];
+  }
+  try {
+    const rows = await supabaseFetch<DbServicePriceItem[]>(
+      "/rest/v1/service_price_items?select=*&is_active=eq.true&order=sort_order.asc,created_at.asc",
+      { next: { revalidate: 300, tags: ["service-pricing"] } }
+    );
+    if (rows && rows.length > 0) {
+      const grouped: Record<string, Array<{ id?: string; name: string; price: string; warranty: string }>> = {};
+      for (const row of rows) {
+        if (!grouped[row.category_name]) grouped[row.category_name] = [];
+        grouped[row.category_name].push({
+          id: row.id,
+          name: row.item_name,
+          price: row.price,
+          warranty: row.warranty,
+        });
+      }
+      return Object.entries(grouped).map(([categoryTitle, items]) => ({
+        categoryTitle,
+        items,
+      }));
+    }
+  } catch (error) {
+    console.error("Lỗi khi tải bảng giá dịch vụ từ Supabase:", error);
+  }
+  return servicePriceCategories as unknown as CatalogServicePriceCategory[];
+}
+
+// -------------------------------------------------------------
+// STORE BRANCHES (CỬA HÀNG TRỰC TIẾP)
+// -------------------------------------------------------------
+type DbStoreBranch = {
+  id: string;
+  branch_name: string;
+  address: string;
+  hotline: string;
+  note: string | null;
+  badge: string | null;
+  sort_order: number;
+  is_active: boolean;
+};
+
+export async function getStoreBranches(): Promise<CatalogStoreBranch[]> {
+  if (!getSupabaseConfig()) {
+    return directStores.map((store, idx) => ({
+      id: `static-branch-${idx}`,
+      branchName: store.branch,
+      address: store.address,
+      hotline: store.hotline,
+      note: store.note,
+      badge: "Cửa hàng trực tiếp",
+      sortOrder: idx + 1,
+      isActive: true,
+    }));
+  }
+  try {
+    const rows = await supabaseFetch<DbStoreBranch[]>(
+      "/rest/v1/store_branches?select=*&is_active=eq.true&order=sort_order.asc,created_at.asc",
+      { next: { revalidate: 300, tags: ["store-branches"] } }
+    );
+    if (rows && rows.length > 0) {
+      return rows.map((r) => ({
+        id: r.id,
+        branchName: r.branch_name,
+        address: r.address,
+        hotline: r.hotline || "0327.359.368",
+        note: r.note || "",
+        badge: r.badge || "Cửa hàng trực tiếp",
+        sortOrder: r.sort_order || 0,
+        isActive: r.is_active,
+      }));
+    }
+  } catch (error) {
+    console.error("Lỗi khi tải danh sách chi nhánh từ Supabase:", error);
+  }
+  return directStores.map((store, idx) => ({
+    id: `static-branch-${idx}`,
+    branchName: store.branch,
+    address: store.address,
+    hotline: store.hotline,
+    note: store.note,
+    badge: "Cửa hàng trực tiếp",
+    sortOrder: idx + 1,
+    isActive: true,
+  }));
+}
+
+// -------------------------------------------------------------
+// SERVICE DISTRICTS (QUẬN HUYỆN TÚC TRỰC)
+// -------------------------------------------------------------
+type DbServiceDistrict = {
+  id: string;
+  district_name: string;
+  address_landmark: string;
+  response_time: string;
+  note: string | null;
+  is_hotspot: boolean;
+  sort_order: number;
+  is_active: boolean;
+};
+
+export async function getServiceDistricts(): Promise<CatalogServiceDistrict[]> {
+  if (!getSupabaseConfig()) {
+    return serviceAreaPoints.map((point, idx) => ({
+      id: `static-district-${idx}`,
+      districtName: point.district,
+      addressLandmark: point.address,
+      responseTime: "Có mặt sau 15 – 25 phút",
+      note: point.note,
+      isHotspot: idx < 6,
+      sortOrder: idx + 1,
+      isActive: true,
+    }));
+  }
+  try {
+    const rows = await supabaseFetch<DbServiceDistrict[]>(
+      "/rest/v1/service_districts?select=*&is_active=eq.true&order=sort_order.asc,created_at.asc",
+      { next: { revalidate: 300, tags: ["service-districts"] } }
+    );
+    if (rows && rows.length > 0) {
+      return rows.map((r) => ({
+        id: r.id,
+        districtName: r.district_name,
+        addressLandmark: r.address_landmark,
+        responseTime: r.response_time || "Có mặt sau 15 – 25 phút",
+        note: r.note || "",
+        isHotspot: r.is_hotspot,
+        sortOrder: r.sort_order || 0,
+        isActive: r.is_active,
+      }));
+    }
+  } catch (error) {
+    console.error("Lỗi khi tải quận huyện từ Supabase:", error);
+  }
+  return serviceAreaPoints.map((point, idx) => ({
+    id: `static-district-${idx}`,
+    districtName: point.district,
+    addressLandmark: point.address,
+    responseTime: "Có mặt sau 15 – 25 phút",
+    note: point.note,
+    isHotspot: idx < 6,
+    sortOrder: idx + 1,
+    isActive: true,
+  }));
 }
 
 // -------------------------------------------------------------
