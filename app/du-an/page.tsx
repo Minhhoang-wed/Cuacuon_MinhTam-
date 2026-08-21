@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { ArrowRight, Building2, MapPin } from "lucide-react";
 import Link from "next/link";
+import { Breadcrumb } from "@/components/breadcrumb";
 import { CtaBand } from "@/components/cta-band";
 import { DoorVisual } from "@/components/door-visual";
 import { PageHero } from "@/components/page-hero";
-import { getProjects } from "@/lib/catalog";
+import { getProjects, getSiteSettings } from "@/lib/catalog";
 
 export const metadata: Metadata = {
   title: "Dự án đã thực hiện",
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ProjectsPage() {
-  const projects = await getProjects();
+  const [projects, site] = await Promise.all([getProjects(), getSiteSettings()]);
 
   return (
     <>
@@ -23,6 +24,14 @@ export default async function ProjectsPage() {
         description="Mỗi bộ cửa là một giải pháp an toàn và hoàn thiện chỉn chu cho không gian sống và kinh doanh của bạn."
         image="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1600&q=82"
       />
+
+      <div className="container">
+        <Breadcrumb
+          items={[{ name: "Dự án đã thực hiện", href: "/du-an" }]}
+          baseUrl={site.seoCanonicalBase || site.baseUrl}
+        />
+      </div>
+
       <section className="section">
         <div className="container">
           {projects.length > 0 ? (

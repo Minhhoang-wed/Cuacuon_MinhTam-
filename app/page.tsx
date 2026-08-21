@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   ArrowRight,
   BadgeCheck,
@@ -13,14 +14,39 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { CinematicHeroSlider } from "@/components/cinematic-hero-slider";
+import { FaqJsonLd, WebSiteJsonLd } from "@/components/structured-data";
 import {
   repairIssues,
   repairTips,
   trustItems,
 } from "@/data/public-home";
+import { serviceFaqs } from "@/data/faq";
 import { formatPrice, getCategories, getHomepageContent, getProducts, getServices, getSiteSettings } from "@/lib/catalog";
 
 export const revalidate = 300;
+
+export async function generateMetadata(): Promise<Metadata> {
+  const site = await getSiteSettings();
+  return {
+    title: `Sửa Cửa Cuốn TP.HCM 24/7 | ${site.name} - Có Mặt Sau 15 Phút`,
+    description:
+      "Dịch vụ sửa cửa cuốn tận nơi tại TP.HCM. Kỹ thuật viên có mặt sau 15-30 phút, báo giá minh bạch, bảo hành 3-24 tháng. Tiếp nhận 24/7 kể cả ngày lễ. Hotline: " +
+      site.hotline,
+    keywords: [
+      "sửa cửa cuốn",
+      "sửa cửa cuốn TP.HCM",
+      "sửa cửa cuốn 24/7",
+      "sửa cửa cuốn tận nơi",
+      "cửa cuốn bị kẹt",
+      "thay motor cửa cuốn",
+      "sửa remote cửa cuốn",
+      "cửa cuốn Minh Tâm",
+      "dịch vụ cửa cuốn",
+      "lắp đặt cửa cuốn",
+    ],
+    alternates: { canonical: "/" },
+  };
+}
 
 const productFallbackImages = [
   "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1000&q=82",
@@ -63,6 +89,17 @@ export default async function HomePage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusiness) }} />
+      <WebSiteJsonLd
+        name={site.name}
+        url={site.seoCanonicalBase || site.baseUrl}
+        description={site.description}
+      />
+      <FaqJsonLd items={serviceFaqs} />
+
+      {/* SEO: H1 chính cho trang chủ — visually hidden nhưng semantic cho Google */}
+      <h1 className="sr-only">
+        Sửa cửa cuốn TP.HCM 24/7 — {site.name} — Có mặt sau 15 phút, bảo hành dài hạn
+      </h1>
 
       {/* Hero Banner phong cách Card vòm tự động chuyển ảnh mỗi 3 giây (Fade Transition) */}
       <CinematicHeroSlider
@@ -222,6 +259,25 @@ export default async function HomePage() {
             <Link href="/tin-tuc" className="button button-primary">
               <FileText size={18} /> Xem thêm bài viết hữu ích <ArrowRight size={18} />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ — Câu hỏi thường gặp (matches FAQPage JSON-LD) */}
+      <section className="repair-section repair-faq-section" id="cau-hoi-thuong-gap">
+        <div className="container">
+          <div className="repair-section-heading">
+            <span>Câu hỏi thường gặp</span>
+            <h2>Khách hàng hay hỏi gì về dịch vụ sửa cửa cuốn?</h2>
+            <p>Giải đáp nhanh các thắc mắc phổ biến nhất về dịch vụ, chi phí, thời gian và bảo hành.</p>
+          </div>
+          <div className="faq-list">
+            {serviceFaqs.map((faq) => (
+              <details className="faq-item" key={faq.question}>
+                <summary>{faq.question}</summary>
+                <p>{faq.answer}</p>
+              </details>
+            ))}
           </div>
         </div>
       </section>

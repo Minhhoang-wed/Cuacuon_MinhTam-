@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { CheckCircle2, ShieldCheck, Sparkles, Wrench } from "lucide-react";
+import { Breadcrumb } from "@/components/breadcrumb";
 import { CtaBand } from "@/components/cta-band";
 import { PageHero } from "@/components/page-hero";
+import { getSiteSettings } from "@/lib/catalog";
 
 export const metadata: Metadata = {
   title: "Giới thiệu",
@@ -9,7 +11,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/ve-chung-toi" },
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const site = await getSiteSettings();
+
   return (
     <>
       <PageHero
@@ -17,6 +21,14 @@ export default function AboutPage() {
         description="Từ một yêu cầu sửa chữa nhỏ đến hệ cửa cho nhà xưởng, chúng tôi luôn bắt đầu bằng khảo sát rõ ràng và kết thúc bằng bàn giao minh bạch."
         image="/images/about-hero-banner.jpg"
       />
+
+      <div className="container">
+        <Breadcrumb
+          items={[{ name: "Giới thiệu", href: "/ve-chung-toi" }]}
+          baseUrl={site.seoCanonicalBase || site.baseUrl}
+        />
+      </div>
+
       <section className="section about-intro">
         <div className="container about-intro-grid">
           <div><span className="kicker">Triết lý phục vụ</span><h2>Giải pháp tốt phải an toàn, phù hợp và bền lâu.</h2></div>

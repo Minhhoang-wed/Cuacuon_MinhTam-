@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { ArrowRight, Search, ShieldCheck, X } from "lucide-react";
 import Link from "next/link";
+import { Breadcrumb } from "@/components/breadcrumb";
 import { CtaBand } from "@/components/cta-band";
 import { PageHero } from "@/components/page-hero";
-import { formatPrice, getCategories, getProducts } from "@/lib/catalog";
+import { formatPrice, getCategories, getProducts, getSiteSettings } from "@/lib/catalog";
 
 export async function generateMetadata({
   searchParams,
@@ -26,9 +27,10 @@ export default async function ProductsPage({
   searchParams: Promise<{ q?: string; category?: string }>;
 }) {
   const filters = await searchParams;
-  const [categories, products] = await Promise.all([
+  const [categories, products, site] = await Promise.all([
     getCategories(),
     getProducts({ category: filters.category, search: filters.q }),
+    getSiteSettings(),
   ]);
 
   return (
@@ -38,6 +40,13 @@ export default async function ProductsPage({
         description="Tra cứu theo từng dòng cửa khe thoáng, tấm liền, motor hoặc phụ kiện. Toàn bộ thông số, báo giá và chính sách bảo hành được quản lý minh bạch."
         image="/images/product-hero-banner.jpg"
       />
+
+      <div className="container">
+        <Breadcrumb
+          items={[{ name: "Sản phẩm & Phụ kiện", href: "/san-pham" }]}
+          baseUrl={site.seoCanonicalBase || site.baseUrl}
+        />
+      </div>
 
       <section className="catalog-tools">
         <div className="container">

@@ -25,6 +25,17 @@ export async function generateMetadata(): Promise<Metadata> {
       index: !isNoIndex,
       follow: !isNoFollow,
     },
+    // Google Search Console verification (replace with your actual verification code)
+    verification: {
+      google: process.env.NEXT_PUBLIC_GSC_VERIFICATION || undefined,
+    },
+    // Local SEO geo meta tags
+    other: {
+      "geo.region": "VN-SG",
+      "geo.placename": site.structuredAddressLocality || "TP. Hồ Chí Minh",
+      "geo.position": "10.7769;106.7009",
+      "ICBM": "10.7769, 106.7009",
+    },
     openGraph: {
       type: "website",
       locale: "vi_VN",

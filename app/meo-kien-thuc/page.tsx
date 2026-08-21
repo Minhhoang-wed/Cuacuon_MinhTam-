@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { ArrowRight, Clock3, FileText, Lightbulb } from "lucide-react";
 import Link from "next/link";
+import { Breadcrumb } from "@/components/breadcrumb";
 import { CtaBand } from "@/components/cta-band";
 import { PageHero } from "@/components/page-hero";
 import { repairTips } from "@/data/public-home";
-import { getArticles } from "@/lib/catalog";
+import { getArticles, getSiteSettings } from "@/lib/catalog";
 import { publicAssetUrl } from "@/lib/supabase-rest";
 
 export const metadata: Metadata = {
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function TipsAndKnowledgePage() {
-  const articles = await getArticles();
+  const [articles, site] = await Promise.all([getArticles(), getSiteSettings()]);
 
   return (
     <>
@@ -23,6 +24,13 @@ export default async function TipsAndKnowledgePage() {
         description="Tổng hợp các kinh nghiệm nhận biết sự cố, mẹo vận hành an toàn và cách bảo trì cửa cuốn bền đẹp dài lâu."
         image="/images/tips-hero-banner.jpg"
       />
+
+      <div className="container">
+        <Breadcrumb
+          items={[{ name: "Mẹo & Kiến thức", href: "/meo-kien-thuc" }]}
+          baseUrl={site.seoCanonicalBase || site.baseUrl}
+        />
+      </div>
 
       {/* 3 Mẹo thực tế nổi bật */}
       <section className="repair-section repair-tips-section" style={{ background: "#ffffff" }}>
