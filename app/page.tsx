@@ -15,11 +15,10 @@ import Link from "next/link";
 import { CinematicHeroSlider } from "@/components/cinematic-hero-slider";
 import {
   repairIssues,
-  repairServices,
   repairTips,
   trustItems,
 } from "@/data/public-home";
-import { formatPrice, getCategories, getHomepageContent, getProducts, getSiteSettings } from "@/lib/catalog";
+import { formatPrice, getCategories, getHomepageContent, getProducts, getServices, getSiteSettings } from "@/lib/catalog";
 
 export const revalidate = 300;
 
@@ -31,11 +30,12 @@ const productFallbackImages = [
 ];
 
 export default async function HomePage() {
-  const [site, homepage, catalogProducts, categories] = await Promise.all([
+  const [site, homepage, catalogProducts, categories, services] = await Promise.all([
     getSiteSettings(),
     getHomepageContent(),
     getProducts(),
     getCategories(),
+    getServices(),
   ]);
 
   const products = catalogProducts.slice(0, 8);
@@ -111,16 +111,23 @@ export default async function HomePage() {
             <p>Đội ngũ kỹ thuật viên xử lý các sự cố cửa cuốn tại nhà an toàn, rõ tình trạng và rõ hướng sửa.</p>
           </div>
           <div className="repair-service-grid">
-            {repairServices.map((service, index) => (
-              <article className="repair-service-card" key={service.title}>
+            {services.map((service, index) => (
+              <article className="repair-service-card" key={service.id || service.slug}>
                 <div className="repair-service-image-wrap">
-                  <img src={service.image} alt={service.title} />
+                  <img
+                    src={service.imageUrl || "/services/sua-cua-bi-ket.png"}
+                    alt={service.name}
+                  />
                   <span className="repair-service-badge">{String(index + 1).padStart(2, "0")} • CỨU HỘ</span>
                 </div>
                 <div className="repair-service-copy">
                   <span className="repair-service-category">DỊCH VỤ SỬA CHỮA</span>
-                  <h3>{service.title}</h3>
-                  <p>{service.description}</p>
+                  <h3>
+                    <Link href={`/dich-vu/${service.slug}`} style={{ color: "inherit", textDecoration: "none" }}>
+                      {service.name}
+                    </Link>
+                  </h3>
+                  <p>{service.summary}</p>
                   <div className="repair-service-price-stack">
                     <b className="service-price">{service.price}</b>
                     {service.warranty && (

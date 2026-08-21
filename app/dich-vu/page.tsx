@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { ArrowRight, CheckCircle2, MessageCircle, Phone, ShieldCheck, Zap } from "lucide-react";
+import { ArrowRight, CheckCircle2, Clock3, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { CtaBand } from "@/components/cta-band";
 import { PageHero } from "@/components/page-hero";
-import { repairServices, servicePriceCategories } from "@/data/public-home";
-import { getSiteSettings } from "@/lib/catalog";
+import { getServicePricing, getServices, getSiteSettings } from "@/lib/catalog";
 
 export const metadata: Metadata = {
   title: "Bảng báo giá dịch vụ sửa cửa cuốn Minh Tâm Door",
@@ -14,7 +13,11 @@ export const metadata: Metadata = {
 };
 
 export default async function ServicesPage() {
-  const site = await getSiteSettings();
+  const [services, servicePriceCategories, site] = await Promise.all([
+    getServices(),
+    getServicePricing(),
+    getSiteSettings(),
+  ]);
 
   return (
     <>
@@ -25,7 +28,7 @@ export default async function ServicesPage() {
         image="/images/service-hero-banner.jpg"
       />
 
-      {/* 6 Khối Dịch vụ Nổi bật có gắn giá và bảo hành */}
+      {/* Danh sách Dịch vụ Kỹ thuật Nổi bật */}
       <section className="section" style={{ background: "#ffffff" }}>
         <div className="container">
           <div className="repair-section-heading">
@@ -35,16 +38,23 @@ export default async function ServicesPage() {
           </div>
 
           <div className="repair-service-grid">
-            {repairServices.map((service, index) => (
-              <article className="repair-service-card" key={service.title}>
+            {services.map((service, index) => (
+              <article className="repair-service-card" key={service.id || service.slug}>
                 <div className="repair-service-image-wrap">
-                  <img src={service.image} alt={service.title} />
+                  <img
+                    src={service.imageUrl || "/services/sua-cua-bi-ket.png"}
+                    alt={service.name}
+                  />
                   <span className="repair-service-badge">{String(index + 1).padStart(2, "0")} • CỨU HỘ</span>
                 </div>
                 <div className="repair-service-copy">
                   <span className="repair-service-category">DỊCH VỤ SỬA CHỮA</span>
-                  <h3>{service.title}</h3>
-                  <p>{service.description}</p>
+                  <h3>
+                    <Link href={`/dich-vu/${service.slug}`} style={{ color: "inherit", textDecoration: "none" }}>
+                      {service.name}
+                    </Link>
+                  </h3>
+                  <p>{service.summary}</p>
                   <div className="repair-service-price-stack">
                     <b className="service-price">{service.price}</b>
                     {service.warranty && (
@@ -70,7 +80,7 @@ export default async function ServicesPage() {
             <p>Áp dụng cho dịch vụ sửa chữa, cứu hộ và thay thế linh kiện cửa cuốn tận nơi tại TP.HCM.</p>
           </div>
 
-          {/* 4 Bảng giá chi tiết theo danh mục khách hàng cung cấp */}
+          {/* Các Bảng giá chi tiết theo danh mục từ CMS */}
           <div className="repair-price-tables-grid">
             {servicePriceCategories.map((cat) => (
               <div className="repair-price-category-card" key={cat.categoryTitle}>
