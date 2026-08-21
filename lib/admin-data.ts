@@ -419,3 +419,51 @@ export async function getAdminOverview() {
     media: media.length,
   };
 }
+
+// ----------------------------------------------------------------------
+// SEO SETTINGS
+// ----------------------------------------------------------------------
+export async function getAdminSeoSettings() {
+  const s = await getSiteSettings();
+  const defaults = {
+    seo_title_template: `%s | ${s.shortName}`,
+    seo_site_name: s.name,
+    seo_default_description: s.description,
+    seo_keywords: "sửa cửa cuốn, cửa cuốn TP.HCM, motor cửa cuốn, phụ kiện cửa cuốn",
+    seo_canonical_base: s.baseUrl,
+    og_title: s.name,
+    og_description: s.description,
+    og_image_url: `${s.baseUrl}/og.png`,
+    og_locale: "vi_VN",
+    twitter_card: "summary_large_image",
+    twitter_title: s.name,
+    twitter_description: s.description,
+    twitter_image_url: `${s.baseUrl}/og.png`,
+    twitter_site: "",
+    robots_index: "index",
+    robots_follow: "follow",
+    structured_business_name: s.name,
+    structured_phone: s.hotline,
+    structured_address_locality: "TP. Hồ Chí Minh",
+    structured_address_region: "VN-SG",
+    structured_price_range: "$$",
+  };
+
+  if (!getSupabaseConfig()) return defaults;
+
+  try {
+    const token = await getAdminAccessToken();
+    const rows = await supabaseFetch<Array<Record<string, string | null>>>(
+      "/rest/v1/site_settings?id=eq.main&select=*&limit=1",
+      { cache: "no-store" },
+      token
+    );
+    const row = rows[0] || {};
+    // Merge: row values override defaults if present
+    return Object.fromEntries(
+      Object.entries(defaults).map(([k, def]) => [k, row[k] ?? def])
+    ) as typeof defaults;
+  } catch {
+    return defaults;
+  }
+}

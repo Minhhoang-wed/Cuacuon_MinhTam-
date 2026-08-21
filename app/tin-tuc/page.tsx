@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { ArrowRight, Clock3 } from "lucide-react";
 import Link from "next/link";
+import { Breadcrumb } from "@/components/breadcrumb";
 import { CtaBand } from "@/components/cta-band";
 import { PageHero } from "@/components/page-hero";
-import { getArticles } from "@/lib/catalog";
+import { getArticles, getSiteSettings } from "@/lib/catalog";
 import { publicAssetUrl } from "@/lib/supabase-rest";
 
 export const metadata: Metadata = {
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function NewsPage() {
-  const articles = await getArticles();
+  const [articles, site] = await Promise.all([getArticles(), getSiteSettings()]);
 
   return (
     <>
@@ -23,6 +24,14 @@ export default async function NewsPage() {
         description="Hướng dẫn ngắn gọn để nhận biết sự cố, bảo trì đúng cách và đảm bảo an toàn tối đa cho gia đình."
         image="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=1600&q=82"
       />
+
+      <div className="container">
+        <Breadcrumb
+          items={[{ name: "Tin tức & Hướng dẫn", href: "/tin-tuc" }]}
+          baseUrl={site.seoCanonicalBase || site.baseUrl}
+        />
+      </div>
+
       <section className="section">
         <div className="container">
           {articles.length > 0 ? (

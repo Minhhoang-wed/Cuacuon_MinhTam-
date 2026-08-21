@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ArrowRight, CheckCircle2, Clock3, Mail, MapPin, MessageCircle, Phone, ShieldCheck, Sparkles } from "lucide-react";
+import { Breadcrumb } from "@/components/breadcrumb";
 import { PageHero } from "@/components/page-hero";
 import { getSiteSettings } from "@/lib/catalog";
 
@@ -20,6 +21,13 @@ export default async function ContactPage() {
         description="Gửi hình ảnh hiện trạng hoặc kích thước cửa cuốn qua Zalo để nhận tư vấn và báo giá chi tiết trong 2-5 phút."
         image="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=1600&q=82"
       />
+
+      <div className="container">
+        <Breadcrumb
+          items={[{ name: "Liên hệ", href: "/lien-he" }]}
+          baseUrl={site.seoCanonicalBase || site.baseUrl}
+        />
+      </div>
 
       <section className="section">
         <div className="container" style={{ maxWidth: "1100px" }}>

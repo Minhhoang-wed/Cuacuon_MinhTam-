@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Clock3, MapPin, Phone, ShieldCheck, Zap } from "lucide-react";
+import { Breadcrumb } from "@/components/breadcrumb";
 import { PageHero } from "@/components/page-hero";
 import { getServiceDistricts, getSiteSettings, getStoreBranches } from "@/lib/catalog";
 
@@ -28,6 +29,13 @@ export default async function ServiceAreaPage() {
         image="/images/area-hero-banner.jpg"
         cardOverlay={true}
       />
+
+      <div className="container">
+        <Breadcrumb
+          items={[{ name: "Khu vực phục vụ", href: "/khu-vuc-phuc-vu" }]}
+          baseUrl={site.seoCanonicalBase || site.baseUrl}
+        />
+      </div>
 
       <section className="repair-area-band">
         <div className="container">

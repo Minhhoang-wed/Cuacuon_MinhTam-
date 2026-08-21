@@ -29,8 +29,47 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
   const [service, settings] = await Promise.all([getServiceBySlug(slug), getSiteSettings()]);
   if (!service) notFound();
 
+  const baseUrl = (settings.seoCanonicalBase || settings.baseUrl).replace(/\/$/, "");
+
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    name: service.name,
+    description: service.summary,
+    provider: {
+      "@type": "HomeAndConstructionBusiness",
+      name: settings.name,
+      telephone: settings.hotline,
+      url: baseUrl,
+    },
+    areaServed: settings.serviceArea,
+    offers: {
+      "@type": "Offer",
+      price: service.price,
+      priceCurrency: "VND",
+    },
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Trang chủ", item: baseUrl },
+      { "@type": "ListItem", position: 2, name: "Dịch vụ kỹ thuật", item: `${baseUrl}/dich-vu` },
+      { "@type": "ListItem", position: 3, name: service.name, item: `${baseUrl}/dich-vu/${service.slug}` },
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
       <section className="detail-hero">
         <div className="container detail-hero-grid">
           <div>

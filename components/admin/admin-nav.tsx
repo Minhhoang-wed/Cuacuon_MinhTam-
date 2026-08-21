@@ -11,7 +11,7 @@ import {
   LogOut,
   MapPin,
   Newspaper,
-  PhoneCall,
+  Search,
   Settings,
   ShieldCheck,
   Wrench,
@@ -59,6 +59,12 @@ const navGroups: NavGroup[] = [
       { href: "/admin/homepage", label: "Nội dung Trang chủ", icon: Home },
       { href: "/admin/media", label: "Thư viện hình ảnh", icon: ImageIcon },
       { href: "/admin/settings", label: "Cấu hình website", icon: Settings },
+    ],
+  },
+  {
+    title: "SEO & Hiệu suất",
+    items: [
+      { href: "/admin/seo", label: "Quản trị SEO", icon: Search, badge: "NEW" },
     ],
   },
 ];

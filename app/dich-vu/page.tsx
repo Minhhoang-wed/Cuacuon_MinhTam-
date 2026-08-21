@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { ArrowRight, CheckCircle2, Clock3, ShieldCheck } from "lucide-react";
 import Link from "next/link";
+import { Breadcrumb } from "@/components/breadcrumb";
 import { CtaBand } from "@/components/cta-band";
+import { FaqJsonLd } from "@/components/structured-data";
 import { PageHero } from "@/components/page-hero";
+import { serviceFaqs } from "@/data/faq";
 import { getServicePricing, getServices, getSiteSettings } from "@/lib/catalog";
 
 export const metadata: Metadata = {
@@ -21,12 +24,21 @@ export default async function ServicesPage() {
 
   return (
     <>
+      <FaqJsonLd items={serviceFaqs} />
+
       <PageHero
         eyebrow="Dịch vụ tận nơi 24/7"
         title="Đúng lỗi. Đúng giải pháp. Đúng phần cần sửa."
         description="Báo giá rõ ràng, minh bạch trước khi làm. Kỹ thuật viên kiểm tra thực tế, tư vấn phương án tối ưu và bảo hành dài hạn từ 3 - 24 tháng."
         image="/images/service-hero-banner.jpg"
       />
+
+      <div className="container">
+        <Breadcrumb
+          items={[{ name: "Dịch vụ sửa cửa cuốn", href: "/dich-vu" }]}
+          baseUrl={site.seoCanonicalBase || site.baseUrl}
+        />
+      </div>
 
       {/* Danh sách Dịch vụ Kỹ thuật Nổi bật */}
       <section className="section" style={{ background: "#ffffff" }}>
@@ -108,6 +120,25 @@ export default async function ServicesPage() {
                   </table>
                 </div>
               </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ — Câu hỏi thường gặp */}
+      <section className="repair-section repair-faq-section" id="cau-hoi-thuong-gap" style={{ background: "#ffffff", padding: "80px 0" }}>
+        <div className="container">
+          <div className="repair-section-heading">
+            <span>Câu hỏi thường gặp</span>
+            <h2>Giải đáp thắc mắc về dịch vụ sửa cửa cuốn</h2>
+            <p>Những câu hỏi phổ biến nhất từ khách hàng về chi phí, thời gian và bảo hành dịch vụ.</p>
+          </div>
+          <div className="faq-list">
+            {serviceFaqs.map((faq) => (
+              <details className="faq-item" key={faq.question}>
+                <summary>{faq.question}</summary>
+                <p>{faq.answer}</p>
+              </details>
             ))}
           </div>
         </div>

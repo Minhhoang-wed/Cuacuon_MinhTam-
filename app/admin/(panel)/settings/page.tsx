@@ -26,12 +26,17 @@ export default async function AdminSettingsPage({
         <div>
           <span>Cấu hình Hệ thống</span>
           <h1>Thông tin Doanh nghiệp & Website</h1>
-          <p>Quản lý tên thương hiệu, địa chỉ, hotline, kênh Zalo/Facebook và thông tin SEO mặc định.</p>
+          <p>Quản lý tên thương hiệu, địa chỉ, hotline, kênh Zalo/Facebook và thông tin liên hệ chính thức.</p>
         </div>
-        <Link href="/" target="_blank" className="button button-ghost">
-          <ExternalLink size={16} />
-          <span>Xem website thực tế</span>
-        </Link>
+        <div style={{ display: "flex", gap: "10px" }}>
+          <Link href="/admin/seo" className="button button-ghost">
+            <span>⚙️ Cấu hình SEO riêng</span>
+          </Link>
+          <Link href="/" target="_blank" className="button button-ghost">
+            <ExternalLink size={16} />
+            <span>Xem website</span>
+          </Link>
+        </div>
       </header>
 
       <form action={saveSettings} className="admin-form">
@@ -64,7 +69,7 @@ export default async function AdminSettingsPage({
             </label>
 
             <label className="full">
-              <span>Mô tả ngắn website (SEO mặc định)</span>
+              <span>Mô tả giới thiệu doanh nghiệp</span>
               <textarea
                 name="site_description"
                 maxLength={170}
