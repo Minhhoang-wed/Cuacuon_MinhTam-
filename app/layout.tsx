@@ -4,7 +4,50 @@ import "./globals.css";
 import { SiteShell } from "@/components/site-shell";
 import { getSiteSettings } from "@/lib/catalog";
 
-export async function generateMetadata(): Promise<Metadata> { const site = await getSiteSettings(); return { metadataBase: new URL(site.baseUrl), title: { default: `${site.name} | Sửa cửa cuốn TP.HCM`, template: `%s | ${site.shortName}` }, description: site.description, keywords: ["sửa cửa cuốn", "sửa cửa cuốn TP.HCM", "cửa cuốn", "motor cửa cuốn", "phụ kiện cửa cuốn"], alternates: { canonical: "/" }, openGraph: { type: "website", locale: "vi_VN", siteName: site.name, title: site.name, description: site.description, images: [{ url: "/og.png", width: 1732, height: 909, alt: `${site.name} - tiếp nhận yêu cầu 24/7` }] }, twitter: { card: "summary_large_image", title: site.name, description: site.description, images: ["/og.png"] } }; }
+export async function generateMetadata(): Promise<Metadata> {
+  const site = await getSiteSettings();
+  const canonicalUrl = site.seoCanonicalBase || site.baseUrl;
+  const isNoIndex = site.robotsIndex === "noindex";
+  const isNoFollow = site.robotsFollow === "nofollow";
+
+  return {
+    metadataBase: new URL(canonicalUrl),
+    title: {
+      default: `${site.name} | Sửa cửa cuốn TP.HCM`,
+      template: site.seoTitleTemplate || `%s | ${site.shortName}`,
+    },
+    description: site.description,
+    keywords: site.seoKeywords
+      ? site.seoKeywords.split(",").map((k) => k.trim()).filter(Boolean)
+      : ["sửa cửa cuốn", "sửa cửa cuốn TP.HCM", "cửa cuốn", "motor cửa cuốn", "phụ kiện cửa cuốn"],
+    alternates: { canonical: "/" },
+    robots: {
+      index: !isNoIndex,
+      follow: !isNoFollow,
+    },
+    openGraph: {
+      type: "website",
+      locale: "vi_VN",
+      siteName: site.name,
+      title: site.ogTitle || site.name,
+      description: site.ogDescription || site.description,
+      images: [
+        {
+          url: site.ogImageUrl || "/og.png",
+          width: 1200,
+          height: 630,
+          alt: `${site.name} - tiếp nhận yêu cầu 24/7`,
+        },
+      ],
+    },
+    twitter: {
+      card: site.twitterCard || "summary_large_image",
+      title: site.twitterTitle || site.name,
+      description: site.twitterDescription || site.description,
+      images: [site.twitterImageUrl || site.ogImageUrl || "/og.png"],
+    },
+  };
+}
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#0b2a3c" };
 

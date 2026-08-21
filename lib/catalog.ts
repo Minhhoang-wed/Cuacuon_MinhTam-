@@ -89,7 +89,34 @@ export type CatalogArticle = {
   publishedAt: string;
 };
 
-export type ManagedSiteConfig = { name: string; shortName: string; description: string; hotline: string; hotlineHref: string; zaloHref: string; email: string; address: string; hours: string; mapsHref: string; serviceArea: string; baseUrl: string; facebookHref: string; messengerHref: string };
+export type ManagedSiteConfig = {
+  name: string;
+  shortName: string;
+  description: string;
+  hotline: string;
+  hotlineHref: string;
+  zaloHref: string;
+  email: string;
+  address: string;
+  hours: string;
+  mapsHref: string;
+  serviceArea: string;
+  baseUrl: string;
+  facebookHref: string;
+  messengerHref: string;
+  seoTitleTemplate?: string;
+  seoKeywords?: string;
+  seoCanonicalBase?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImageUrl?: string;
+  twitterCard?: "summary" | "summary_large_image" | "app" | "player";
+  twitterTitle?: string;
+  twitterDescription?: string;
+  twitterImageUrl?: string;
+  robotsIndex?: "index" | "noindex";
+  robotsFollow?: "follow" | "nofollow";
+};
 export type HomepageContent = { heroEyebrow: string; heroTitle: string; heroEmphasis: string; heroDescription: string; heroCtaLabel: string; introTitle: string; introText: string };
 
 function parseAmount(value: string) { const digits = value.replace(/\D/g, ""); return digits ? Number(digits) : null; }
@@ -615,13 +642,63 @@ export async function getArticleBySlug(slug: string): Promise<CatalogArticle | n
 export async function getCategoryBySlug(slug: string) { const categories = await getCategories(); return categories.find((item) => item.slug === slug) || null; }
 
 export async function getSiteSettings(): Promise<ManagedSiteConfig> {
-  const fallback: ManagedSiteConfig = { ...siteConfig, facebookHref: "https://facebook.com/", messengerHref: "https://m.me/" };
+  const fallback: ManagedSiteConfig = {
+    ...siteConfig,
+    facebookHref: "https://facebook.com/",
+    messengerHref: "https://m.me/",
+    seoTitleTemplate: `%s | ${siteConfig.shortName}`,
+    seoKeywords: "sửa cửa cuốn, sửa cửa cuốn TP.HCM, cửa cuốn, motor cửa cuốn, phụ kiện cửa cuốn",
+    seoCanonicalBase: siteConfig.baseUrl,
+    ogTitle: siteConfig.name,
+    ogDescription: siteConfig.description,
+    ogImageUrl: "/og.png",
+    twitterCard: "summary_large_image",
+    twitterTitle: siteConfig.name,
+    twitterDescription: siteConfig.description,
+    twitterImageUrl: "/og.png",
+    robotsIndex: "index",
+    robotsFollow: "follow",
+  };
   if (!getSupabaseConfig()) return fallback;
   try {
-    const rows = await supabaseFetch<Array<Record<string,string | null>>>("/rest/v1/site_settings?id=eq.main&select=*&limit=1", { next: { revalidate: 300, tags: ["site-settings"] } }); const row = rows[0]; if (!row) return fallback;
+    const rows = await supabaseFetch<Array<Record<string, string | null>>>(
+      "/rest/v1/site_settings?id=eq.main&select=*&limit=1",
+      { next: { revalidate: 300, tags: ["site-settings"] } }
+    );
+    const row = rows[0];
+    if (!row) return fallback;
     const hotline = row.hotline || fallback.hotline;
-    return { ...fallback, name: row.company_name || fallback.name, shortName: row.short_name || fallback.shortName, description: row.site_description || fallback.description, hotline, hotlineHref: `tel:${hotline.replace(/\D/g, "")}`, zaloHref: row.zalo_url || fallback.zaloHref, email: row.email || fallback.email, address: row.address || fallback.address, hours: row.business_hours || fallback.hours, mapsHref: row.maps_url || fallback.mapsHref, serviceArea: row.service_area || fallback.serviceArea, facebookHref: row.facebook_url || fallback.facebookHref, messengerHref: row.messenger_url || fallback.messengerHref };
-  } catch { return fallback; }
+    return {
+      ...fallback,
+      name: row.company_name || fallback.name,
+      shortName: row.short_name || fallback.shortName,
+      description: row.seo_default_description || row.site_description || fallback.description,
+      hotline,
+      hotlineHref: `tel:${hotline.replace(/\D/g, "")}`,
+      zaloHref: row.zalo_url || fallback.zaloHref,
+      email: row.email || fallback.email,
+      address: row.address || fallback.address,
+      hours: row.business_hours || fallback.hours,
+      mapsHref: row.maps_url || fallback.mapsHref,
+      serviceArea: row.service_area || fallback.serviceArea,
+      facebookHref: row.facebook_url || fallback.facebookHref,
+      messengerHref: row.messenger_url || fallback.messengerHref,
+      seoTitleTemplate: row.seo_title_template || fallback.seoTitleTemplate,
+      seoKeywords: row.seo_keywords || fallback.seoKeywords,
+      seoCanonicalBase: row.seo_canonical_base || fallback.seoCanonicalBase,
+      ogTitle: row.og_title || row.seo_site_name || fallback.ogTitle,
+      ogDescription: row.og_description || row.seo_default_description || fallback.ogDescription,
+      ogImageUrl: row.og_image_url || fallback.ogImageUrl,
+      twitterCard: (row.twitter_card as any) || fallback.twitterCard,
+      twitterTitle: row.twitter_title || fallback.twitterTitle,
+      twitterDescription: row.twitter_description || fallback.twitterDescription,
+      twitterImageUrl: row.twitter_image_url || fallback.twitterImageUrl,
+      robotsIndex: (row.robots_index as any) || fallback.robotsIndex,
+      robotsFollow: (row.robots_follow as any) || fallback.robotsFollow,
+    };
+  } catch {
+    return fallback;
+  }
 }
 
 export async function getHomepageContent(): Promise<HomepageContent> {
