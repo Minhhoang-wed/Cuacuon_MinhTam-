@@ -1,5 +1,16 @@
 import type { Metadata } from "next";
-import { AlertCircle, ArrowLeft, ArrowRight, Boxes, Building2, KeyRound, Settings } from "lucide-react";
+import {
+  AlertCircle,
+  ArrowLeft,
+  ArrowRight,
+  Boxes,
+  Building2,
+  KeyRound,
+  MapPin,
+  Settings,
+  Shield,
+  Wrench,
+} from "lucide-react";
 import Link from "next/link";
 import { isSupabaseConfigured } from "@/lib/supabase-rest";
 
@@ -15,57 +26,83 @@ const messages: Record<string, string> = {
   permission: "Tài khoản này chưa được cấp quyền Quản trị viên.",
 };
 
+const features = [
+  { icon: Wrench, label: "Quản lý dịch vụ sửa chữa & bảng giá chi tiết" },
+  { icon: Boxes, label: "Catalog sản phẩm cửa cuốn & danh mục" },
+  { icon: Building2, label: "Dự án thi công & hình ảnh công trình thực tế" },
+  { icon: MapPin, label: "Khu vực phục vụ & mạng lưới cửa hàng" },
+  { icon: Settings, label: "Cấu hình website, hotline & thông tin liên hệ" },
+];
+
 export default async function AdminLoginPage({
   searchParams,
 }: {
   searchParams: Promise<{ error?: string }>;
 }) {
   const { error } = await searchParams;
-  const configured = isSupabaseConfigured();
 
   return (
     <main className="admin-login-page">
-      <div className="admin-login-brand">
-        <Link href="/" className="admin-login-logo" aria-label="Cua Cuon Minh Tam - Trang chu">
-          <img src="/logo/logo.png" alt="Cua Cuon Minh Tam" />
-        </Link>
-        <span className="admin-login-badge">CMS</span>
-      </div>
+      {/* ── LEFT PANEL: Brand & Hero ── */}
+      <div className="admin-login-left">
+        {/* Logo + CMS badge */}
+        <div className="admin-login-brand">
+          <Link href="/" className="admin-login-logo" aria-label="Cua Cuon Minh Tam - Trang chu">
+            <img src="/logo/logo.png" alt="Cua Cuon Minh Tam" />
+          </Link>
+          <span className="admin-login-badge">CMS</span>
+        </div>
 
-      <div className="admin-login-grid">
-        <section>
-          <span className="kicker">Hệ thống Quản trị</span>
+        {/* Hero headline */}
+        <div className="admin-login-headline">
+          <span className="admin-login-eyebrow">
+            <Shield size={13} />
+            Hệ thống quản trị
+          </span>
+
           <h1>
             Quản trị nội dung<br />
-            Cửa Cuốn Minh Tâm.
+            Cửa Cuốn <em>Minh Tâm.</em>
           </h1>
+
           <p>
-            Khu vực dành riêng cho ban quản trị cập nhật sản phẩm, hình ảnh công trình và thông tin hiển thị website.
+            Khu vực dành riêng cho ban quản trị cập nhật sản phẩm,
+            bảng giá, hình ảnh công trình và toàn bộ nội dung website.
           </p>
 
-          <ul>
-            <li>
-              <Boxes size={18} />
-              <span>Quản lý danh mục & bảng giá sản phẩm cửa cuốn</span>
-            </li>
-            <li>
-              <Building2 size={18} />
-              <span>Cập nhật dự án & hình ảnh công trình thực tế</span>
-            </li>
-            <li>
-              <Settings size={18} />
-              <span>Tùy chỉnh thông tin liên hệ, hotline & cấu hình trang chủ</span>
-            </li>
+          {/* Feature list */}
+          <ul className="admin-login-features">
+            {features.map(({ icon: Icon, label }) => (
+              <li key={label}>
+                <span className="admin-login-feature-icon">
+                  <Icon />
+                </span>
+                <span>{label}</span>
+              </li>
+            ))}
           </ul>
-        </section>
+        </div>
 
-        <section className="admin-login-card">
-          <KeyRound size={32} />
+        {/* Footer strip */}
+        <div className="admin-login-footer">
+          <span>© 2025 Cửa Cuốn Minh Tâm · Sửa chữa 24/7</span>
+          <span>TP. Hồ Chí Minh</span>
+        </div>
+      </div>
+
+      {/* ── RIGHT PANEL: Login Form ── */}
+      <div className="admin-login-right">
+        <div className="admin-login-card">
+          {/* Icon mark */}
+          <div className="admin-login-card-icon">
+            <KeyRound />
+          </div>
+
           <h2>Đăng nhập quản trị</h2>
-          <p>Sử dụng tài khoản quản trị đã được cấp quyền trên hệ thống.</p>
+          <p>Sử dụng tài khoản đã được cấp quyền quản trị viên trên hệ thống.</p>
 
           {error && (
-            <div className="admin-error">
+            <div className="admin-error" style={{ marginBottom: 20 }}>
               <AlertCircle size={18} style={{ flexShrink: 0 }} />
               <span>{messages[error] || "Không thể đăng nhập vào hệ thống."}</span>
             </div>
@@ -95,7 +132,7 @@ export default async function AdminLoginPage({
               />
             </label>
 
-            <button className="button button-primary">
+            <button type="submit" className="button button-primary">
               <span>Đăng nhập hệ thống</span>
               <ArrowRight size={18} />
             </button>
@@ -105,10 +142,8 @@ export default async function AdminLoginPage({
             <ArrowLeft size={16} />
             <span>Quay lại trang chủ website</span>
           </Link>
-        </section>
+        </div>
       </div>
     </main>
   );
 }
-
-
