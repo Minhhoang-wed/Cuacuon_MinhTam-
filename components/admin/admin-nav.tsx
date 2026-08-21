@@ -81,7 +81,10 @@ export function AdminNav({ email }: { email: string; demo?: boolean }) {
       <nav>
         {navGroups.map((group) => (
           <div className="admin-nav-group" key={group.title}>
-            <span className="admin-nav-group-title">{group.title}</span>
+            <span className="admin-nav-group-title">
+              <span className="admin-nav-group-dot" />
+              {group.title}
+            </span>
             {group.items.map(({ href, label, icon: Icon, badge }) => {
               const isActive =
                 pathname === href ||
@@ -93,7 +96,7 @@ export function AdminNav({ email }: { email: string; demo?: boolean }) {
                   href={href}
                   className={isActive ? "active" : ""}
                 >
-                  <Icon strokeWidth={isActive ? 2.2 : 1.8} size={18} />
+                  <Icon strokeWidth={isActive ? 2.2 : 2.0} size={20} />
                   <span>{label}</span>
                   {badge && <span className="admin-nav-pill-badge">{badge}</span>}
                 </Link>
