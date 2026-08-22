@@ -55,7 +55,6 @@ export default async function AdminServiceAreasPage({
 
       <header className="admin-page-header">
         <div>
-          <span>Mạng lưới phục vụ</span>
           <h1>Khu vực phục vụ & Chi nhánh ({branches.length} Chi nhánh / {districts.length} Quận huyện)</h1>
           <p>Quản lý các điểm cửa hàng trực tiếp và mạng lưới kỹ thuật viên túc trực tại các quận huyện TP.HCM.</p>
         </div>
@@ -67,12 +66,11 @@ export default async function AdminServiceAreasPage({
         <section className="admin-panel">
           <div className="admin-panel-heading">
             <div>
-              <span>Hệ thống cửa hàng</span>
               <h2>1. Chi nhánh cửa hàng trực tiếp ({branches.length})</h2>
             </div>
           </div>
 
-          <div style={{ padding: "16px 20px", display: "flex", flexDirection: "column", gap: "14px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "12px" }}>
             {branches.map((branch) => (
               <article
                 key={branch.id}
@@ -207,7 +205,7 @@ export default async function AdminServiceAreasPage({
               style={{ width: "100%", marginTop: 14 }}
               disabled={demo}
             >
-              <Plus size={18} />
+              <Plus size={14} />
               <span>Thêm chi nhánh</span>
             </button>
           </form>
@@ -220,7 +218,6 @@ export default async function AdminServiceAreasPage({
         <section className="admin-panel">
           <div className="admin-panel-heading">
             <div>
-              <span>Mạng lưới túc trực 24/7</span>
               <h2>2. Danh sách Quận / Huyện phục vụ ({districts.length})</h2>
             </div>
           </div>
@@ -339,7 +336,7 @@ export default async function AdminServiceAreasPage({
               style={{ width: "100%", marginTop: 14 }}
               disabled={demo}
             >
-              <Plus size={18} />
+              <Plus size={14} />
               <span>Thêm điểm phục vụ</span>
             </button>
           </form>

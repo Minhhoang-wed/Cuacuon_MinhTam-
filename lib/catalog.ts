@@ -680,7 +680,10 @@ export async function getSiteSettings(): Promise<ManagedSiteConfig> {
     );
     const row = rows[0];
     if (!row) return fallback;
-    const hotline = row.hotline || fallback.hotline;
+    const rawHotline = row.hotline || "";
+    const hotline = (rawHotline && !rawHotline.includes("0909") && !rawHotline.includes("0901")) ? rawHotline : fallback.hotline;
+    const rawZalo = row.zalo_url || "";
+    const zaloHref = (rawZalo && !rawZalo.includes("0909") && !rawZalo.includes("0901")) ? rawZalo : fallback.zaloHref;
     return {
       ...fallback,
       name: row.company_name || fallback.name,
@@ -688,7 +691,7 @@ export async function getSiteSettings(): Promise<ManagedSiteConfig> {
       description: row.seo_default_description || row.site_description || fallback.description,
       hotline,
       hotlineHref: `tel:${hotline.replace(/\D/g, "")}`,
-      zaloHref: row.zalo_url || fallback.zaloHref,
+      zaloHref,
       email: row.email || fallback.email,
       address: row.address || fallback.address,
       hours: row.business_hours || fallback.hours,

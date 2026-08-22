@@ -27,12 +27,11 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
 
       <header className="admin-page-header">
         <div>
-          <span>Quản lý Catalog</span>
           <h1>Danh sách Sản phẩm Cửa cuốn ({products.length})</h1>
           <p>Quản lý toàn bộ danh mục sản phẩm, bảng giá hiển thị, ảnh đại diện và thông số kỹ thuật.</p>
         </div>
         <Link href="/admin/products/new" className="button button-primary">
-          <Plus size={18} />
+          <Plus size={14} />
           <span>Thêm sản phẩm mới</span>
         </Link>
       </header>
@@ -117,9 +116,9 @@ export default async function AdminProductsPage({ searchParams }: { searchParams
                           : "Lưu trữ"}
                       </span>
                     </td>
-                    <td>
+                    <td style={{ whiteSpace: "nowrap" }}>
                       {product.is_featured ? (
-                        <span style={{ display: "inline-flex", alignItems: "center", gap: 4, color: "#d97706", fontSize: 13, fontWeight: 600, background: "#fffbeb", padding: "2px 8px", borderRadius: "6px" }}>
+                        <span style={{ display: "inline-flex", alignItems: "center", gap: 5, color: "#d97706", fontSize: 12, fontWeight: 600, background: "#fffbeb", padding: "3px 8px", borderRadius: "6px", whiteSpace: "nowrap", flexShrink: 0 }}>
                           <Star size={13} fill="#d97706" /> Nổi bật
                         </span>
                       ) : (

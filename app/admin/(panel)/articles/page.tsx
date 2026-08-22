@@ -30,12 +30,11 @@ export default async function AdminArticlesPage({
 
       <header className="admin-page-header">
         <div>
-          <span>Tin tức & Cẩm nang</span>
           <h1>Quản lý bài viết ({articles.length})</h1>
           <p>Soạn thảo, quản lý bài viết hướng dẫn an toàn, bảo trì và tin tức kỹ thuật.</p>
         </div>
         <Link href="/admin/articles/new" className="button button-primary">
-          <Plus size={18} />
+          <Plus size={14} />
           <span>Viết bài mới</span>
         </Link>
       </header>
@@ -122,10 +121,10 @@ export default async function AdminArticlesPage({
                           : "Lưu trữ"}
                       </span>
                     </td>
-                    <td>
+                    <td style={{ whiteSpace: "nowrap" }}>
                       {article.is_featured ? (
-                        <span style={{ color: "#d97706", display: "inline-flex", alignItems: "center", gap: 4, fontSize: 13, fontWeight: 600 }}>
-                          <Star size={14} fill="#d97706" /> Nổi bật
+                        <span style={{ color: "#d97706", display: "inline-flex", alignItems: "center", gap: 5, fontSize: 12, fontWeight: 600, background: "#fffbeb", padding: "3px 8px", borderRadius: "6px", whiteSpace: "nowrap", flexShrink: 0 }}>
+                          <Star size={13} fill="#d97706" /> Nổi bật
                         </span>
                       ) : (
                         <span style={{ color: "#94a3b8", fontSize: "13px" }}>—</span>

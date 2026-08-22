@@ -363,7 +363,41 @@ export async function getAdminServiceRequest(id: string): Promise<AdminServiceRe
 }
 
 export async function getAdminMedia() { if (!getSupabaseConfig()) return []; const token = await getAdminAccessToken(); return supabaseFetch<MediaRow[]>("/rest/v1/media_assets?select=*&order=created_at.desc&limit=100", { cache: "no-store" }, token); }
-export async function getAdminSettings() { if (!getSupabaseConfig()) { const x = await getSiteSettings(); return { company_name: x.name, short_name: x.shortName, site_description: x.description, hotline: x.hotline, zalo_url: x.zaloHref, email: x.email, address: x.address, facebook_url: x.facebookHref, messenger_url: x.messengerHref, maps_url: x.mapsHref, business_hours: x.hours, service_area: x.serviceArea }; } const token = await getAdminAccessToken(); const rows = await supabaseFetch<Array<Record<string,string | null>>>("/rest/v1/site_settings?id=eq.main&select=*&limit=1", { cache: "no-store" }, token); return rows[0] || {}; }
+export async function getAdminSettings() {
+  if (!getSupabaseConfig()) {
+    const x = await getSiteSettings();
+    return {
+      company_name: x.name,
+      short_name: x.shortName,
+      site_description: x.description,
+      hotline: x.hotline,
+      zalo_url: x.zaloHref,
+      email: x.email,
+      address: x.address,
+      facebook_url: x.facebookHref,
+      messenger_url: x.messengerHref,
+      maps_url: x.mapsHref,
+      business_hours: x.hours,
+      service_area: x.serviceArea,
+    };
+  }
+  const token = await getAdminAccessToken();
+  const rows = await supabaseFetch<Array<Record<string, string | null>>>(
+    "/rest/v1/site_settings?id=eq.main&select=*&limit=1",
+    { cache: "no-store" },
+    token
+  );
+  const row = rows[0] || {};
+  const rawHotline = row.hotline || "";
+  const hotline = (rawHotline && !rawHotline.includes("0909") && !rawHotline.includes("0901")) ? rawHotline : "0327 359 368";
+  const rawZalo = row.zalo_url || "";
+  const zalo_url = (rawZalo && !rawZalo.includes("0909") && !rawZalo.includes("0901")) ? rawZalo : "https://zalo.me/0327359368";
+  return {
+    ...row,
+    hotline,
+    zalo_url,
+  };
+}
 export async function getAdminHomepage() { if (!getSupabaseConfig()) { const x = await getHomepageContent(); return { hero_eyebrow: x.heroEyebrow, hero_title: x.heroTitle, hero_emphasis: x.heroEmphasis, hero_description: x.heroDescription, hero_cta_label: x.heroCtaLabel, intro_title: x.introTitle, intro_text: x.introText }; } const token = await getAdminAccessToken(); const rows = await supabaseFetch<Array<Record<string,string | null>>>("/rest/v1/homepage_content?id=eq.main&select=*&limit=1", { cache: "no-store" }, token); return rows[0] || {}; }
 
 export async function getAdminOverview() {

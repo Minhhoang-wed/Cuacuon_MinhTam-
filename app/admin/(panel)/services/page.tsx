@@ -66,12 +66,11 @@ export default async function AdminServicesPage({
 
       <header className="admin-page-header">
         <div>
-          <span>Dịch vụ & Báo giá</span>
           <h1>Quản lý Dịch vụ & Bảng giá ({services.length} Dịch vụ / {priceItems.length} Hạng mục giá)</h1>
           <p>Quản lý các gói dịch vụ cứu hộ 24/7 và điều chỉnh bảng báo giá chi tiết hiển thị trên trang /dich-vu.</p>
         </div>
         <Link href="/admin/services/new" className="button button-primary">
-          <Plus size={18} />
+          <Plus size={14} />
           <span>Thêm dịch vụ mới</span>
         </Link>
       </header>
@@ -80,12 +79,8 @@ export default async function AdminServicesPage({
       <section className="admin-panel" style={{ marginBottom: "36px" }}>
         <div className="admin-panel-heading">
           <div>
-            <span>Kỹ thuật chuyên sâu</span>
             <h2>1. Danh sách Dịch vụ sửa chữa ({services.length})</h2>
           </div>
-          <Link href="/admin/services/new" className="button button-primary" style={{ padding: "7px 14px", fontSize: "13.5px" }}>
-            <Plus size={15} /> Thêm dịch vụ
-          </Link>
         </div>
 
         {services.length > 0 ? (
@@ -195,12 +190,11 @@ export default async function AdminServicesPage({
         <section className="admin-panel">
           <div className="admin-panel-heading">
             <div>
-              <span>Bảng báo giá chi tiết</span>
               <h2>2. Bảng giá dịch vụ theo từng hạng mục</h2>
             </div>
           </div>
 
-          <div style={{ padding: "16px 20px", display: "flex", flexDirection: "column", gap: "24px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "18px", marginTop: "12px" }}>
             {priceCategoryOptions.map((catTitle) => {
               const items = groupedPricing[catTitle] || [];
               return (
@@ -210,12 +204,12 @@ export default async function AdminServicesPage({
                     background: "#f8fafc",
                     border: "1px solid #e2e8f0",
                     borderRadius: "10px",
-                    padding: "16px",
+                    padding: "14px",
                   }}
                 >
                   <h3
                     style={{
-                      fontSize: "15px",
+                      fontSize: "14.5px",
                       fontWeight: 700,
                       color: "#1e293b",
                       margin: "0 0 12px",
@@ -224,11 +218,11 @@ export default async function AdminServicesPage({
                       gap: "8px",
                     }}
                   >
-                    <Layers size={17} color="#2563eb" /> {catTitle} ({items.length})
+                    <Layers size={16} color="#2563eb" /> {catTitle} ({items.length})
                   </h3>
 
                   {items.length > 0 ? (
-                    <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                       {items.map((item) => (
                         <div
                           key={item.id}
@@ -238,25 +232,56 @@ export default async function AdminServicesPage({
                             borderRadius: "8px",
                             border: "1px solid #e2e8f0",
                             display: "flex",
-                            flexWrap: "wrap",
-                            alignItems: "center",
-                            justifyContent: "space-between",
-                            gap: "10px",
+                            flexDirection: "column",
+                            gap: "8px",
                           }}
                         >
-                          <div style={{ flex: "1 1 240px" }}>
-                            <b style={{ fontSize: "14px", color: "#0f172a" }}>{item.item_name}</b>
-                            <div style={{ display: "flex", gap: "14px", marginTop: "4px", fontSize: "13px" }}>
-                              <span style={{ color: "#2563eb", fontWeight: 600 }}>{item.price}</span>
-                              <span style={{ color: "#059669" }}>Bảo hành: {item.warranty}</span>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "flex-start",
+                              gap: "10px",
+                            }}
+                          >
+                            <b style={{ fontSize: "14px", color: "#0f172a", lineHeight: 1.4, flex: 1 }}>
+                              {item.item_name}
+                            </b>
+                            <div style={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0 }}>
+                              <form action={deleteServicePriceItem} style={{ margin: 0 }}>
+                                <input type="hidden" name="id" value={item.id} />
+                                <DeletePriceItemButton itemName={item.item_name} />
+                              </form>
                             </div>
                           </div>
 
-                          <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                            <form action={deleteServicePriceItem} style={{ margin: 0 }}>
-                              <input type="hidden" name="id" value={item.id} />
-                              <DeletePriceItemButton itemName={item.item_name} />
-                            </form>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              gap: "10px",
+                              paddingTop: "6px",
+                              borderTop: "1px dashed #f1f5f9",
+                              fontSize: "13px",
+                            }}
+                          >
+                            <span style={{ color: "#2563eb", fontWeight: 700, whiteSpace: "nowrap" }}>
+                              {item.price}
+                            </span>
+                            <span
+                              style={{
+                                color: "#059669",
+                                fontWeight: 600,
+                                whiteSpace: "nowrap",
+                                background: "#ecfdf5",
+                                padding: "2px 8px",
+                                borderRadius: "4px",
+                                fontSize: "12px",
+                              }}
+                            >
+                              Bảo hành: {item.warranty}
+                            </span>
                           </div>
                         </div>
                       ))}

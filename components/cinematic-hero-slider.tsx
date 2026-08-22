@@ -1,12 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MessageCircle, Phone } from "lucide-react";
 
 interface CinematicHeroSliderProps {
-  hotlineHref: string;
-  hotline: string;
-  zaloHref: string;
+  hotlineHref?: string;
+  hotline?: string;
+  zaloHref?: string;
   images?: string[];
 }
 
@@ -63,14 +62,6 @@ export function CinematicHeroSlider({
               Tiếp nhận mọi sự cố cửa cuốn kẹt nan, hỏng motor, lỗi remote, lệch ray, đứt lò xo... 
               Kỹ thuật viên có mặt nhanh sau 15 – 30 phút tại tất cả các quận huyện TP.HCM.
             </p>
-            <div className="cinematic-hero-actions">
-              <a href={hotlineHref} className="cinematic-btn-primary">
-                <Phone size={18} /> Gọi cứu hộ ngay: {hotline}
-              </a>
-              <a href={zaloHref} target="_blank" rel="noreferrer" className="cinematic-btn-secondary">
-                <MessageCircle size={18} /> Zalo tư vấn miễn phí
-              </a>
-            </div>
           </div>
 
           {/* Dấu chấm chuyển slide (Subtle Dots) */}

@@ -24,7 +24,6 @@ export default async function AdminSettingsPage({
 
       <header className="admin-page-header">
         <div>
-          <span>Cấu hình Hệ thống</span>
           <h1>Thông tin Doanh nghiệp & Website</h1>
           <p>Quản lý tên thương hiệu, địa chỉ, hotline, kênh Zalo/Facebook và thông tin liên hệ chính thức.</p>
         </div>
@@ -44,7 +43,6 @@ export default async function AdminSettingsPage({
         <section className="admin-form-card">
           <div className="admin-form-section-title">
             <div>
-              <span>Hồ sơ Doanh nghiệp</span>
               <h2>Thông tin thương hiệu</h2>
             </div>
           </div>
@@ -112,7 +110,6 @@ export default async function AdminSettingsPage({
         <section className="admin-form-card">
           <div className="admin-form-section-title">
             <div>
-              <span>Kênh tương tác trực tiếp</span>
               <h2>Hotline & Liên kết mạng xã hội</h2>
             </div>
           </div>
