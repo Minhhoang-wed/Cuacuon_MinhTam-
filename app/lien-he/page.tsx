@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ArrowRight, CheckCircle2, Clock3, Mail, MapPin, MessageCircle, Phone, ShieldCheck, Sparkles } from "lucide-react";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { PageHero } from "@/components/page-hero";
+import { directStores } from "@/data/public-home";
 import { getSiteSettings } from "@/lib/catalog";
 
 export const metadata: Metadata = {
@@ -130,15 +131,21 @@ export default async function ContactPage() {
               </a>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginTop: "24px", paddingTop: "20px", borderTop: "1px solid var(--border-color)" }}>
-                <a
-                  href={site.mapsHref}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ display: "flex", alignItems: "flex-start", gap: "12px", color: "var(--text-body)", textDecoration: "none", fontSize: "14px" }}
-                >
-                  <MapPin size={18} color="var(--accent-color)" style={{ flexShrink: 0, marginTop: "2px" }} />
-                  <span>{site.address}</span>
-                </a>
+                {directStores.map((store, idx) => (
+                  <a
+                    key={idx}
+                    href={site.mapsHref || "https://maps.google.com"}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ display: "flex", alignItems: "flex-start", gap: "12px", color: "var(--text-body)", textDecoration: "none", fontSize: "14px" }}
+                  >
+                    <MapPin size={18} color="var(--accent-color)" style={{ flexShrink: 0, marginTop: "2px" }} />
+                    <span>
+                      <strong style={{ display: "block", color: "var(--text-title, #0f172a)", marginBottom: "2px" }}>{store.branch}</strong>
+                      <span style={{ color: "#64748b", fontSize: "13.5px" }}>{store.address}</span>
+                    </span>
+                  </a>
+                ))}
                 <a
                   href={`mailto:${site.email}`}
                   style={{ display: "flex", alignItems: "center", gap: "12px", color: "var(--text-body)", textDecoration: "none", fontSize: "14px" }}
