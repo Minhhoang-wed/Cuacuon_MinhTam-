@@ -50,13 +50,6 @@ export default async function AboutPage() {
         </div>
       </section>
 
-      <section className="about-image-band">
-        <div className="container about-image-grid">
-          <img src={about.image1Url} alt="Kỹ thuật viên kiểm tra thiết bị" />
-          <img src={about.image2Url} alt="Công trình cửa cuốn công nghiệp" />
-        </div>
-      </section>
-
       <section className="section about-values-section">
         <div className="container">
           <div className="lovable-section-heading">

@@ -123,41 +123,11 @@ export default async function AdminAboutPage({
           </div>
         </section>
 
-        {/* 3. Bộ ảnh hoạt động thực tế */}
+        {/* 3. Giá trị cốt lõi */}
         <section className="admin-form-card">
           <div className="admin-form-section-title">
             <div>
               <span>Phần 3</span>
-              <h2>Bộ 2 ảnh hoạt động thực tế</h2>
-            </div>
-          </div>
-
-          <div className="admin-fields two">
-            <label>
-              <span>Ảnh thực tế 1 (Kỹ thuật viên / Xưởng)</span>
-              <input
-                name="image_1_url"
-                defaultValue={content.image_1_url || ""}
-                placeholder="VD: https://images.unsplash.com/..."
-              />
-            </label>
-
-            <label>
-              <span>Ảnh thực tế 2 (Công trình / Thiết bị)</span>
-              <input
-                name="image_2_url"
-                defaultValue={content.image_2_url || ""}
-                placeholder="VD: https://images.unsplash.com/..."
-              />
-            </label>
-          </div>
-        </section>
-
-        {/* 4. Giá trị cốt lõi */}
-        <section className="admin-form-card">
-          <div className="admin-form-section-title">
-            <div>
-              <span>Phần 4</span>
               <h2>3 Giá trị cốt lõi</h2>
             </div>
           </div>
@@ -231,11 +201,11 @@ export default async function AdminAboutPage({
           </div>
         </section>
 
-        {/* 5. Quy trình làm việc 5 bước */}
+        {/* 4. Quy trình làm việc 5 bước */}
         <section className="admin-form-card">
           <div className="admin-form-section-title">
             <div>
-              <span>Phần 5</span>
+              <span>Phần 4</span>
               <h2>Quy trình làm việc 5 bước</h2>
             </div>
           </div>

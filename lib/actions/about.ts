@@ -17,8 +17,6 @@ export async function saveAboutContent(form: FormData) {
     "philosophy_title",
     "philosophy_text_1",
     "philosophy_text_2",
-    "image_1_url",
-    "image_2_url",
     "values_heading",
     "value_1_title",
     "value_1_text",

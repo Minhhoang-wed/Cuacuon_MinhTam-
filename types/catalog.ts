@@ -181,8 +181,8 @@ export type AboutPageContent = {
   philosophyTitle: string;
   philosophyText1: string;
   philosophyText2: string;
-  image1Url: string;
-  image2Url: string;
+  image1Url?: string;
+  image2Url?: string;
   valuesHeading: string;
   value1Title: string;
   value1Text: string;
