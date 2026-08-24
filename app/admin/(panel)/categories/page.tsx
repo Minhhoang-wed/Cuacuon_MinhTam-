@@ -75,6 +75,20 @@ export default async function AdminCategoriesPage({
                     </label>
 
                     <label>
+                      <span>Ảnh đại diện / Icon (URL hoặc tải tệp)</span>
+                      <input
+                        name="image_path"
+                        defaultValue={category.image_path || ""}
+                        placeholder="VD: /images/cua-khe-thoang.png hoặc categories/..."
+                      />
+                    </label>
+
+                    <label>
+                      <span>Tải ảnh mới từ máy</span>
+                      <input type="file" name="image" accept="image/jpeg,image/png,image/webp" />
+                    </label>
+
+                    <label>
                       <span>Thứ tự hiển thị</span>
                       <input name="sort_order" type="number" defaultValue={category.sort_order} />
                     </label>
@@ -160,6 +174,16 @@ export default async function AdminCategoriesPage({
                   rows={3}
                   placeholder="Giới thiệu về dòng cửa cuốn này..."
                 />
+              </label>
+
+              <label>
+                <span>Đường dẫn ảnh đại diện (Tùy chọn)</span>
+                <input name="image_path" placeholder="VD: /images/cua-khe-thoang.png" />
+              </label>
+
+              <label>
+                <span>Tải ảnh từ máy (Tùy chọn)</span>
+                <input type="file" name="image" accept="image/jpeg,image/png,image/webp" />
               </label>
 
               <label>

@@ -2,6 +2,7 @@ import { CheckCircle2, Clock3, Edit3, Layers, Plus, Save, ShieldCheck, Tag, Tras
 import Link from "next/link";
 import { DeletePriceItemButton } from "@/components/admin/delete-price-item-button";
 import { DeleteServiceButton } from "@/components/admin/delete-service-button";
+import { EditPriceItemModal } from "@/components/admin/edit-price-item-modal";
 import { deleteService, deleteServicePriceItem, saveServicePriceItem } from "@/lib/admin-actions";
 import { getAdminServicePriceItems, getAdminServices } from "@/lib/admin-data";
 import { isSupabaseConfigured, publicAssetUrl } from "@/lib/supabase-rest";
@@ -252,6 +253,7 @@ export default async function AdminServicesPage({
                               {item.item_name}
                             </b>
                             <div style={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0 }}>
+                              <EditPriceItemModal item={item} />
                               <form action={deleteServicePriceItem} style={{ margin: 0 }}>
                                 <input type="hidden" name="id" value={item.id} />
                                 <DeletePriceItemButton itemName={item.item_name} />

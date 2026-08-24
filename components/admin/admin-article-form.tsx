@@ -1,6 +1,7 @@
 import { ImagePlus, Newspaper, Save } from "lucide-react";
 import { saveArticle } from "@/lib/admin-actions";
 import type { AdminArticleRow } from "@/lib/admin-data";
+import { ArticleImageManager } from "@/components/admin/article-image-manager";
 
 const defaultCategories = [
   "Cẩm nang sử dụng",
@@ -115,56 +116,41 @@ export function AdminArticleForm({ article }: { article?: AdminArticleRow | null
           </div>
         </div>
 
-        <div className="admin-fields">
+        <div style={{ marginBottom: "20px" }}>
+          <ArticleImageManager
+            initialImageUrl={article?.image_url}
+            articleTitle={article?.title}
+          />
+        </div>
+
+        <div className="admin-fields three" style={{ marginTop: "16px", paddingTop: "16px", borderTop: "1px solid #f1f5f9" }}>
           <label>
-            <span>Tải lên ảnh bìa mới (JPG, PNG, WebP tối đa 5MB)</span>
+            <span>Trạng thái xuất bản *</span>
+            <select name="status" defaultValue={article?.status || "published"}>
+              <option value="published">Đã xuất bản (Công khai)</option>
+              <option value="draft">Bản nháp (Ẩn)</option>
+              <option value="archived">Lưu trữ</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Thứ tự ưu tiên</span>
             <input
-              type="file"
-              name="image"
-              accept="image/jpeg,image/png,image/webp"
+              name="sort_order"
+              type="number"
+              defaultValue={article?.sort_order ?? 0}
             />
           </label>
 
-          {article?.image_url && (
-            <label>
-              <span>Đường dẫn ảnh hiện tại</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "28px" }}>
+            <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
               <input
-                name="image_url"
-                defaultValue={article.image_url}
-                readOnly
+                type="checkbox"
+                name="is_featured"
+                defaultChecked={article?.is_featured || false}
               />
+              <span style={{ fontWeight: 600, color: "#1e293b" }}>Ghim bài viết nổi bật</span>
             </label>
-          )}
-
-          <div className="admin-fields three">
-            <label>
-              <span>Trạng thái xuất bản *</span>
-              <select name="status" defaultValue={article?.status || "published"}>
-                <option value="published">Đã xuất bản (Công khai)</option>
-                <option value="draft">Bản nháp (Ẩn)</option>
-                <option value="archived">Lưu trữ</option>
-              </select>
-            </label>
-
-            <label>
-              <span>Thứ tự ưu tiên</span>
-              <input
-                name="sort_order"
-                type="number"
-                defaultValue={article?.sort_order ?? 0}
-              />
-            </label>
-
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "28px" }}>
-              <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
-                <input
-                  type="checkbox"
-                  name="is_featured"
-                  defaultChecked={article?.is_featured || false}
-                />
-                <span>Ghim bài viết nổi bật</span>
-              </label>
-            </div>
           </div>
         </div>
       </section>

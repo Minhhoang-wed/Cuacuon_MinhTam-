@@ -21,7 +21,8 @@ import {
   trustItems,
 } from "@/data/public-home";
 import { serviceFaqs } from "@/data/faq";
-import { formatPrice, getCategories, getHomepageContent, getProducts, getServices, getSiteSettings } from "@/lib/catalog";
+import { formatPrice, getArticles, getCategories, getHomepageContent, getProducts, getServices, getSiteSettings } from "@/lib/catalog";
+import { publicAssetUrl } from "@/lib/supabase-rest";
 
 export const revalidate = 300;
 
@@ -56,15 +57,17 @@ const productFallbackImages = [
 ];
 
 export default async function HomePage() {
-  const [site, homepage, catalogProducts, categories, services] = await Promise.all([
+  const [site, homepage, catalogProducts, categories, services, articles] = await Promise.all([
     getSiteSettings(),
     getHomepageContent(),
     getProducts(),
     getCategories(),
     getServices(),
+    getArticles(),
   ]);
 
   const products = catalogProducts.slice(0, 8);
+  const displayArticles = articles.length > 0 ? articles.slice(0, 4) : [];
 
   const localBusiness = {
     "@context": "https://schema.org",
@@ -249,19 +252,38 @@ export default async function HomePage() {
             <p>Các gợi ý nhận biết sự cố và kiểm tra an toàn cơ bản trước khi cần kỹ thuật viên hỗ trợ.</p>
           </div>
           <div className="repair-tip-grid">
-            {repairTips.map((tip) => (
-              <article className="repair-tip-card" key={tip.title}>
-                <img src={tip.image} alt={tip.title} />
-                <div>
-                  <span>{tip.tag}</span>
-                  <h3>{tip.title}</h3>
-                  <p>{tip.excerpt}</p>
-                  <a href="/tin-tuc">
-                    Xem chi tiết <ArrowRight size={15} />
-                  </a>
-                </div>
-              </article>
-            ))}
+            {displayArticles.length > 0
+              ? displayArticles.map((article) => {
+                  const coverImg = article.imageUrl
+                    ? publicAssetUrl(article.imageUrl) || article.imageUrl
+                    : "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=800&q=80";
+                  return (
+                    <article className="repair-tip-card" key={article.id || article.slug}>
+                      <img src={coverImg} alt={article.title} />
+                      <div>
+                        <span>{article.category}</span>
+                        <h3>{article.title}</h3>
+                        <p>{article.excerpt}</p>
+                        <Link href={`/tin-tuc/${article.slug}`}>
+                          Xem chi tiết <ArrowRight size={15} />
+                        </Link>
+                      </div>
+                    </article>
+                  );
+                })
+              : repairTips.map((tip) => (
+                  <article className="repair-tip-card" key={tip.title}>
+                    <img src={tip.image} alt={tip.title} />
+                    <div>
+                      <span>{tip.tag}</span>
+                      <h3>{tip.title}</h3>
+                      <p>{tip.excerpt}</p>
+                      <Link href="/tin-tuc">
+                        Xem chi tiết <ArrowRight size={15} />
+                      </Link>
+                    </div>
+                  </article>
+                ))}
           </div>
           <div className="repair-center-action">
             <Link href="/tin-tuc" className="button button-primary">

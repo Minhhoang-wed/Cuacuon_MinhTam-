@@ -2,6 +2,8 @@ import { CheckCircle2, Clock3, Edit3, Flame, MapPin, Phone, Plus, Save, Store, T
 import Link from "next/link";
 import { DeleteBranchButton } from "@/components/admin/delete-branch-button";
 import { DeleteDistrictButton } from "@/components/admin/delete-district-button";
+import { EditBranchModal } from "@/components/admin/edit-branch-modal";
+import { EditDistrictModal } from "@/components/admin/edit-district-modal";
 import { deleteServiceDistrict, deleteStoreBranch, saveServiceDistrict, saveStoreBranch } from "@/lib/admin-actions";
 import { getAdminServiceDistricts, getAdminStoreBranches } from "@/lib/admin-data";
 import { isSupabaseConfigured } from "@/lib/supabase-rest";
@@ -105,10 +107,13 @@ export default async function AdminServiceAreasPage({
                     <h3 style={{ margin: 0, fontSize: "16px", color: "#0f172a" }}>{branch.branch_name}</h3>
                   </div>
 
-                  <form action={deleteStoreBranch} style={{ margin: 0 }}>
-                    <input type="hidden" name="id" value={branch.id} />
-                    <DeleteBranchButton branchName={branch.branch_name} />
-                  </form>
+                  <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                    <EditBranchModal branch={branch} />
+                    <form action={deleteStoreBranch} style={{ margin: 0 }}>
+                      <input type="hidden" name="id" value={branch.id} />
+                      <DeleteBranchButton branchName={branch.branch_name} />
+                    </form>
+                  </div>
                 </div>
 
                 <p style={{ margin: 0, fontSize: "13.5px", color: "#475569", display: "flex", alignItems: "center", gap: "6px" }}>
@@ -258,6 +263,7 @@ export default async function AdminServiceAreasPage({
                     </td>
                     <td>
                       <div className="table-actions" style={{ justifyContent: "flex-end" }}>
+                        <EditDistrictModal district={district} />
                         <form action={deleteServiceDistrict} style={{ margin: 0 }}>
                           <input type="hidden" name="id" value={district.id} />
                           <DeleteDistrictButton districtName={district.district_name} />
