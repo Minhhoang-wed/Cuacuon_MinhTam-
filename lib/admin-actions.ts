@@ -258,10 +258,30 @@ export async function saveService(form: FormData) {
   const process = value(form, "process").split("\n").map((s) => s.trim()).filter(Boolean);
 
   let imageUrl = optional(form, "image_url");
+  const isCleared = form.get("clear_image") === "true";
+  if (isCleared) {
+    imageUrl = null;
+  }
+
   const imageFile = form.get("image");
   if (imageFile instanceof File && imageFile.size > 0) {
     const path = await uploadObject(imageFile, "services", token);
     imageUrl = path;
+    try {
+      await supabaseFetch("/rest/v1/media_assets", {
+        method: "POST",
+        headers: { Prefer: "return=minimal" },
+        body: JSON.stringify({
+          storage_path: path,
+          file_name: imageFile.name,
+          alt_text: name,
+          mime_type: imageFile.type,
+          size_bytes: imageFile.size,
+        }),
+      }, token);
+    } catch {
+      // Ignore if media_assets insert is not critical
+    }
   }
 
   const payload = {
@@ -294,6 +314,7 @@ export async function saveService(form: FormData) {
   revalidatePath("/dich-vu");
   revalidatePath(`/dich-vu/${payload.slug}`);
   revalidatePath("/admin/services");
+  revalidatePath("/admin/media");
   redirect(`/admin/services?saved=1`);
 }
 

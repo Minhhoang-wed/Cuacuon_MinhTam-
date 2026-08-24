@@ -81,7 +81,12 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
               Tư vấn & Báo giá qua Zalo
             </a>
           </div>
-          <DoorVisual label="KỸ THUẬT" kind="service" />
+          <DoorVisual
+            label="KỸ THUẬT"
+            kind="service"
+            imageUrl={service.imageUrl}
+            imageAlt={service.name}
+          />
         </div>
       </section>
       <section className="section">
