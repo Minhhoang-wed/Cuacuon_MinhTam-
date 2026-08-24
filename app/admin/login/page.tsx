@@ -5,10 +5,8 @@ import {
   ArrowRight,
   Boxes,
   Building2,
-  KeyRound,
   MapPin,
   Settings,
-  Shield,
   Wrench,
 } from "lucide-react";
 import Link from "next/link";
@@ -45,21 +43,15 @@ export default async function AdminLoginPage({
     <main className="admin-login-page">
       {/* ── LEFT PANEL: Brand & Hero ── */}
       <div className="admin-login-left">
-        {/* Logo + CMS badge */}
+        {/* Logo */}
         <div className="admin-login-brand">
           <Link href="/" className="admin-login-logo" aria-label="Cua Cuon Minh Tam - Trang chu">
             <img src="/logo/logo.png" alt="Cua Cuon Minh Tam" />
           </Link>
-          <span className="admin-login-badge">CMS</span>
         </div>
 
         {/* Hero headline */}
         <div className="admin-login-headline">
-          <span className="admin-login-eyebrow">
-            <Shield size={13} />
-            Hệ thống quản trị
-          </span>
-
           <h1>
             Quản trị nội dung<br />
             Cửa Cuốn <em>Minh Tâm.</em>
@@ -93,11 +85,6 @@ export default async function AdminLoginPage({
       {/* ── RIGHT PANEL: Login Form ── */}
       <div className="admin-login-right">
         <div className="admin-login-card">
-          {/* Icon mark */}
-          <div className="admin-login-card-icon">
-            <KeyRound />
-          </div>
-
           <h2>Đăng nhập quản trị</h2>
           <p>Sử dụng tài khoản đã được cấp quyền quản trị viên trên hệ thống.</p>
 
