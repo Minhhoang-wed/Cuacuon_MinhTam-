@@ -172,3 +172,28 @@ export type HomepageContent = {
   introTitle: string;
   introText: string;
 };
+
+export type AboutPageContent = {
+  heroTitle: string;
+  heroDescription: string;
+  heroImage: string;
+  philosophyKicker: string;
+  philosophyTitle: string;
+  philosophyText1: string;
+  philosophyText2: string;
+  image1Url: string;
+  image2Url: string;
+  valuesHeading: string;
+  value1Title: string;
+  value1Text: string;
+  value2Title: string;
+  value2Text: string;
+  value3Title: string;
+  value3Text: string;
+  processHeading: string;
+  processStep1: string;
+  processStep2: string;
+  processStep3: string;
+  processStep4: string;
+  processStep5: string;
+};

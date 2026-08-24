@@ -1,5 +1,5 @@
 import { getAdminAccessToken } from "@/lib/admin-auth";
-import { getCategories, getHomepageContent, getProducts, getSiteSettings, getServices as getPublicServices, getArticles as getPublicArticles, getStoreBranches as getPublicStoreBranches, getServiceDistricts as getPublicServiceDistricts, getServicePricing as getPublicServicePricing } from "@/lib/catalog";
+import { getCategories, getHomepageContent, getAboutContent, getProducts, getSiteSettings, getServices as getPublicServices, getArticles as getPublicArticles, getStoreBranches as getPublicStoreBranches, getServiceDistricts as getPublicServiceDistricts, getServicePricing as getPublicServicePricing } from "@/lib/catalog";
 import { getSupabaseConfig, supabaseFetch } from "@/lib/supabase-rest";
 import type {
   AdminCategoryRow,
@@ -354,6 +354,72 @@ export async function getAdminSettings() {
   }
 }
 export async function getAdminHomepage() { if (!getSupabaseConfig()) { const x = await getHomepageContent(); return { hero_eyebrow: x.heroEyebrow, hero_title: x.heroTitle, hero_emphasis: x.heroEmphasis, hero_description: x.heroDescription, hero_cta_label: x.heroCtaLabel, intro_title: x.introTitle, intro_text: x.introText }; } const token = await getAdminAccessToken(); const rows = await supabaseFetch<Array<Record<string,string | null>>>("/rest/v1/homepage_content?id=eq.main&select=*&limit=1", { cache: "no-store" }, token); return rows[0] || {}; }
+
+export async function getAdminAboutContent() {
+  if (!getSupabaseConfig()) {
+    const x = await getAboutContent();
+    return {
+      hero_title: x.heroTitle,
+      hero_description: x.heroDescription,
+      hero_image: x.heroImage,
+      philosophy_kicker: x.philosophyKicker,
+      philosophy_title: x.philosophyTitle,
+      philosophy_text_1: x.philosophyText1,
+      philosophy_text_2: x.philosophyText2,
+      image_1_url: x.image1Url,
+      image_2_url: x.image2Url,
+      values_heading: x.valuesHeading,
+      value_1_title: x.value1Title,
+      value_1_text: x.value1Text,
+      value_2_title: x.value2Title,
+      value_2_text: x.value2Text,
+      value_3_title: x.value3Title,
+      value_3_text: x.value3Text,
+      process_heading: x.processHeading,
+      process_step_1: x.processStep1,
+      process_step_2: x.processStep2,
+      process_step_3: x.processStep3,
+      process_step_4: x.processStep4,
+      process_step_5: x.processStep5,
+    };
+  }
+  const token = await getAdminAccessToken();
+  try {
+    const rows = await supabaseFetch<Array<Record<string, string | null>>>(
+      "/rest/v1/about_content?id=eq.main&select=*&limit=1",
+      { cache: "no-store" },
+      token
+    ).catch(() => []);
+    if (rows && rows[0]) return rows[0];
+  } catch (error) {
+    console.warn("Chưa có bảng about_content, sử dụng dữ liệu mặc định.");
+  }
+  const x = await getAboutContent();
+  return {
+    hero_title: x.heroTitle,
+    hero_description: x.heroDescription,
+    hero_image: x.heroImage,
+    philosophy_kicker: x.philosophyKicker,
+    philosophy_title: x.philosophyTitle,
+    philosophy_text_1: x.philosophyText1,
+    philosophy_text_2: x.philosophyText2,
+    image_1_url: x.image1Url,
+    image_2_url: x.image2Url,
+    values_heading: x.valuesHeading,
+    value_1_title: x.value1Title,
+    value_1_text: x.value1Text,
+    value_2_title: x.value2Title,
+    value_2_text: x.value2Text,
+    value_3_title: x.value3Title,
+    value_3_text: x.value3Text,
+    process_heading: x.processHeading,
+    process_step_1: x.processStep1,
+    process_step_2: x.processStep2,
+    process_step_3: x.processStep3,
+    process_step_4: x.processStep4,
+    process_step_5: x.processStep5,
+  };
+}
 
 export async function getAdminOverview() {
   if (!getSupabaseConfig()) {

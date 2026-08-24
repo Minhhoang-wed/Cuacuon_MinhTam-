@@ -16,6 +16,7 @@ import type {
   CatalogArticle,
   ManagedSiteConfig,
   HomepageContent,
+  AboutPageContent,
 } from "@/types/catalog";
 
 export type {
@@ -32,6 +33,7 @@ export type {
   CatalogArticle,
   ManagedSiteConfig,
   HomepageContent,
+  AboutPageContent,
 };
 
 function parseAmount(value: string) { const digits = value.replace(/\D/g, ""); return digits ? Number(digits) : null; }
@@ -640,4 +642,66 @@ export async function getHomepageContent(): Promise<HomepageContent> {
   if (!getSupabaseConfig()) return fallback;
   try { const rows = await supabaseFetch<Array<Record<string,string | null>>>("/rest/v1/homepage_content?id=eq.main&select=*&limit=1", { next: { revalidate: 300, tags: ["homepage"] } }); const row = rows[0]; return row ? { heroEyebrow: row.hero_eyebrow || fallback.heroEyebrow, heroTitle: row.hero_title || fallback.heroTitle, heroEmphasis: row.hero_emphasis || fallback.heroEmphasis, heroDescription: row.hero_description || fallback.heroDescription, heroCtaLabel: row.hero_cta_label || fallback.heroCtaLabel, introTitle: row.intro_title || fallback.introTitle, introText: row.intro_text || fallback.introText } : fallback; }
   catch { return fallback; }
+}
+
+export async function getAboutContent(): Promise<AboutPageContent> {
+  const fallback: AboutPageContent = {
+    heroTitle: "Tận tâm trong từng công trình.",
+    heroDescription: "Từ một yêu cầu sửa chữa nhỏ đến hệ cửa cho nhà xưởng, chúng tôi luôn bắt đầu bằng khảo sát rõ ràng và kết thúc bằng bàn giao minh bạch.",
+    heroImage: "/images/about-hero-banner.jpg",
+    philosophyKicker: "Triết lý phục vụ",
+    philosophyTitle: "Giải pháp tốt phải an toàn, phù hợp và bền lâu.",
+    philosophyText1: "Chúng tôi không chỉ xử lý lỗi trước mắt. Mỗi hạng mục đều được xem xét theo tải cửa, tần suất vận hành, điều kiện công trình và nhu cầu thực tế của khách hàng.",
+    philosophyText2: "Đội ngũ ưu tiên giải thích dễ hiểu, thống nhất chi phí trước khi làm và hướng dẫn sử dụng sau khi bàn giao.",
+    image1Url: "https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=1000&q=82",
+    image2Url: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1000&q=82",
+    valuesHeading: "Giá trị cốt lõi",
+    value1Title: "Đúng kỹ thuật",
+    value1Text: "Khảo sát hiện trạng, xác định nguyên nhân và lựa chọn giải pháp phù hợp với từng hệ cửa.",
+    value2Title: "Minh bạch",
+    value2Text: "Giải thích hạng mục, báo giá trước khi thực hiện và nêu rõ chính sách bảo hành.",
+    value3Title: "Tận tâm",
+    value3Text: "Thi công gọn gàng, chạy thử đầy đủ và tiếp tục hỗ trợ sau khi công trình hoàn tất.",
+    processHeading: "Rõ ràng từ tiếp nhận đến bảo hành.",
+    processStep1: "Tiếp nhận thông tin và hình ảnh hiện trạng",
+    processStep2: "Khảo sát, tư vấn giải pháp phù hợp",
+    processStep3: "Thống nhất vật tư, chi phí và tiến độ",
+    processStep4: "Thi công, chạy thử và nghiệm thu",
+    processStep5: "Bàn giao hướng dẫn và chính sách bảo hành",
+  };
+  if (!getSupabaseConfig()) return fallback;
+  try {
+    const rows = await supabaseFetch<Array<Record<string, string | null>>>(
+      "/rest/v1/about_content?id=eq.main&select=*&limit=1",
+      { next: { revalidate: 300, tags: ["about-content"] } }
+    );
+    const row = rows[0];
+    if (!row) return fallback;
+    return {
+      heroTitle: row.hero_title || fallback.heroTitle,
+      heroDescription: row.hero_description || fallback.heroDescription,
+      heroImage: row.hero_image || fallback.heroImage,
+      philosophyKicker: row.philosophy_kicker || fallback.philosophyKicker,
+      philosophyTitle: row.philosophy_title || fallback.philosophyTitle,
+      philosophyText1: row.philosophy_text_1 || fallback.philosophyText1,
+      philosophyText2: row.philosophy_text_2 || fallback.philosophyText2,
+      image1Url: row.image_1_url || fallback.image1Url,
+      image2Url: row.image_2_url || fallback.image2Url,
+      valuesHeading: row.values_heading || fallback.valuesHeading,
+      value1Title: row.value_1_title || fallback.value1Title,
+      value1Text: row.value_1_text || fallback.value1Text,
+      value2Title: row.value_2_title || fallback.value2Title,
+      value2Text: row.value_2_text || fallback.value2Text,
+      value3Title: row.value_3_title || fallback.value3Title,
+      value3Text: row.value_3_text || fallback.value3Text,
+      processHeading: row.process_heading || fallback.processHeading,
+      processStep1: row.process_step_1 || fallback.processStep1,
+      processStep2: row.process_step_2 || fallback.processStep2,
+      processStep3: row.process_step_3 || fallback.processStep3,
+      processStep4: row.process_step_4 || fallback.processStep4,
+      processStep5: row.process_step_5 || fallback.processStep5,
+    };
+  } catch {
+    return fallback;
+  }
 }
