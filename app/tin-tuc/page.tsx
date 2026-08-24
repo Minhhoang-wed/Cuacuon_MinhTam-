@@ -36,36 +36,36 @@ export default async function NewsPage() {
         <div className="container">
           {articles.length > 0 ? (
             <div className="article-grid">
-              {articles.map((article, index) => (
+              {articles.map((article) => (
                 <article className="article-card" key={article.slug}>
-                  {article.imageUrl ? (
-                    <div
-                      className="article-cover"
-                      style={{
-                        padding: 0,
-                        backgroundImage: `url(${publicAssetUrl(article.imageUrl) || article.imageUrl})`,
-                        backgroundSize: "cover",
-                        backgroundPosition: "center",
-                      }}
-                    >
-                      <span style={{ position: "relative", zIndex: 2 }}>{article.category}</span>
-                      <b style={{ position: "relative", zIndex: 2 }}>{String(index + 1).padStart(2, "0")}</b>
-                    </div>
-                  ) : (
-                    <div className={`article-cover tone-${(index % 4) + 1}`}>
-                      <span>{article.category}</span>
-                      <b>{String(index + 1).padStart(2, "0")}</b>
-                    </div>
-                  )}
-                  <div className="article-body">
-                    <div className="card-meta">
+                  <Link href={`/tin-tuc/${article.slug}`} className="article-card-media">
+                    {article.imageUrl ? (
+                      <img
+                        src={publicAssetUrl(article.imageUrl) || article.imageUrl}
+                        alt={article.title}
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div className="article-card-placeholder">
+                        <span>{article.category || "Cẩm nang"}</span>
+                      </div>
+                    )}
+                  </Link>
+
+                  <div className="article-card-body">
+                    <div className="article-card-meta">
                       <span>{article.publishedAt}</span>
-                      <span><Clock3 size={13} /> {article.readTime}</span>
+                      <span>·</span>
+                      <span><Clock3 size={13} /> {article.readTime} đọc</span>
                     </div>
-                    <h2>{article.title}</h2>
-                    <p>{article.excerpt}</p>
-                    <Link href={`/tin-tuc/${article.slug}`} className="text-link">
-                      Đọc bài viết <ArrowRight size={17} />
+                    <h3>
+                      <Link href={`/tin-tuc/${article.slug}`}>
+                        {article.title}
+                      </Link>
+                    </h3>
+                    {article.excerpt && <p>{article.excerpt}</p>}
+                    <Link href={`/tin-tuc/${article.slug}`} className="article-card-link">
+                      Đọc bài viết <ArrowRight size={15} />
                     </Link>
                   </div>
                 </article>

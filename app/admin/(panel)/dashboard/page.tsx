@@ -107,7 +107,7 @@ export default async function AdminDashboardPage() {
           <h1>Tổng quan hệ thống</h1>
           <p>Quản lý dịch vụ, bảng giá, sản phẩm và nội dung website của bạn.</p>
         </div>
-        <div style={{ display: "flex", gap: "10px", flexWrap: "wrap" }}>
+        <div className="admin-header-actions">
           <Link href="/admin/services/new" className="button button-primary button-small">
             <Plus size={15} />
             <span>Thêm dịch vụ</span>
