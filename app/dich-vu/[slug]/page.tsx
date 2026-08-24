@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import { ArrowLeft, CheckCircle2, Clock3, ShieldCheck } from "lucide-react";
+import { ArrowLeft, CheckCircle2, MessageCircle, Phone } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CtaBand } from "@/components/cta-band";
-import { DoorVisual } from "@/components/door-visual";
 import { getServiceBySlug, getServices, getSiteSettings } from "@/lib/catalog";
 
 export async function generateStaticParams() {
@@ -73,58 +72,79 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
       <section className="detail-hero">
         <div className="container detail-hero-grid">
           <div>
-            <Link href="/dich-vu" className="back-link"><ArrowLeft /> Tất cả dịch vụ</Link>
-            <span className="kicker">Sửa chữa tận nơi</span>
+            <Link href="/dich-vu" className="back-link">
+              <ArrowLeft size={16} /> Quay lại danh mục dịch vụ
+            </Link>
+            <span className="kicker">Dịch vụ sửa chữa chuyên nghiệp</span>
             <h1>{service.name}</h1>
             <p>{service.summary}</p>
-            <a href={settings.zaloHref || "https://zalo.me/"} target="_blank" rel="noreferrer" className="button button-primary">
-              Tư vấn & Báo giá qua Zalo
-            </a>
+            {service.price && (
+              <div className="detail-price">
+                {service.price.trim().toLowerCase().startsWith("từ")
+                  ? service.price
+                  : `Từ ${service.price}`}
+              </div>
+            )}
+            <div className="detail-hero-actions" style={{ marginTop: "24px" }}>
+              <a
+                href={settings.zaloHref || "https://zalo.me/"}
+                className="button button-primary"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <MessageCircle size={17} /> Nhận báo giá qua Zalo
+              </a>
+              <a
+                href={settings.hotlineHref || `tel:${settings.hotline}`}
+                className="button button-light"
+              >
+                <Phone size={17} /> Gọi tư vấn ngay
+              </a>
+            </div>
           </div>
-          <DoorVisual
-            label="KỸ THUẬT"
-            kind="service"
-            imageUrl={service.imageUrl}
-            imageAlt={service.name}
-          />
+          <div className="service-detail-image-card">
+            <img
+              src={service.imageUrl || "/services/sua-cua-bi-ket.png"}
+              alt={service.name}
+            />
+          </div>
         </div>
       </section>
-      <section className="section">
-        <div className="container detail-content-grid">
-          <div>
-            {service.symptoms && service.symptoms.length > 0 && (
-              <>
-                <h2>Dấu hiệu thường gặp</h2>
-                <ul className="check-list">
-                  {service.symptoms.map((item) => (
-                    <li key={item}><CheckCircle2 /> {item}</li>
-                  ))}
-                </ul>
-              </>
-            )}
-            {service.process && service.process.length > 0 && (
-              <>
-                <h2>Quy trình xử lý</h2>
-                <ol className="number-list">
-                  {service.process.map((item, index) => (
-                    <li key={item}>
-                      <b>{String(index + 1).padStart(2, "0")}</b>
-                      <span>{item}</span>
-                    </li>
-                  ))}
-                </ol>
-              </>
-            )}
+      {((service.symptoms && service.symptoms.length > 0) || (service.process && service.process.length > 0)) && (
+        <section className="section" style={{ background: "#ffffff" }}>
+          <div className="container" style={{ maxWidth: "1000px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "48px" }}>
+              {service.symptoms && service.symptoms.length > 0 && (
+                <div>
+                  <h2 style={{ fontSize: "24px", fontWeight: "700", color: "#0a2540", margin: "0 0 18px" }}>
+                    Dấu hiệu thường gặp
+                  </h2>
+                  <ul className="check-list">
+                    {service.symptoms.map((item) => (
+                      <li key={item}><CheckCircle2 /> {item}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {service.process && service.process.length > 0 && (
+                <div>
+                  <h2 style={{ fontSize: "24px", fontWeight: "700", color: "#0a2540", margin: "0 0 18px" }}>
+                    Quy trình xử lý
+                  </h2>
+                  <ol className="number-list">
+                    {service.process.map((item, index) => (
+                      <li key={item}>
+                        <b>{String(index + 1).padStart(2, "0")}</b>
+                        <span>{item}</span>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+            </div>
           </div>
-          <aside className="quote-card">
-            <span>Thông tin tham khảo</span>
-            <div><small>Khoảng giá</small><strong>{service.price}</strong></div>
-            <div><small>Thời gian dự kiến</small><b><Clock3 /> {service.duration}</b></div>
-            <div><small>Bảo hành</small><b><ShieldCheck /> {service.warranty}</b></div>
-            <p>Chi phí thực tế phụ thuộc hiện trạng, model thiết bị, khu vực và thời điểm phục vụ.</p>
-          </aside>
-        </div>
-      </section>
+        </section>
+      )}
       <CtaBand compact />
     </>
   );
