@@ -53,8 +53,9 @@ export function EditBranchModal({ branch }: { branch: AdminStoreBranchRow }) {
               borderRadius: "14px",
               width: "100%",
               maxWidth: "520px",
+              maxHeight: "90vh",
+              overflowY: "auto",
               boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.2)",
-              overflow: "hidden",
               border: "1px solid #e2e8f0",
             }}
             onClick={(e) => e.stopPropagation()}
@@ -160,9 +161,10 @@ export function EditBranchModal({ branch }: { branch: AdminStoreBranchRow }) {
               <div
                 style={{
                   display: "flex",
+                  alignItems: "center",
                   justifyContent: "flex-end",
-                  gap: "10px",
-                  marginTop: "20px",
+                  gap: "12px",
+                  marginTop: "24px",
                   paddingTop: "16px",
                   borderTop: "1px solid #f1f5f9",
                 }}
@@ -170,11 +172,50 @@ export function EditBranchModal({ branch }: { branch: AdminStoreBranchRow }) {
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  className="button button-ghost"
+                  style={{
+                    width: "auto",
+                    height: "40px",
+                    minWidth: "100px",
+                    padding: "0 20px",
+                    borderRadius: "8px",
+                    border: "1px solid #cbd5e1",
+                    background: "#ffffff",
+                    color: "#475569",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    whiteSpace: "nowrap",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    transition: "all 0.2s ease",
+                  }}
                 >
                   Hủy bỏ
                 </button>
-                <button type="submit" className="button button-primary">
+                <button
+                  type="submit"
+                  style={{
+                    width: "auto",
+                    height: "40px",
+                    minWidth: "135px",
+                    padding: "0 22px",
+                    borderRadius: "8px",
+                    border: "none",
+                    background: "#2563eb",
+                    color: "#ffffff",
+                    fontSize: "14px",
+                    fontWeight: 600,
+                    cursor: "pointer",
+                    whiteSpace: "nowrap",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                    boxShadow: "0 2px 6px rgba(37, 99, 235, 0.25)",
+                    transition: "all 0.2s ease",
+                  }}
+                >
                   <Save size={16} />
                   <span>Lưu thay đổi</span>
                 </button>

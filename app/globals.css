@@ -1978,8 +1978,9 @@ img { max-width: 100%; }
   gap: 7px;
 }
 
-.table-actions a,
-.table-actions button {
+.table-actions > a,
+.table-actions > button,
+.table-actions > form > button {
   width: 36px;
   height: 36px;
   padding: 0;
@@ -1993,7 +1994,9 @@ img { max-width: 100%; }
   transition: all 0.15s ease;
 }
 
-.table-actions a:hover {
+.table-actions > a:hover,
+.table-actions > button:hover,
+.table-actions > form > button:hover {
   color: var(--adm-blue);
   border-color: var(--adm-blue);
   background: #eff6ff;
@@ -2001,7 +2004,8 @@ img { max-width: 100%; }
 
 .table-actions svg { width: 16px; height: 16px; }
 
-.table-actions button:disabled { cursor: not-allowed; opacity: 0.4; }
+.table-actions > button:disabled,
+.table-actions > form > button:disabled { cursor: not-allowed; opacity: 0.4; }
 
 .table-actions .delete-product-button { color: #dc2626; border-color: #fca5a5; background: #fef2f2; }
 .table-actions .delete-product-button:hover:not(:disabled) { color: white; border-color: #dc2626; background: #dc2626; }
@@ -3237,11 +3241,41 @@ body { color: var(--lovable-ink); font-family: var(--font-body); background: #ff
 .door-visual-image { width: 100%; height: 100%; position: absolute; inset: 0; display: block; object-fit: cover; transition: transform .5s; }
 .door-visual-card:hover .door-visual-image { transform: scale(1.04); }
 .door-visual-card::after { content: ""; position: absolute; inset: 50% 0 0; background: linear-gradient(transparent, rgba(8,27,49,.65)); }
-.door-visual-product { background: #f4f5f6; }
+.door-visual-product,
+.door-visual-service {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
 .door-visual-product::before,
-.door-visual-product::after { display: none; }
-.door-visual-product .door-visual-image { object-fit: contain; object-position: center; }
-.door-visual-product:hover .door-visual-image { transform: none; }
+.door-visual-product::after,
+.door-visual-service::before,
+.door-visual-service::after {
+  display: none !important;
+}
+.door-visual-product .door-visual-image,
+.door-visual-service .door-visual-image {
+  position: relative !important;
+  inset: auto !important;
+  max-width: 100% !important;
+  max-height: 380px !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+  object-position: center;
+  border-radius: 8px;
+}
+.door-visual-product:hover .door-visual-image,
+.door-visual-service:hover .door-visual-image {
+  transform: scale(1.02);
+}
+.door-visual-service .visual-badge {
+  display: none;
+}
 .visual-badge { position: absolute; z-index: 1; right: 16px; bottom: 16px; left: 16px; display: flex; align-items: center; gap: 8px; color: #fff; font-size: 9px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 .visual-badge svg { color: var(--lovable-gold); }
 .card-meta span { color: var(--lovable-muted); }
@@ -3252,11 +3286,277 @@ body { color: var(--lovable-ink); font-family: var(--font-body); background: #ff
 .value-panel .kicker, .check-stack svg { color: var(--lovable-gold); }
 .check-stack span { color: rgba(255,255,255,.76); }
 
-/* Detail pages */
-.detail-hero { padding: 66px 0 80px; border-bottom: 1px solid var(--lovable-line); background: #fff; }
-.detail-hero-grid { grid-template-columns: 1fr 1.08fr; gap: 72px; }
-.detail-hero-grid > div:first-child { order: 2; }
-.detail-hero-grid > .door-visual-card, .detail-hero-grid > .product-image-viewer { order: 1; min-height: 570px; }
+/* ==========================================================================
+   DETAIL HERO (CLEAN WHITE EDITORIAL DESIGN)
+   ========================================================================== */
+.detail-hero {
+  padding: 48px 0 60px;
+  border-bottom: 1px solid var(--lovable-line, #e2e8f0);
+  background: #ffffff;
+}
+
+.detail-hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 56px;
+  align-items: center;
+}
+
+.detail-hero-grid > div:first-child {
+  order: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.detail-hero .back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  margin-bottom: 16px;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.detail-hero .back-link:hover {
+  color: #0f5fd7;
+  transform: translateX(-3px);
+}
+
+.detail-hero .kicker {
+  display: inline-block;
+  color: #d97706;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.detail-hero h1 {
+  margin: 0 0 14px;
+  font-family: var(--font-body), "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif;
+  font-size: clamp(28px, 3.4vw, 42px);
+  font-weight: 800;
+  color: #0a2540;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.detail-hero p {
+  margin: 0 0 20px;
+  color: #475569;
+  font-size: 15.5px;
+  line-height: 1.65;
+  max-width: 580px;
+}
+
+.detail-hero .detail-price,
+.detail-price {
+  margin: 0 0 24px;
+  color: #0a2540;
+  font-family: "Roboto", "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
+}
+
+.detail-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.detail-hero-actions .button,
+.detail-hero-actions .button-primary,
+.button.button-primary {
+  color: #ffffff !important;
+  background: #0a2540 !important;
+  box-shadow: 0 6px 18px rgba(10, 37, 64, 0.22) !important;
+  padding: 12px 22px !important;
+  border-radius: 8px !important;
+  font-family: var(--font-body), "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif !important;
+  font-size: 14.5px !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer;
+}
+
+.detail-hero-actions .button-primary:hover,
+.button.button-primary:hover {
+  background: #0f5fd7 !important;
+  box-shadow: 0 8px 22px rgba(15, 95, 215, 0.3) !important;
+  transform: translateY(-1px) !important;
+}
+
+.detail-hero-actions .button-light,
+.button.button-light {
+  color: #0a2540 !important;
+  border: 1px solid #cbd5e1 !important;
+  background: #ffffff !important;
+  padding: 12px 22px !important;
+  border-radius: 8px !important;
+  font-family: var(--font-body), "Plus Jakarta Sans", "Be Vietnam Pro", sans-serif !important;
+  font-size: 14.5px !important;
+  font-weight: 700 !important;
+  text-transform: none !important;
+  letter-spacing: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  text-decoration: none !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer;
+}
+
+.detail-hero-actions .button-light:hover,
+.button.button-light:hover {
+  background: #f8fafc !important;
+  border-color: #0a2540 !important;
+  transform: translateY(-1px) !important;
+}
+
+.detail-hero-grid > .door-visual-card,
+.detail-hero-grid > .product-image-viewer,
+.detail-hero-grid > .service-detail-image-card {
+  order: 2;
+  min-height: 380px;
+  max-height: 440px;
+}
+
+.service-detail-image-card {
+  position: relative;
+  width: 100%;
+  min-height: 400px;
+  max-height: 460px;
+  height: 100%;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 24px;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+.service-detail-image-card img {
+  max-width: 100%;
+  max-height: 380px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  transition: transform 0.35s ease;
+  filter: drop-shadow(0 8px 20px rgba(0, 0, 0, 0.06));
+}
+
+.service-detail-image-card:hover img {
+  transform: scale(1.03);
+}
+
+/* ==========================================================================
+   QUOTE CARD (LUXURY NAVY WAVE DESIGN & NEAT ALIGNMENT)
+   ========================================================================== */
+.quote-card,
+.service-quote-card {
+  position: sticky;
+  top: 120px;
+  padding: 28px 24px;
+  border-radius: 20px;
+  color: #ffffff;
+  background-color: #061523;
+  background-image: 
+    linear-gradient(145deg, rgba(6, 21, 35, 0.88) 0%, rgba(10, 37, 64, 0.95) 100%),
+    url("/images/navy-wave-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 1px solid rgba(56, 189, 248, 0.22);
+  box-shadow: 0 16px 36px rgba(6, 21, 35, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.quote-card > span,
+.quote-card-badge {
+  color: #e8a020;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: inline-block;
+  margin-bottom: 2px;
+}
+
+.quote-card-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  backdrop-filter: blur(4px);
+}
+
+.quote-item-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #cbd5e1;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.quote-item-label svg {
+  color: #38bdf8;
+  flex-shrink: 0;
+}
+
+.quote-item-price {
+  color: #fbbf24;
+  font-family: "Roboto", "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.quote-item-value {
+  color: #ffffff;
+  font-family: "Roboto", "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-size: 14.5px;
+  font-weight: 700;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.quote-card-note,
+.quote-card > p {
+  margin: 4px 0 0;
+  color: #94a3b8;
+  font-size: 12.5px;
+  line-height: 1.6;
+}
 .product-image-viewer { position: relative; }
 .product-image-viewer-trigger { width: 100%; height: 100%; min-height: inherit; padding: 0; display: block; border: 0; background: transparent; cursor: zoom-in; }
 .product-image-viewer-trigger .door-visual-card { height: 100%; min-height: inherit; }
@@ -5398,25 +5698,28 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
 .repair-service-image-wrap {
   position: relative;
   width: 100%;
-  height: 230px;
-  background: #0f172a;
+  height: 240px;
+  background: #f8fafc;
   overflow: hidden;
   border-bottom: 1px solid #edf2f7;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 10px;
+  cursor: pointer;
+  text-decoration: none;
 }
 .repair-service-image-wrap img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
   transform: scale(1);
   transition: transform 0.35s ease;
   display: block;
 }
 .repair-service-card:hover .repair-service-image-wrap img {
-  transform: scale(1.04);
+  transform: scale(1.05);
 }
 .repair-service-badge {
   position: absolute;
@@ -7464,17 +7767,18 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
     position: relative !important;
     width: 100% !important;
     height: 220px !important;
-    background: #0f172a !important;
+    background: #f8fafc !important;
     border-bottom: 1px solid #edf2f7 !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     overflow: hidden !important;
+    padding: 8px !important;
   }
   .repair-service-image-wrap img {
     width: 100% !important;
     height: 100% !important;
-    object-fit: cover !important;
+    object-fit: contain !important;
     object-position: center center !important;
     transform: scale(1) !important;
     display: block !important;

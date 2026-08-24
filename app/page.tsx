@@ -162,13 +162,13 @@ export default async function HomePage() {
           <div className="repair-service-grid">
             {services.map((service, index) => (
               <article className="repair-service-card" key={service.id || service.slug}>
-                <div className="repair-service-image-wrap">
+                <Link href={`/dich-vu/${service.slug}`} className="repair-service-image-wrap">
                   <img
                     src={service.imageUrl || "/services/sua-cua-bi-ket.png"}
                     alt={service.name}
                   />
                   <span className="repair-service-badge">{String(index + 1).padStart(2, "0")} • CỨU HỘ</span>
-                </div>
+                </Link>
                 <div className="repair-service-copy">
                   <span className="repair-service-category">DỊCH VỤ SỬA CHỮA</span>
                   <h3>
