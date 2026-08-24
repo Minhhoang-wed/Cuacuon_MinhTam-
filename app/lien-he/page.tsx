@@ -142,40 +142,56 @@ export default async function ContactPage() {
 
               <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginTop: "24px", paddingTop: "20px", borderTop: "1px solid var(--border-color)" }}>
                 {/* Cơ sở 1 */}
-                <a
-                  href={site.mapsHref || "https://maps.google.com"}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ display: "flex", alignItems: "flex-start", gap: "12px", color: "var(--text-body)", textDecoration: "none", fontSize: "14px" }}
-                >
-                  <MapPin size={18} color="var(--accent-color)" style={{ flexShrink: 0, marginTop: "2px" }} />
-                  <span>
-                    <strong style={{ display: "block", color: "var(--text-title, #0f172a)", marginBottom: "2px" }}>
-                      {site.branch1Name || (displayBranches[0]?.branchName) || "Cơ sở 1 (Trụ sở Quận 10)"}
-                    </strong>
-                    <span style={{ color: "#64748b", fontSize: "13.5px" }}>
-                      {site.branch1Address || (displayBranches[0]?.address) || "361 Lý Thường Kiệt, P. Tân Hòa, Quận 10, TP.HCM"}
-                    </span>
-                  </span>
-                </a>
+                {(() => {
+                  const b1Name = site.branch1Name || (displayBranches[0]?.branchName) || "Cơ sở 1 (Trụ sở Quận 10)";
+                  const b1Addr = site.branch1Address || (displayBranches[0]?.address) || "361 Lý Thường Kiệt, P. Tân Hòa, Quận 10, TP.HCM";
+                  const b1MapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b1Addr)}`;
+                  return (
+                    <a
+                      href={b1MapUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      title={`Mở Google Maps chỉ đường tới ${b1Name}`}
+                      style={{ display: "flex", alignItems: "flex-start", gap: "12px", color: "var(--text-body)", textDecoration: "none", fontSize: "14px" }}
+                    >
+                      <MapPin size={18} color="var(--accent-color)" style={{ flexShrink: 0, marginTop: "2px" }} />
+                      <span>
+                        <strong style={{ display: "block", color: "var(--text-title, #0f172a)", marginBottom: "2px" }}>
+                          {b1Name}
+                        </strong>
+                        <span style={{ color: "#64748b", fontSize: "13.5px" }}>
+                          {b1Addr}
+                        </span>
+                      </span>
+                    </a>
+                  );
+                })()}
 
                 {/* Cơ sở 2 */}
-                <a
-                  href={site.mapsHref || "https://maps.google.com"}
-                  target="_blank"
-                  rel="noreferrer"
-                  style={{ display: "flex", alignItems: "flex-start", gap: "12px", color: "var(--text-body)", textDecoration: "none", fontSize: "14px" }}
-                >
-                  <MapPin size={18} color="var(--accent-color)" style={{ flexShrink: 0, marginTop: "2px" }} />
-                  <span>
-                    <strong style={{ display: "block", color: "var(--text-title, #0f172a)", marginBottom: "2px" }}>
-                      {site.branch2Name || (displayBranches[1]?.branchName) || "Cơ sở 2 (Chi nhánh Quận 6)"}
-                    </strong>
-                    <span style={{ color: "#64748b", fontSize: "13.5px" }}>
-                      {site.branch2Address || (displayBranches[1]?.address) || "617 Phạm Văn Chí, P. Bình Tiên, Quận 6, TP.HCM"}
-                    </span>
-                  </span>
-                </a>
+                {(() => {
+                  const b2Name = site.branch2Name || (displayBranches[1]?.branchName) || "Cơ sở 2 (Chi nhánh Quận 6)";
+                  const b2Addr = site.branch2Address || (displayBranches[1]?.address) || "617 Phạm Văn Chí, P. Bình Tiên, Quận 6, TP.HCM";
+                  const b2MapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b2Addr)}`;
+                  return (
+                    <a
+                      href={b2MapUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      title={`Mở Google Maps chỉ đường tới ${b2Name}`}
+                      style={{ display: "flex", alignItems: "flex-start", gap: "12px", color: "var(--text-body)", textDecoration: "none", fontSize: "14px" }}
+                    >
+                      <MapPin size={18} color="var(--accent-color)" style={{ flexShrink: 0, marginTop: "2px" }} />
+                      <span>
+                        <strong style={{ display: "block", color: "var(--text-title, #0f172a)", marginBottom: "2px" }}>
+                          {b2Name}
+                        </strong>
+                        <span style={{ color: "#64748b", fontSize: "13.5px" }}>
+                          {b2Addr}
+                        </span>
+                      </span>
+                    </a>
+                  );
+                })()}
                 <a
                   href={`mailto:${site.email}`}
                   style={{ display: "flex", alignItems: "center", gap: "12px", color: "var(--text-body)", textDecoration: "none", fontSize: "14px" }}

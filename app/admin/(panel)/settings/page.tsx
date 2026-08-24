@@ -182,16 +182,6 @@ export default async function AdminSettingsPage({
                 placeholder="VD: https://zalo.me/0327359368"
               />
             </label>
-
-            <label>
-              <span>Bản đồ Google Maps (URL chỉ đường)</span>
-              <input
-                type="url"
-                name="maps_url"
-                defaultValue={settings.maps_url || ""}
-                placeholder="VD: https://maps.app.goo.gl/..."
-              />
-            </label>
           </div>
         </section>
 

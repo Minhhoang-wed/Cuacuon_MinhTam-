@@ -53,7 +53,16 @@ export default async function ServiceAreaPage() {
                   <MapPin size={17} /> {store.badge || "Cửa hàng trực tiếp"}
                 </div>
                 <h3>{store.branchName}</h3>
-                <p className="direct-store-address">{store.address}</p>
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(store.address)}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  title="Mở chỉ đường trên Google Maps"
+                  className="direct-store-address"
+                  style={{ textDecoration: "none", display: "inline-block" }}
+                >
+                  {store.address}
+                </a>
                 <div className="direct-store-footer">
                   <span>{store.note}</span>
                   <a href={`tel:${store.hotline.replace(/\D/g, "")}`} className="direct-store-phone">
