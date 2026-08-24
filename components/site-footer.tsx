@@ -1,6 +1,7 @@
 import { ArrowRight, Clock3, Mail, MapPin, MessageCircle, Phone, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { PublicLogo } from "@/components/public-logo";
+import { directStores } from "@/data/public-home";
 import type { ManagedSiteConfig } from "@/lib/catalog";
 
 export function SiteFooter({ site }: { site: ManagedSiteConfig }) {
@@ -44,17 +45,41 @@ export function SiteFooter({ site }: { site: ManagedSiteConfig }) {
         </div>
 
         <div>
-          <h3>Thông Tin Liên Hệ</h3>
+          <h3>Hệ Thống Chi Nhánh</h3>
           <div className="footer-maison-contact">
             <a href={site.hotlineHref} className="footer-hotline-highlight">
               <Phone size={17} />
               <span className="footer-hotline-label">TỔNG ĐÀI 24/7:</span>
               <strong className="footer-hotline-number">{site.hotline}</strong>
             </a>
-            <a href={site.mapsHref} target="_blank" rel="noreferrer">
-              <MapPin size={16} />
-              <span>{site.address}</span>
-            </a>
+
+            {/* 2 Chi nhánh trực tiếp */}
+            {directStores.map((store, idx) => (
+              <a
+                key={idx}
+                href={site.mapsHref || "https://maps.google.com"}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "9px",
+                  textDecoration: "none",
+                  color: "inherit",
+                }}
+              >
+                <MapPin size={16} style={{ flexShrink: 0, marginTop: "2px", color: "var(--lovable-gold, #f59e0b)" }} />
+                <span>
+                  <strong style={{ color: "#ffffff", display: "block", fontSize: "12.5px", marginBottom: "2px" }}>
+                    {store.branch}
+                  </strong>
+                  <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.78)", lineHeight: 1.45, display: "block" }}>
+                    {store.address}
+                  </span>
+                </span>
+              </a>
+            ))}
+
             <a href={`mailto:${site.email}`}>
               <Mail size={16} />
               <span>{site.email}</span>
