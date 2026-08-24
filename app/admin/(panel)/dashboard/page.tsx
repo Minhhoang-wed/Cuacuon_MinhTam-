@@ -190,7 +190,7 @@ export default async function AdminDashboardPage() {
                 <div style={{ display: "flex", alignItems: "center", gap: "10px", minWidth: 0 }}>
                   {service.image_url ? (
                     <img
-                      src={service.image_url}
+                      src={publicAssetUrl(service.image_url) || service.image_url}
                       alt={service.name}
                       style={{
                         width: 36,

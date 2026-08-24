@@ -1,6 +1,7 @@
 import { CheckCircle2, Clock3, Save, ShieldCheck, Wrench } from "lucide-react";
 import { saveService } from "@/lib/admin-actions";
 import type { AdminServiceRow } from "@/lib/admin-data";
+import { ServiceImageManager } from "@/components/admin/service-image-manager";
 
 export function AdminServiceForm({ service }: { service?: AdminServiceRow | null }) {
   const defaultSymptoms = Array.isArray(service?.symptoms) ? service.symptoms.join("\n") : "";
@@ -120,54 +121,41 @@ export function AdminServiceForm({ service }: { service?: AdminServiceRow | null
       <section className="admin-form-card">
         <div className="admin-form-section-title">
           <div>
-            <span>Hình ảnh & Hiển thị</span>
-            <h2>Ảnh minh họa dịch vụ & Trạng thái</h2>
+            <span>Hình ảnh dịch vụ</span>
+            <h2>Ảnh minh họa kỹ thuật & Trạng thái hiển thị</h2>
           </div>
         </div>
 
-        <div className="admin-fields">
-          <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", padding: "12px 14px", borderRadius: "8px", fontSize: "13px", color: "#166534", lineHeight: 1.5 }}>
-            💡 <strong>Tỷ lệ ảnh chuẩn đẹp nhất:</strong> Tỷ lệ <strong>16:10 hoặc 4:3</strong> (Kích thước đề xuất: <strong>800 × 500 px</strong> hoặc <strong>1200 × 750 px</strong>, dung lượng dưới 5MB). Hệ thống đã tự động định dạng khung chuẩn cố định, ảnh tải lên sẽ luôn hiển thị đầy đủ, không bị méo hay vỡ khung trên mọi thiết bị.
-          </div>
+        <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", padding: "12px 14px", borderRadius: "8px", fontSize: "13px", color: "#166534", lineHeight: 1.5, marginBottom: "16px" }}>
+          💡 <strong>Tỷ lệ ảnh chuẩn đẹp nhất:</strong> Tỷ lệ <strong>16:10 hoặc 4:3</strong> (Kích thước đề xuất: <strong>800 × 500 px</strong> hoặc <strong>1200 × 750 px</strong>, dung lượng dưới 5MB). Hệ thống đã tự động định dạng khung chuẩn cố định, ảnh tải lên sẽ luôn hiển thị đầy đủ, không bị méo hay vỡ khung trên mọi thiết bị.
+        </div>
 
+        <div style={{ marginBottom: "20px" }}>
+          <ServiceImageManager
+            initialImageUrl={service?.image_url}
+            serviceName={service?.name}
+          />
+        </div>
+
+        <div className="admin-fields two" style={{ marginTop: "16px", paddingTop: "16px", borderTop: "1px solid #f1f5f9" }}>
           <label>
-            <span>Tải lên ảnh minh họa mới (JPG, PNG, WebP tối đa 5MB)</span>
+            <span>Thứ tự hiển thị (Số nhỏ đứng trước)</span>
             <input
-              type="file"
-              name="image"
-              accept="image/jpeg,image/png,image/webp"
+              name="sort_order"
+              type="number"
+              defaultValue={service?.sort_order ?? 0}
             />
           </label>
 
-          <label>
-            <span>Đường dẫn ảnh (URL hoặc đường dẫn sẵn có trong hệ thống)</span>
-            <input
-              name="image_url"
-              defaultValue={service?.image_url || ""}
-              placeholder="VD: /services/sua-cua-bi-ket.png hoặc tải ảnh ở trên"
-            />
-          </label>
-
-          <div className="admin-fields two">
-            <label>
-              <span>Thứ tự hiển thị</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "28px" }}>
+            <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
               <input
-                name="sort_order"
-                type="number"
-                defaultValue={service?.sort_order ?? 0}
+                type="checkbox"
+                name="is_active"
+                defaultChecked={service ? service.is_active : true}
               />
+              <span style={{ fontWeight: 600, color: "#1e293b" }}>Kích hoạt hiển thị dịch vụ trên website</span>
             </label>
-
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginTop: "28px" }}>
-              <label style={{ display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
-                <input
-                  type="checkbox"
-                  name="is_active"
-                  defaultChecked={service ? service.is_active : true}
-                />
-                <span>Kích hoạt hiển thị trên website</span>
-              </label>
-            </div>
           </div>
         </div>
       </section>

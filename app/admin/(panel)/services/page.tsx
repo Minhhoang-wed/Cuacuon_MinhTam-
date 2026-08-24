@@ -4,7 +4,7 @@ import { DeletePriceItemButton } from "@/components/admin/delete-price-item-butt
 import { DeleteServiceButton } from "@/components/admin/delete-service-button";
 import { deleteService, deleteServicePriceItem, saveServicePriceItem } from "@/lib/admin-actions";
 import { getAdminServicePriceItems, getAdminServices } from "@/lib/admin-data";
-import { isSupabaseConfigured } from "@/lib/supabase-rest";
+import { isSupabaseConfigured, publicAssetUrl } from "@/lib/supabase-rest";
 
 const priceCategoryOptions = [
   "1. Bảng giá sửa chữa cơ bản & cứu hộ cửa cuốn",
@@ -103,7 +103,7 @@ export default async function AdminServicesPage({
                       <div className="admin-item-cell">
                         {service.image_url ? (
                           <img
-                            src={service.image_url}
+                            src={publicAssetUrl(service.image_url) || service.image_url}
                             alt={service.name}
                             style={{
                               width: 44,
