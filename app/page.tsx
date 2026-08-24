@@ -109,6 +109,11 @@ export default async function HomePage() {
         hotlineHref={site.hotlineHref}
         hotline={site.hotline}
         zaloHref={site.zaloHref}
+        eyebrow={homepage.heroEyebrow}
+        title={homepage.heroTitle}
+        emphasis={homepage.heroEmphasis}
+        description={homepage.heroDescription}
+        ctaLabel={homepage.heroCtaLabel}
       />
 
       <section className="repair-section repair-trust-section" id="vi-sao-chon-minh-tam">

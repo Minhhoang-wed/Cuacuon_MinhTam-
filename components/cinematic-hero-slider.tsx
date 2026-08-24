@@ -7,6 +7,11 @@ interface CinematicHeroSliderProps {
   hotline?: string;
   zaloHref?: string;
   images?: string[];
+  eyebrow?: string;
+  title?: string;
+  emphasis?: string;
+  description?: string;
+  ctaLabel?: string;
 }
 
 const DEFAULT_SLIDES = [
@@ -20,6 +25,11 @@ export function CinematicHeroSlider({
   hotline,
   zaloHref,
   images = DEFAULT_SLIDES,
+  eyebrow,
+  title,
+  emphasis,
+  description,
+  ctaLabel,
 }: CinematicHeroSliderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -52,15 +62,15 @@ export function CinematicHeroSlider({
           {/* Lớp nội dung chữ nổi bật */}
           <div className="cinematic-hero-content">
             <span className="cinematic-hero-badge">
-              CỨU HỘ & SỬA CỬA CUỐN 24/7 TOÀN TP.HCM
+              {eyebrow || "CỨU HỘ & SỬA CỬA CUỐN 24/7 TOÀN TP.HCM"}
             </span>
             <h1 className="cinematic-hero-title">
-              Cửa cuốn gặp sự cố?
-              <em>Minh Tâm hỗ trợ sửa chữa tận nơi.</em>
+              {title || "Cửa cuốn gặp sự cố?"}
+              {emphasis ? <em>{emphasis}</em> : <em>Minh Tâm hỗ trợ sửa chữa tận nơi.</em>}
             </h1>
             <p className="cinematic-hero-desc">
-              Tiếp nhận mọi sự cố cửa cuốn kẹt nan, hỏng motor, lỗi remote, lệch ray, đứt lò xo... 
-              Kỹ thuật viên có mặt nhanh sau 15 – 30 phút tại tất cả các quận huyện TP.HCM.
+              {description ||
+                "Tiếp nhận mọi sự cố cửa cuốn kẹt nan, hỏng motor, lỗi remote, lệch ray, đứt lò xo... Kỹ thuật viên có mặt nhanh sau 15 – 30 phút tại tất cả các quận huyện TP.HCM."}
             </p>
           </div>
 
