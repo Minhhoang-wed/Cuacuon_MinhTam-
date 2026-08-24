@@ -262,33 +262,33 @@ export default async function AdminServicesPage({
                           <div
                             style={{
                               display: "flex",
-                              justifyContent: "space-between",
-                              alignItems: "center",
-                              gap: "8px",
-                              flexWrap: "wrap",
+                              flexDirection: "column",
+                              gap: "6px",
                               paddingTop: "6px",
                               borderTop: "1px dashed #f1f5f9",
-                              fontSize: "13px",
                             }}
                           >
-                            <span style={{ color: "#2563eb", fontWeight: 700, whiteSpace: "nowrap" }}>
+                            <span style={{ color: "#2563eb", fontWeight: 700, fontSize: "13.5px" }}>
                               {item.price}
                             </span>
-                            <span
-                              style={{
-                                color: "#059669",
-                                fontWeight: 600,
-                                background: "#ecfdf5",
-                                padding: "2px 8px",
-                                borderRadius: "4px",
-                                fontSize: "11.5px",
-                                display: "inline-block",
-                                maxWidth: "100%",
-                                wordBreak: "break-word",
-                              }}
-                            >
-                              Bảo hành: {item.warranty}
-                            </span>
+                            <div>
+                              <span
+                                style={{
+                                  color: "#059669",
+                                  fontWeight: 600,
+                                  background: "#ecfdf5",
+                                  border: "1px solid #d1fae5",
+                                  padding: "3px 8px",
+                                  borderRadius: "4px",
+                                  fontSize: "11.5px",
+                                  display: "inline-block",
+                                  maxWidth: "100%",
+                                  wordBreak: "break-word",
+                                }}
+                              >
+                                Bảo hành: {item.warranty}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       ))}
