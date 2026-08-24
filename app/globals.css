@@ -6184,7 +6184,8 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
 /* ========== DESKTOP FIXES (>= 768px) ========== */
 @media (min-width: 768px) {
   .mobile-actions,
-  .floating-zalo-wrap {
+  .floating-zalo-wrap,
+  .floating-contact-wrap {
     display: none !important;
   }
   .mobile-nav-navy,
@@ -6503,36 +6504,59 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
     line-height: 1.55 !important;
   }
 
-  /* Floating Zalo Circle Button */
-  body.mobile-menu-open .floating-zalo-wrap {
+  /* Floating Contact Group (Phone + Zalo) */
+  body.mobile-menu-open .floating-zalo-wrap,
+  body.mobile-menu-open .floating-contact-wrap {
     display: none !important;
   }
-  .floating-zalo-wrap {
+  .floating-contact-wrap {
     position: fixed !important;
     bottom: calc(20px + env(safe-area-inset-bottom, 0px)) !important;
     right: 18px !important;
     z-index: 9990 !important;
     display: flex !important;
+    flex-direction: column !important;
     align-items: center !important;
-    justify-content: center !important;
+    gap: 14px !important;
   }
-  .floating-zalo-btn {
+  .floating-contact-btn {
     position: relative !important;
-    width: 60px !important;
-    height: 60px !important;
+    width: 56px !important;
+    height: 56px !important;
     border-radius: 50% !important;
-    background: transparent !important;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    box-shadow: 0 8px 24px rgba(0, 104, 255, 0.45) !important;
     text-decoration: none !important;
     transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease !important;
     user-select: none !important;
     -webkit-tap-highlight-color: transparent !important;
   }
-  .floating-zalo-btn:active {
+  .floating-contact-btn:active {
     transform: scale(0.92) !important;
+  }
+  .floating-phone-btn {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+    box-shadow: 0 8px 24px rgba(22, 163, 74, 0.45) !important;
+    color: #ffffff !important;
+  }
+  .floating-phone-icon {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    animation: floatingPhoneRing 2s infinite ease-in-out !important;
+  }
+  .floating-phone-pulse {
+    position: absolute !important;
+    inset: -5px !important;
+    border-radius: 50% !important;
+    border: 2px solid rgba(34, 197, 94, 0.65) !important;
+    animation: floatingContactPulse 2s infinite cubic-bezier(0.25, 1, 0.5, 1) !important;
+    pointer-events: none !important;
+  }
+  .floating-zalo-btn {
+    background: transparent !important;
+    box-shadow: 0 8px 24px rgba(0, 104, 255, 0.45) !important;
   }
   .floating-zalo-img {
     width: 100% !important;
@@ -6546,10 +6570,10 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
     inset: -5px !important;
     border-radius: 50% !important;
     border: 2px solid rgba(0, 104, 255, 0.65) !important;
-    animation: floatingZaloPulse 2s infinite cubic-bezier(0.25, 1, 0.5, 1) !important;
+    animation: floatingContactPulse 2s infinite cubic-bezier(0.25, 1, 0.5, 1) 0.5s !important;
     pointer-events: none !important;
   }
-  @keyframes floatingZaloPulse {
+  @keyframes floatingContactPulse {
     0% {
       transform: scale(0.95);
       opacity: 0.9;
@@ -6561,6 +6585,20 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
     100% {
       transform: scale(1.35);
       opacity: 0;
+    }
+  }
+  @keyframes floatingPhoneRing {
+    0%, 100% {
+      transform: rotate(0deg);
+    }
+    10%, 30% {
+      transform: rotate(-14deg);
+    }
+    20%, 40% {
+      transform: rotate(14deg);
+    }
+    50% {
+      transform: rotate(0deg);
     }
   }
 
