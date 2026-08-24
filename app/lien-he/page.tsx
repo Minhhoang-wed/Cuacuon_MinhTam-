@@ -3,7 +3,7 @@ import { ArrowRight, CheckCircle2, Clock3, Mail, MapPin, MessageCircle, Phone, S
 import { Breadcrumb } from "@/components/breadcrumb";
 import { PageHero } from "@/components/page-hero";
 import { directStores } from "@/data/public-home";
-import { getSiteSettings } from "@/lib/catalog";
+import { getSiteSettings, getStoreBranches } from "@/lib/catalog";
 
 export const metadata: Metadata = {
   title: "Liên hệ & Tư vấn qua Zalo / Hotline",
@@ -12,7 +12,17 @@ export const metadata: Metadata = {
 };
 
 export default async function ContactPage() {
-  const site = await getSiteSettings();
+  const [site, branches] = await Promise.all([getSiteSettings(), getStoreBranches()]);
+  const displayBranches = branches.length > 0 ? branches : directStores.map((s) => ({
+    id: s.branch,
+    branchName: s.branch,
+    address: s.address,
+    hotline: site.hotline,
+    note: s.note,
+    badge: (s as unknown as { badge?: string }).badge || "Cửa hàng trực tiếp",
+    sortOrder: 0,
+    isActive: true,
+  }));
 
   return (
     <>
@@ -131,9 +141,25 @@ export default async function ContactPage() {
               </a>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginTop: "24px", paddingTop: "20px", borderTop: "1px solid var(--border-color)" }}>
-                {directStores.map((store, idx) => (
+                {site.address && (
                   <a
-                    key={idx}
+                    href={site.mapsHref || "https://maps.google.com"}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{ display: "flex", alignItems: "flex-start", gap: "12px", color: "var(--text-body)", textDecoration: "none", fontSize: "14px" }}
+                  >
+                    <MapPin size={18} color="#10b981" style={{ flexShrink: 0, marginTop: "2px" }} />
+                    <span>
+                      <strong style={{ display: "block", color: "var(--text-title, #0f172a)", marginBottom: "2px" }}>
+                        Trụ sở chính / Xưởng kỹ thuật
+                      </strong>
+                      <span style={{ color: "#64748b", fontSize: "13.5px" }}>{site.address}</span>
+                    </span>
+                  </a>
+                )}
+                {displayBranches.map((store, idx) => (
+                  <a
+                    key={store.id || idx}
                     href={site.mapsHref || "https://maps.google.com"}
                     target="_blank"
                     rel="noreferrer"
@@ -141,7 +167,7 @@ export default async function ContactPage() {
                   >
                     <MapPin size={18} color="var(--accent-color)" style={{ flexShrink: 0, marginTop: "2px" }} />
                     <span>
-                      <strong style={{ display: "block", color: "var(--text-title, #0f172a)", marginBottom: "2px" }}>{store.branch}</strong>
+                      <strong style={{ display: "block", color: "var(--text-title, #0f172a)", marginBottom: "2px" }}>{store.branchName}</strong>
                       <span style={{ color: "#64748b", fontSize: "13.5px" }}>{store.address}</span>
                     </span>
                   </a>

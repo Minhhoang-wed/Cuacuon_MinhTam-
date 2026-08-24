@@ -2,9 +2,20 @@ import { ArrowRight, Clock3, Mail, MapPin, MessageCircle, Phone, ShieldCheck } f
 import Link from "next/link";
 import { PublicLogo } from "@/components/public-logo";
 import { directStores } from "@/data/public-home";
-import type { ManagedSiteConfig } from "@/lib/catalog";
+import type { CatalogStoreBranch, ManagedSiteConfig } from "@/lib/catalog";
 
-export function SiteFooter({ site }: { site: ManagedSiteConfig }) {
+export function SiteFooter({ site, branches = [] }: { site: ManagedSiteConfig; branches?: CatalogStoreBranch[] }) {
+  const displayBranches = branches.length > 0 ? branches : directStores.map((s) => ({
+    id: s.branch,
+    branchName: s.branch,
+    address: s.address,
+    hotline: site.hotline,
+    note: s.note,
+    badge: (s as unknown as { badge?: string }).badge || "Cửa hàng trực tiếp",
+    sortOrder: 0,
+    isActive: true,
+  }));
+
   return (
     <footer className="footer-maison">
       <div className="container footer-maison-grid">
@@ -53,10 +64,36 @@ export function SiteFooter({ site }: { site: ManagedSiteConfig }) {
               <strong className="footer-hotline-number">{site.hotline}</strong>
             </a>
 
-            {/* 2 Chi nhánh trực tiếp */}
-            {directStores.map((store, idx) => (
+            {/* Trụ sở chính từ Cài đặt chung CMS */}
+            {site.address && (
               <a
-                key={idx}
+                href={site.mapsHref || "https://maps.google.com"}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: "9px",
+                  textDecoration: "none",
+                  color: "inherit",
+                }}
+              >
+                <MapPin size={16} style={{ flexShrink: 0, marginTop: "2px", color: "#10b981" }} />
+                <span>
+                  <strong style={{ color: "#ffffff", display: "block", fontSize: "12.5px", marginBottom: "2px" }}>
+                    Trụ sở chính / Xưởng kỹ thuật
+                  </strong>
+                  <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.85)", lineHeight: 1.45, display: "block" }}>
+                    {site.address}
+                  </span>
+                </span>
+              </a>
+            )}
+
+            {/* Danh sách Chi nhánh từ CMS */}
+            {displayBranches.map((store, idx) => (
+              <a
+                key={store.id || idx}
                 href={site.mapsHref || "https://maps.google.com"}
                 target="_blank"
                 rel="noreferrer"
@@ -71,7 +108,7 @@ export function SiteFooter({ site }: { site: ManagedSiteConfig }) {
                 <MapPin size={16} style={{ flexShrink: 0, marginTop: "2px", color: "var(--lovable-gold, #f59e0b)" }} />
                 <span>
                   <strong style={{ color: "#ffffff", display: "block", fontSize: "12.5px", marginBottom: "2px" }}>
-                    {store.branch}
+                    {store.branchName}
                   </strong>
                   <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.78)", lineHeight: 1.45, display: "block" }}>
                     {store.address}
