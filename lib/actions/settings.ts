@@ -16,15 +16,19 @@ export async function saveSettings(form: FormData) {
     "hotline",
     "zalo_url",
     "email",
-    "address",
-    "facebook_url",
-    "messenger_url",
     "maps_url",
     "business_hours",
     "service_area",
+    "branch_1_name",
+    "branch_1_address",
+    "branch_2_name",
+    "branch_2_address",
   ];
   const payload: Record<string, string> = { id: "main", updated_at: new Date().toISOString() };
   fields.forEach((field) => (payload[field] = value(form, field)));
+  if (payload.branch_1_address) {
+    payload.address = payload.branch_1_address;
+  }
 
   await supabaseFetch(
     "/rest/v1/site_settings?on_conflict=id",

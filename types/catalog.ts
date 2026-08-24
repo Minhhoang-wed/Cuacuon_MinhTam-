@@ -138,8 +138,12 @@ export type ManagedSiteConfig = {
   mapsHref: string;
   serviceArea: string;
   baseUrl: string;
-  facebookHref: string;
-  messengerHref: string;
+  branch1Name?: string;
+  branch1Address?: string;
+  branch2Name?: string;
+  branch2Address?: string;
+  facebookHref?: string;
+  messengerHref?: string;
   seoTitleTemplate?: string;
   seoKeywords?: string;
   seoCanonicalBase?: string;

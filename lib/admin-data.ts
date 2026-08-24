@@ -291,6 +291,10 @@ export async function getAdminSettings() {
       zalo_url: x.zaloHref,
       email: x.email,
       address: x.address,
+      branch_1_name: x.branch1Name || "Cơ sở 1 (Trụ sở Quận 10)",
+      branch_1_address: x.branch1Address || "361 Lý Thường Kiệt, P. Tân Hòa, Quận 10, TP.HCM",
+      branch_2_name: x.branch2Name || "Cơ sở 2 (Chi nhánh Quận 6)",
+      branch_2_address: x.branch2Address || "617 Phạm Văn Chí, P. Bình Tiên, Quận 6, TP.HCM",
       facebook_url: x.facebookHref,
       messenger_url: x.messengerHref,
       maps_url: x.mapsHref,
@@ -313,6 +317,10 @@ export async function getAdminSettings() {
     ...row,
     hotline,
     zalo_url,
+    branch_1_name: row.branch_1_name || "Cơ sở 1 (Trụ sở Quận 10)",
+    branch_1_address: row.branch_1_address || row.address || "361 Lý Thường Kiệt, P. Tân Hòa, Quận 10, TP.HCM",
+    branch_2_name: row.branch_2_name || "Cơ sở 2 (Chi nhánh Quận 6)",
+    branch_2_address: row.branch_2_address || "617 Phạm Văn Chí, P. Bình Tiên, Quận 6, TP.HCM",
   };
 }
 export async function getAdminHomepage() { if (!getSupabaseConfig()) { const x = await getHomepageContent(); return { hero_eyebrow: x.heroEyebrow, hero_title: x.heroTitle, hero_emphasis: x.heroEmphasis, hero_description: x.heroDescription, hero_cta_label: x.heroCtaLabel, intro_title: x.introTitle, intro_text: x.introText }; } const token = await getAdminAccessToken(); const rows = await supabaseFetch<Array<Record<string,string | null>>>("/rest/v1/homepage_content?id=eq.main&select=*&limit=1", { cache: "no-store" }, token); return rows[0] || {}; }

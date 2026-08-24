@@ -78,15 +78,6 @@ export default async function AdminSettingsPage({
               />
             </label>
 
-            <label className="full">
-              <span>Địa chỉ trụ sở / Xưởng kỹ thuật</span>
-              <input
-                name="address"
-                defaultValue={settings.address || ""}
-                placeholder="VD: Số 123 Đường Nguyễn Xí, Phường 26, Quận Bình Thạnh, TP.HCM"
-              />
-            </label>
-
             <label>
               <span>Thời gian làm việc</span>
               <input
@@ -107,21 +98,68 @@ export default async function AdminSettingsPage({
           </div>
         </section>
 
-        {/* Kênh liên hệ & Mạng xã hội */}
+        {/* Hệ thống Cơ sở 1 & Cơ sở 2 */}
         <section className="admin-form-card">
           <div className="admin-form-section-title">
             <div>
-              <h2>Hotline & Liên kết mạng xã hội</h2>
+              <h2>Hệ thống Cơ sở phục vụ (CS1 & CS2)</h2>
             </div>
           </div>
 
           <div className="admin-fields two">
             <label>
-              <span>Số điện thoại Hotline / Cứu hộ</span>
+              <span>Tên Cơ sở 1</span>
+              <input
+                name="branch_1_name"
+                defaultValue={settings.branch_1_name || "Cơ sở 1 (Trụ sở Quận 10)"}
+                placeholder="VD: Cơ sở 1 (Trụ sở Quận 10)"
+              />
+            </label>
+
+            <label>
+              <span>Địa chỉ Cơ sở 1</span>
+              <input
+                name="branch_1_address"
+                defaultValue={settings.branch_1_address || settings.address || "361 Lý Thường Kiệt, P. Tân Hòa, Quận 10, TP.HCM"}
+                placeholder="VD: 361 Lý Thường Kiệt, P. Tân Hòa, Quận 10, TP.HCM"
+              />
+            </label>
+
+            <label>
+              <span>Tên Cơ sở 2</span>
+              <input
+                name="branch_2_name"
+                defaultValue={settings.branch_2_name || "Cơ sở 2 (Chi nhánh Quận 6)"}
+                placeholder="VD: Cơ sở 2 (Chi nhánh Quận 6)"
+              />
+            </label>
+
+            <label>
+              <span>Địa chỉ Cơ sở 2</span>
+              <input
+                name="branch_2_address"
+                defaultValue={settings.branch_2_address || "617 Phạm Văn Chí, P. Bình Tiên, Quận 6, TP.HCM"}
+                placeholder="VD: 617 Phạm Văn Chí, P. Bình Tiên, Quận 6, TP.HCM"
+              />
+            </label>
+          </div>
+        </section>
+
+        {/* Kênh liên hệ & Hotline */}
+        <section className="admin-form-card">
+          <div className="admin-form-section-title">
+            <div>
+              <h2>Hotline & Kênh liên hệ trực tiếp</h2>
+            </div>
+          </div>
+
+          <div className="admin-fields two">
+            <label>
+              <span>Số điện thoại Hotline / Cứu hộ 24/7</span>
               <input
                 name="hotline"
                 defaultValue={settings.hotline || ""}
-                placeholder="VD: 0901 234 567"
+                placeholder="VD: 0327 359 368"
               />
             </label>
 
@@ -131,37 +169,17 @@ export default async function AdminSettingsPage({
                 type="email"
                 name="email"
                 defaultValue={settings.email || ""}
-                placeholder="VD: cuacuonantamtphcm@gmail.com"
+                placeholder="VD: cuacuonminhtam24h@gmail.com"
               />
             </label>
 
             <label>
-              <span>Đường dẫn Zalo (URL hoặc số)</span>
+              <span>Đường dẫn Zalo (URL hoặc số điện thoại)</span>
               <input
                 type="text"
                 name="zalo_url"
                 defaultValue={settings.zalo_url || ""}
-                placeholder="VD: https://zalo.me/0901234567"
-              />
-            </label>
-
-            <label>
-              <span>Trang Facebook Fanpage</span>
-              <input
-                type="url"
-                name="facebook_url"
-                defaultValue={settings.facebook_url || ""}
-                placeholder="VD: https://facebook.com/cuacuonantam"
-              />
-            </label>
-
-            <label>
-              <span>Liên kết Messenger</span>
-              <input
-                type="url"
-                name="messenger_url"
-                defaultValue={settings.messenger_url || ""}
-                placeholder="VD: https://m.me/cuacuonantam"
+                placeholder="VD: https://zalo.me/0327359368"
               />
             </label>
 

@@ -64,58 +64,53 @@ export function SiteFooter({ site, branches = [] }: { site: ManagedSiteConfig; b
               <strong className="footer-hotline-number">{site.hotline}</strong>
             </a>
 
-            {/* Trụ sở chính từ Cài đặt chung CMS */}
-            {site.address && (
-              <a
-                href={site.mapsHref || "https://maps.google.com"}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: "9px",
-                  textDecoration: "none",
-                  color: "inherit",
-                }}
-              >
-                <MapPin size={16} style={{ flexShrink: 0, marginTop: "2px", color: "#10b981" }} />
-                <span>
-                  <strong style={{ color: "#ffffff", display: "block", fontSize: "12.5px", marginBottom: "2px" }}>
-                    Trụ sở chính / Xưởng kỹ thuật
-                  </strong>
-                  <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.85)", lineHeight: 1.45, display: "block" }}>
-                    {site.address}
-                  </span>
+            {/* Cơ sở 1 */}
+            <a
+              href={site.mapsHref || "https://maps.google.com"}
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: "9px",
+                textDecoration: "none",
+                color: "inherit",
+              }}
+            >
+              <MapPin size={16} style={{ flexShrink: 0, marginTop: "2px", color: "var(--lovable-gold, #f59e0b)" }} />
+              <span>
+                <strong style={{ color: "#ffffff", display: "block", fontSize: "12.5px", marginBottom: "2px" }}>
+                  {site.branch1Name || (displayBranches[0]?.branchName) || "Cơ sở 1 (Trụ sở Quận 10)"}
+                </strong>
+                <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.78)", lineHeight: 1.45, display: "block" }}>
+                  {site.branch1Address || (displayBranches[0]?.address) || "361 Lý Thường Kiệt, P. Tân Hòa, Quận 10, TP.HCM"}
                 </span>
-              </a>
-            )}
+              </span>
+            </a>
 
-            {/* Danh sách Chi nhánh từ CMS */}
-            {displayBranches.map((store, idx) => (
-              <a
-                key={store.id || idx}
-                href={site.mapsHref || "https://maps.google.com"}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: "9px",
-                  textDecoration: "none",
-                  color: "inherit",
-                }}
-              >
-                <MapPin size={16} style={{ flexShrink: 0, marginTop: "2px", color: "var(--lovable-gold, #f59e0b)" }} />
-                <span>
-                  <strong style={{ color: "#ffffff", display: "block", fontSize: "12.5px", marginBottom: "2px" }}>
-                    {store.branchName}
-                  </strong>
-                  <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.78)", lineHeight: 1.45, display: "block" }}>
-                    {store.address}
-                  </span>
+            {/* Cơ sở 2 */}
+            <a
+              href={site.mapsHref || "https://maps.google.com"}
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: "9px",
+                textDecoration: "none",
+                color: "inherit",
+              }}
+            >
+              <MapPin size={16} style={{ flexShrink: 0, marginTop: "2px", color: "var(--lovable-gold, #f59e0b)" }} />
+              <span>
+                <strong style={{ color: "#ffffff", display: "block", fontSize: "12.5px", marginBottom: "2px" }}>
+                  {site.branch2Name || (displayBranches[1]?.branchName) || "Cơ sở 2 (Chi nhánh Quận 6)"}
+                </strong>
+                <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.78)", lineHeight: 1.45, display: "block" }}>
+                  {site.branch2Address || (displayBranches[1]?.address) || "617 Phạm Văn Chí, P. Bình Tiên, Quận 6, TP.HCM"}
                 </span>
-              </a>
-            ))}
+              </span>
+            </a>
 
             <a href={`mailto:${site.email}`}>
               <Mail size={16} />
