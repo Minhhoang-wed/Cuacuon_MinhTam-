@@ -143,7 +143,7 @@ export default async function RequestDetailPage({
 
         {/* Xử lý trạng thái & Ghi chú nội bộ */}
         <aside>
-          <form action={updateServiceRequestStatus} className="admin-form-card" style={{ position: "sticky", top: "20px" }}>
+          <form action={updateServiceRequestStatus} className="admin-form-card">
             <input type="hidden" name="id" value={request.id} />
 
             <div className="admin-form-section-title">

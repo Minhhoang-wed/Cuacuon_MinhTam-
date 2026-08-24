@@ -1,4 +1,4 @@
-import { Building2, CheckCircle2, ExternalLink, Globe, PhoneCall, Save, Shield } from "lucide-react";
+import { CheckCircle2, ExternalLink, Save, SlidersHorizontal } from "lucide-react";
 import Link from "next/link";
 import { saveSettings } from "@/lib/admin-actions";
 import { getAdminSettings } from "@/lib/admin-data";
@@ -27,9 +27,10 @@ export default async function AdminSettingsPage({
           <h1>Thông tin Doanh nghiệp & Website</h1>
           <p>Quản lý tên thương hiệu, địa chỉ, hotline, kênh Zalo/Facebook và thông tin liên hệ chính thức.</p>
         </div>
-        <div style={{ display: "flex", gap: "10px" }}>
+        <div className="admin-header-actions">
           <Link href="/admin/seo" className="button button-ghost">
-            <span>⚙️ Cấu hình SEO riêng</span>
+            <SlidersHorizontal size={16} />
+            <span>Cấu hình SEO</span>
           </Link>
           <Link href="/" target="_blank" className="button button-ghost">
             <ExternalLink size={16} />

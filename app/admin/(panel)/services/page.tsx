@@ -204,21 +204,24 @@ export default async function AdminServicesPage({
                     background: "#f8fafc",
                     border: "1px solid #e2e8f0",
                     borderRadius: "10px",
-                    padding: "14px",
+                    padding: "12px",
+                    overflow: "hidden",
                   }}
                 >
                   <h3
                     style={{
-                      fontSize: "14.5px",
+                      fontSize: "14px",
                       fontWeight: 700,
                       color: "#1e293b",
-                      margin: "0 0 12px",
+                      margin: "0 0 10px",
                       display: "flex",
                       alignItems: "center",
                       gap: "8px",
+                      wordBreak: "break-word",
                     }}
                   >
-                    <Layers size={16} color="#2563eb" /> {catTitle} ({items.length})
+                    <Layers size={16} color="#2563eb" style={{ flexShrink: 0 }} />
+                    <span>{catTitle} ({items.length})</span>
                   </h3>
 
                   {items.length > 0 ? (
@@ -228,12 +231,13 @@ export default async function AdminServicesPage({
                           key={item.id}
                           style={{
                             background: "#ffffff",
-                            padding: "12px 14px",
+                            padding: "10px 12px",
                             borderRadius: "8px",
                             border: "1px solid #e2e8f0",
                             display: "flex",
                             flexDirection: "column",
-                            gap: "8px",
+                            gap: "6px",
+                            overflow: "hidden",
                           }}
                         >
                           <div
@@ -241,10 +245,10 @@ export default async function AdminServicesPage({
                               display: "flex",
                               justifyContent: "space-between",
                               alignItems: "flex-start",
-                              gap: "10px",
+                              gap: "8px",
                             }}
                           >
-                            <b style={{ fontSize: "14px", color: "#0f172a", lineHeight: 1.4, flex: 1 }}>
+                            <b style={{ fontSize: "13.5px", color: "#0f172a", lineHeight: 1.4, flex: 1, wordBreak: "break-word" }}>
                               {item.item_name}
                             </b>
                             <div style={{ display: "flex", alignItems: "center", gap: "6px", flexShrink: 0 }}>
@@ -260,7 +264,8 @@ export default async function AdminServicesPage({
                               display: "flex",
                               justifyContent: "space-between",
                               alignItems: "center",
-                              gap: "10px",
+                              gap: "8px",
+                              flexWrap: "wrap",
                               paddingTop: "6px",
                               borderTop: "1px dashed #f1f5f9",
                               fontSize: "13px",
@@ -273,11 +278,13 @@ export default async function AdminServicesPage({
                               style={{
                                 color: "#059669",
                                 fontWeight: 600,
-                                whiteSpace: "nowrap",
                                 background: "#ecfdf5",
                                 padding: "2px 8px",
                                 borderRadius: "4px",
-                                fontSize: "12px",
+                                fontSize: "11.5px",
+                                display: "inline-block",
+                                maxWidth: "100%",
+                                wordBreak: "break-word",
                               }}
                             >
                               Bảo hành: {item.warranty}
@@ -287,7 +294,7 @@ export default async function AdminServicesPage({
                       ))}
                     </div>
                   ) : (
-                    <p style={{ margin: 0, fontSize: "13.5px", color: "#94a3b8" }}>
+                    <p style={{ margin: 0, fontSize: "13px", color: "#94a3b8" }}>
                       Chưa có hạng mục nào trong danh mục giá này.
                     </p>
                   )}
