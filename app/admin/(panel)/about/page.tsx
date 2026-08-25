@@ -2,6 +2,7 @@ import { CheckCircle2, ExternalLink, Info, ListOrdered, Save, ShieldCheck, Spark
 import Link from "next/link";
 import { saveAboutContent } from "@/lib/admin-actions";
 import { getAdminAboutContent } from "@/lib/admin-data";
+import { AboutBannerEditor } from "@/components/admin/about-banner-editor";
 
 export default async function AdminAboutPage({
   searchParams,
@@ -62,14 +63,13 @@ export default async function AdminAboutPage({
               />
             </label>
 
-            <label className="full">
-              <span>Đường dẫn ảnh nền Banner (URL hoặc đường dẫn nội bộ)</span>
-              <input
-                name="hero_image"
-                defaultValue={content.hero_image || ""}
-                placeholder="VD: /images/about-hero-banner.jpg"
+            <div className="full">
+              <AboutBannerEditor
+                initialImageUrl={content.hero_image || "/images/about-hero-banner.jpg"}
+                defaultTitle={content.hero_title || "Tận tâm trong từng công trình."}
+                defaultDescription={content.hero_description || "Từ một yêu cầu sửa chữa nhỏ đến hệ cửa cho nhà xưởng, chúng tôi luôn bắt đầu bằng khảo sát rõ ràng và kết thúc bằng bàn giao minh bạch."}
               />
-            </label>
+            </div>
           </div>
         </section>
 

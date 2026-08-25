@@ -3,16 +3,31 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { getAdminAccessToken, requireAdmin } from "@/lib/admin-auth";
-import { supabaseFetch } from "@/lib/supabase-rest";
-import { value } from "./helpers";
+import { publicAssetUrl, supabaseFetch } from "@/lib/supabase-rest";
+import { uploadObject, value } from "./helpers";
 
 export async function saveAboutContent(form: FormData) {
   await requireAdmin();
   const token = await getAdminAccessToken();
+
+  let heroImageUrl = value(form, "hero_image") || "/images/about-hero-banner.jpg";
+
+  const heroImageFile = form.get("hero_image_file");
+  if (heroImageFile instanceof File && heroImageFile.size > 0) {
+    try {
+      const path = await uploadObject(heroImageFile, "about", token);
+      const publicUrl = publicAssetUrl(path);
+      if (publicUrl) {
+        heroImageUrl = publicUrl;
+      }
+    } catch (err) {
+      console.error("Lỗi upload ảnh Hero Banner:", err);
+    }
+  }
+
   const fields = [
     "hero_title",
     "hero_description",
-    "hero_image",
     "philosophy_kicker",
     "philosophy_title",
     "philosophy_text_1",
@@ -31,7 +46,11 @@ export async function saveAboutContent(form: FormData) {
     "process_step_4",
     "process_step_5",
   ];
-  const payload: Record<string, string> = { id: "main", updated_at: new Date().toISOString() };
+  const payload: Record<string, string> = {
+    id: "main",
+    hero_image: heroImageUrl,
+    updated_at: new Date().toISOString(),
+  };
   fields.forEach((field) => (payload[field] = value(form, field)));
 
   try {
@@ -54,3 +73,4 @@ export async function saveAboutContent(form: FormData) {
   revalidatePath("/admin/about");
   redirect("/admin/about?saved=1");
 }
+
