@@ -123,41 +123,45 @@ export async function saveSettings(form: FormData) {
 export async function saveSeoSettings(form: FormData) {
   await requireAdmin();
   const token = await getAdminAccessToken();
-  const fields = [
-    "seo_title_template",
-    "seo_site_name",
-    "seo_default_description",
-    "seo_keywords",
-    "seo_canonical_base",
-    "og_title",
-    "og_description",
-    "og_image_url",
-    "og_locale",
-    "twitter_card",
-    "twitter_title",
-    "twitter_description",
-    "twitter_image_url",
-    "twitter_site",
-    "robots_index",
-    "robots_follow",
-    "structured_business_name",
-    "structured_phone",
-    "structured_address_locality",
-    "structured_address_region",
-    "structured_price_range",
-  ];
-  const payload: Record<string, string> = { id: "main", updated_at: new Date().toISOString() };
-  fields.forEach((field) => (payload[field] = value(form, field)));
 
-  await supabaseFetch(
-    "/rest/v1/site_settings?on_conflict=id",
-    {
-      method: "POST",
-      headers: { Prefer: "resolution=merge-duplicates,return=minimal" },
-      body: JSON.stringify(payload),
-    },
-    token
-  );
+  const siteName = value(form, "seo_site_name") || "Cửa Cuốn Minh Tâm 24H";
+  const desc = value(form, "seo_default_description") || "";
+  const keywords = value(form, "seo_keywords") || "";
+  const canonicalBase = value(form, "seo_canonical_base") || "";
+  const ogImageUrl = value(form, "og_image_url") || "/og.png";
+  const robotsIndex = value(form, "robots_index") || "index";
+
+  const payload: Record<string, string> = {
+    id: "main",
+    updated_at: new Date().toISOString(),
+    seo_site_name: siteName,
+    seo_default_description: desc,
+    seo_keywords: keywords,
+    seo_canonical_base: canonicalBase,
+    seo_title_template: `%s | ${siteName}`,
+    og_title: siteName,
+    og_description: desc,
+    og_image_url: ogImageUrl,
+    twitter_title: siteName,
+    twitter_description: desc,
+    twitter_image_url: ogImageUrl,
+    robots_index: robotsIndex,
+    robots_follow: "follow",
+  };
+
+  try {
+    await supabaseFetch(
+      "/rest/v1/site_settings?on_conflict=id",
+      {
+        method: "POST",
+        headers: { Prefer: "resolution=merge-duplicates,return=minimal" },
+        body: JSON.stringify(payload),
+      },
+      token
+    );
+  } catch (error) {
+    console.error("Lỗi khi lưu cấu hình SEO:", error);
+  }
 
   revalidateTag("site-settings", "max");
   revalidatePath("/", "layout");

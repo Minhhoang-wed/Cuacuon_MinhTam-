@@ -1,5 +1,4 @@
 import {
-  AlertTriangle,
   CheckCircle2,
   ExternalLink,
   Eye,
@@ -9,8 +8,8 @@ import {
   Save,
   Search,
   Share2,
+  Sparkles,
   Tag,
-  Twitter,
 } from "lucide-react";
 import Link from "next/link";
 import { saveSeoSettings } from "@/lib/admin-actions";
@@ -29,18 +28,18 @@ export default async function AdminSeoPage({
       {saved && (
         <div className="admin-success">
           <CheckCircle2 size={18} />
-          <span>Đã cập nhật toàn bộ cấu hình SEO thành công. Thay đổi đã có hiệu lực trên website.</span>
+          <span>Đã cập nhật cấu hình SEO thành công. Thay đổi đã có hiệu lực trên website.</span>
         </div>
       )}
 
       <header className="admin-page-header">
         <div>
           <span>
-            <Search size={13} /> Tối ưu công cụ tìm kiếm
+            <Search size={13} /> Tối ưu công cụ tìm kiếm & Chia sẻ
           </span>
           <h1>Quản trị SEO</h1>
           <p>
-            Cấu hình title template, meta description, Open Graph, Twitter Card, Robots và JSON-LD Schema — tách biệt hoàn toàn với thông tin doanh nghiệp.
+            Tối ưu hóa tiêu đề, mô tả hiển thị trên Google tìm kiếm và hình ảnh đại diện khi gửi link qua Zalo / Facebook.
           </p>
         </div>
         <div style={{ display: "flex", gap: 10 }}>
@@ -53,39 +52,85 @@ export default async function AdminSeoPage({
 
       <form action={saveSeoSettings} className="admin-form">
 
-        {/* ── 1. Title & Keywords ── */}
+        {/* ── 1. Google Search Preview & Metadata ── */}
         <section className="admin-form-card">
           <div className="admin-form-section-title">
             <div>
-              <span><Tag size={12} /> Metadata cơ bản</span>
-              <h2>Title & Keywords</h2>
+              <span><Tag size={12} /> Google Search</span>
+              <h2>Hiển thị trên Google Tìm Kiếm</h2>
+            </div>
+          </div>
+
+          {/* Google Search Snippet Preview */}
+          <div style={{
+            background: "#ffffff",
+            border: "1px solid #e2e8f0",
+            borderRadius: "10px",
+            padding: "16px 20px",
+            marginBottom: "20px",
+            boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+          }}>
+            <div style={{ fontSize: "12px", color: "#64748b", marginBottom: "8px", display: "flex", alignItems: "center", gap: "6px" }}>
+              <Globe size={14} color="#2563eb" />
+              <span>Xem trước kết quả tìm kiếm trên Google:</span>
+            </div>
+            <div style={{ fontSize: "13px", color: "#202124", lineHeight: 1.3 }}>
+              <span style={{ color: "#202124", fontSize: "12px" }}>
+                {seo.seo_canonical_base || "https://www.suachuacuacuonnhanh24h.com"}
+              </span>
+              <h3 style={{
+                color: "#1a0dab",
+                fontSize: "18px",
+                fontWeight: 500,
+                margin: "4px 0",
+                lineHeight: 1.3,
+                cursor: "pointer",
+              }}>
+                {seo.seo_site_name ? `${seo.seo_site_name} | Sửa Cửa Cuốn TP.HCM 24/7` : "Cửa Cuốn Minh Tâm | Sửa Cửa Cuốn TP.HCM 24/7"}
+              </h3>
+              <p style={{ color: "#4d5156", fontSize: "13.5px", margin: 0, lineHeight: 1.45 }}>
+                {seo.seo_default_description || "Dịch vụ sửa chữa, bảo trì và lắp đặt cửa cuốn tận nơi tại TP.HCM. Thợ có mặt sau 15-20 phút, báo giá minh bạch, bảo hành dài hạn."}
+              </p>
             </div>
           </div>
 
           <div className="admin-fields two">
             <label className="full">
-              <span>Template tiêu đề trang (Title Template)</span>
+              <span>Tên thương hiệu SEO / Tiêu đề trang chính</span>
               <input
-                name="seo_title_template"
-                defaultValue={seo.seo_title_template}
-                placeholder="%s | Minh Tâm 24H"
+                name="seo_site_name"
+                defaultValue={seo.seo_site_name || "Cửa Cuốn Minh Tâm 24H"}
+                placeholder="VD: Cửa Cuốn Minh Tâm 24H"
+                required
               />
-              <small style={{ color: "#64748b", fontSize: 12 }}>
-                Dùng <code>%s</code> làm chỗ chứa tên từng trang. VD: <em>Sửa Cửa Cuốn | Minh Tâm 24H</em>
+            </label>
+
+            <label className="full">
+              <span>Mô tả tìm kiếm Google (Meta Description) — Tối đa 160 ký tự</span>
+              <textarea
+                name="seo_default_description"
+                rows={3}
+                maxLength={160}
+                defaultValue={seo.seo_default_description}
+                placeholder="VD: Chuyên sửa chữa, lắp đặt cửa cuốn tại TP.HCM. Phục vụ 24/7, có mặt sau 15 phút, bảo hành dài hạn..."
+                required
+              />
+              <small style={{ color: "#64748b", fontSize: "12px" }}>
+                Đoạn văn ngắn gọn, thu hút khách hàng bấm vào link khi tìm kiếm trên Google.
               </small>
             </label>
 
-            <label>
-              <span>Tên website (Site Name)</span>
+            <label className="full">
+              <span>Từ khóa SEO chính (Keywords) — Cách nhau bởi dấu phẩy</span>
               <input
-                name="seo_site_name"
-                defaultValue={seo.seo_site_name}
-                placeholder="Cửa Cuốn Minh Tâm 24H"
+                name="seo_keywords"
+                defaultValue={seo.seo_keywords}
+                placeholder="sửa cửa cuốn, sửa cửa cuốn TP.HCM, motor cửa cuốn, remote cửa cuốn"
               />
             </label>
 
-            <label>
-              <span>URL gốc chuẩn (Canonical Base URL)</span>
+            <label className="full">
+              <span>Địa chỉ website chính thức (Canonical Base URL)</span>
               <input
                 type="url"
                 name="seo_canonical_base"
@@ -93,252 +138,78 @@ export default async function AdminSeoPage({
                 placeholder="https://www.suachuacuacuonnhanh24h.com"
               />
             </label>
-
-            <label className="full">
-              <span>Mô tả mặc định (Default Meta Description) — tối đa 160 ký tự</span>
-              <textarea
-                name="seo_default_description"
-                rows={3}
-                maxLength={160}
-                defaultValue={seo.seo_default_description}
-                placeholder="Chuyên sửa chữa, lắp đặt cửa cuốn tại TP.HCM. Phục vụ 24/7, thợ kỹ thuật chuyên nghiệp..."
-              />
-            </label>
-
-            <label className="full">
-              <span>Từ khóa SEO (Keywords) — phân cách bằng dấu phẩy</span>
-              <input
-                name="seo_keywords"
-                defaultValue={seo.seo_keywords}
-                placeholder="sửa cửa cuốn, cửa cuốn TP.HCM, motor cửa cuốn, phụ kiện cửa cuốn"
-              />
-            </label>
           </div>
         </section>
 
-        {/* ── 2. Open Graph (Facebook / Zalo) ── */}
+        {/* ── 2. Ảnh đại diện khi chia sẻ Zalo & Facebook (OG Image) ── */}
         <section className="admin-form-card">
           <div className="admin-form-section-title">
             <div>
-              <span><Share2 size={12} /> Mạng xã hội</span>
-              <h2>Open Graph (Facebook · Zalo · LinkedIn)</h2>
+              <span><Share2 size={12} /> Zalo · Facebook · Messenger</span>
+              <h2>Hình ảnh đại diện khi gửi link (Social Thumbnail)</h2>
             </div>
           </div>
 
           <div className="seo-preview-card">
             <div className="seo-preview-label">
-              <Globe size={13} /> Xem trước khi chia sẻ lên Facebook / Zalo
+              <Globe size={13} /> Xem trước khi gửi link qua Zalo / Facebook
             </div>
             <div className="seo-og-preview">
               <div className="seo-og-image">
-                <Image size={28} style={{ opacity: .35 }} />
-                <span>og:image</span>
+                {seo.og_image_url ? (
+                  <img
+                    src={seo.og_image_url}
+                    alt="Preview"
+                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                  />
+                ) : (
+                  <>
+                    <Image size={28} style={{ opacity: 0.35 }} />
+                    <span>Ảnh đại diện Zalo</span>
+                  </>
+                )}
               </div>
               <div className="seo-og-copy">
-                <span className="seo-og-site">{seo.seo_canonical_base?.replace(/https?:\/\//, "") || "yourdomain.com"}</span>
-                <b>{seo.og_title || seo.seo_site_name}</b>
-                <p>{seo.og_description || seo.seo_default_description}</p>
+                <span className="seo-og-site">
+                  {seo.seo_canonical_base?.replace(/https?:\/\//, "") || "suachuacuacuonnhanh24h.com"}
+                </span>
+                <b>{seo.seo_site_name || "Cửa Cuốn Minh Tâm"}</b>
+                <p>{seo.seo_default_description || "Dịch vụ sửa chữa cửa cuốn 24/7 uy tín TP.HCM"}</p>
               </div>
             </div>
           </div>
 
-          <div className="admin-fields two">
-            <label>
-              <span>OG Title</span>
-              <input
-                name="og_title"
-                defaultValue={seo.og_title}
-                placeholder="Cửa Cuốn Minh Tâm — Sửa chữa 24/7 TP.HCM"
-              />
-            </label>
-
-            <label>
-              <span>OG Locale</span>
-              <select name="og_locale" defaultValue={seo.og_locale}>
-                <option value="vi_VN">vi_VN — Tiếng Việt</option>
-                <option value="en_US">en_US — English</option>
-              </select>
-            </label>
-
+          <div className="admin-fields">
             <label className="full">
-              <span>OG Description</span>
-              <textarea
-                name="og_description"
-                rows={2}
-                maxLength={200}
-                defaultValue={seo.og_description}
-                placeholder="Chuyên sửa chữa, lắp đặt cửa cuốn 24/7 tại TP.HCM..."
-              />
-            </label>
-
-            <label className="full">
-              <span>OG Image URL — ảnh chia sẻ mạng xã hội (khuyến nghị 1200×630px)</span>
+              <span>Đường dẫn ảnh đại diện (OG Image URL) — Kích thước khuyến nghị: 1200×630px</span>
               <input
-                type="url"
+                type="text"
                 name="og_image_url"
                 defaultValue={seo.og_image_url}
-                placeholder="https://yourdomain.com/og.png"
+                placeholder="VD: /og.png hoặc https://domain.com/anh-dai-dien.jpg"
               />
+              <small style={{ color: "#64748b", fontSize: "12px" }}>
+                Ảnh này sẽ tự động xuất hiện làm ảnh bìa thumbnail khi bạn copy link gửi cho khách qua Zalo hoặc Facebook.
+              </small>
             </label>
           </div>
         </section>
 
-        {/* ── 3. Twitter Card ── */}
+        {/* ── 3. Trạng thái lập chỉ mục (Robots Index) ── */}
         <section className="admin-form-card">
           <div className="admin-form-section-title">
             <div>
-              <span><Twitter size={12} /> Twitter / X</span>
-              <h2>Twitter Card</h2>
+              <span><Eye size={12} /> Google Index</span>
+              <h2>Trạng thái hiển thị trên Google</h2>
             </div>
           </div>
 
-          <div className="admin-fields two">
+          <div className="admin-fields">
             <label>
-              <span>Loại card</span>
-              <select name="twitter_card" defaultValue={seo.twitter_card}>
-                <option value="summary_large_image">Summary Large Image (khuyến nghị)</option>
-                <option value="summary">Summary</option>
-                <option value="app">App</option>
-              </select>
-            </label>
-
-            <label>
-              <span>Twitter Site (@username)</span>
-              <input
-                name="twitter_site"
-                defaultValue={seo.twitter_site}
-                placeholder="@cuacuonminhtam"
-              />
-            </label>
-
-            <label>
-              <span>Twitter Title</span>
-              <input
-                name="twitter_title"
-                defaultValue={seo.twitter_title}
-                placeholder="Cửa Cuốn Minh Tâm 24H"
-              />
-            </label>
-
-            <label>
-              <span>Twitter Image URL</span>
-              <input
-                type="url"
-                name="twitter_image_url"
-                defaultValue={seo.twitter_image_url}
-                placeholder="https://yourdomain.com/og.png"
-              />
-            </label>
-
-            <label className="full">
-              <span>Twitter Description</span>
-              <textarea
-                name="twitter_description"
-                rows={2}
-                maxLength={200}
-                defaultValue={seo.twitter_description}
-                placeholder="Sửa chữa cửa cuốn 24/7 TP.HCM..."
-              />
-            </label>
-          </div>
-        </section>
-
-        {/* ── 4. Robots ── */}
-        <section className="admin-form-card">
-          <div className="admin-form-section-title">
-            <div>
-              <span><Eye size={12} /> Robots</span>
-              <h2>Robots.txt & Indexing</h2>
-            </div>
-          </div>
-
-          <div className="seo-robots-info">
-            <AlertTriangle size={15} />
-            <span>
-              Thay đổi robots có thể ảnh hưởng toàn bộ khả năng hiển thị trên Google.
-              Chỉ thay đổi nếu bạn hiểu rõ tác động.
-            </span>
-          </div>
-
-          <div className="admin-fields two">
-            <label>
-              <span>Index</span>
-              <select name="robots_index" defaultValue={seo.robots_index}>
-                <option value="index"><Eye size={14} /> index — Cho phép Google lập chỉ mục</option>
-                <option value="noindex"><EyeOff size={14} /> noindex — Ẩn khỏi Google</option>
-              </select>
-            </label>
-
-            <label>
-              <span>Follow</span>
-              <select name="robots_follow" defaultValue={seo.robots_follow}>
-                <option value="follow">follow — Google theo link</option>
-                <option value="nofollow">nofollow — Google không theo link</option>
-              </select>
-            </label>
-          </div>
-        </section>
-
-        {/* ── 5. Structured Data (JSON-LD) ── */}
-        <section className="admin-form-card">
-          <div className="admin-form-section-title">
-            <div>
-              <span><Globe size={12} /> Structured Data</span>
-              <h2>JSON-LD Schema (LocalBusiness)</h2>
-            </div>
-          </div>
-
-          <div className="seo-schema-info">
-            <span>📌</span>
-            <span>
-              Structured Data giúp Google hiển thị thông tin doanh nghiệp trực tiếp trên kết quả tìm kiếm
-              (Knowledge Panel, Rich Snippets). Schema type: <strong>LocalBusiness + HomeAndConstructionBusiness</strong>.
-            </span>
-          </div>
-
-          <div className="admin-fields two">
-            <label>
-              <span>Tên doanh nghiệp (schema:name)</span>
-              <input
-                name="structured_business_name"
-                defaultValue={seo.structured_business_name}
-                placeholder="Cửa Cuốn Minh Tâm 24H"
-              />
-            </label>
-
-            <label>
-              <span>Số điện thoại (schema:telephone)</span>
-              <input
-                name="structured_phone"
-                defaultValue={seo.structured_phone}
-                placeholder="0901 234 567"
-              />
-            </label>
-
-            <label>
-              <span>Thành phố (addressLocality)</span>
-              <input
-                name="structured_address_locality"
-                defaultValue={seo.structured_address_locality}
-                placeholder="TP. Hồ Chí Minh"
-              />
-            </label>
-
-            <label>
-              <span>Khu vực / Mã vùng (addressRegion)</span>
-              <input
-                name="structured_address_region"
-                defaultValue={seo.structured_address_region}
-                placeholder="VN-SG"
-              />
-            </label>
-
-            <label>
-              <span>Price Range (priceRange)</span>
-              <select name="structured_price_range" defaultValue={seo.structured_price_range}>
-                <option value="$">$ — Bình dân</option>
-                <option value="$$">$$ — Trung bình</option>
-                <option value="$$$">$$$ — Cao cấp</option>
+              <span>Cho phép Google tìm kiếm & lập chỉ mục website</span>
+              <select name="robots_index" defaultValue={seo.robots_index || "index"}>
+                <option value="index">🟢 index — Cho phép Google tìm thấy & hiển thị website (Khuyên dùng)</option>
+                <option value="noindex">🔴 noindex — Ẩn hoàn toàn website khỏi kết quả tìm kiếm Google</option>
               </select>
             </label>
           </div>
@@ -346,7 +217,7 @@ export default async function AdminSeoPage({
 
         {/* ── Save Bar ── */}
         <div className="admin-sticky-save">
-          <span>✓ Thay đổi SEO sẽ có hiệu lực ngay sau khi lưu và website được revalidate.</span>
+          <span>✓ Cấu hình SEO sau khi lưu sẽ đồng bộ tự động trên toàn bộ website.</span>
           <button type="submit" className="button button-primary">
             <Save size={18} />
             <span>Lưu cấu hình SEO</span>
