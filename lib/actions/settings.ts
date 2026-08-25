@@ -3,8 +3,8 @@
 import { revalidatePath, revalidateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { getAdminAccessToken, requireAdmin } from "@/lib/admin-auth";
-import { supabaseFetch } from "@/lib/supabase-rest";
-import { value } from "./helpers";
+import { publicAssetUrl, supabaseFetch } from "@/lib/supabase-rest";
+import { uploadObject, value } from "./helpers";
 
 export async function saveSettings(form: FormData) {
   await requireAdmin();
@@ -124,11 +124,25 @@ export async function saveSeoSettings(form: FormData) {
   await requireAdmin();
   const token = await getAdminAccessToken();
 
+  let ogImageUrl = value(form, "og_image_url") || "/og.png";
+
+  const ogImageFile = form.get("og_image_file");
+  if (ogImageFile instanceof File && ogImageFile.size > 0) {
+    try {
+      const path = await uploadObject(ogImageFile, "library", token);
+      const publicUrl = publicAssetUrl(path);
+      if (publicUrl) {
+        ogImageUrl = publicUrl;
+      }
+    } catch (err) {
+      console.error("Lỗi upload ảnh Social Thumbnail:", err);
+    }
+  }
+
   const siteName = value(form, "seo_site_name") || "Cửa Cuốn Minh Tâm 24H";
   const desc = value(form, "seo_default_description") || "";
   const keywords = value(form, "seo_keywords") || "";
   const canonicalBase = value(form, "seo_canonical_base") || "";
-  const ogImageUrl = value(form, "og_image_url") || "/og.png";
   const robotsIndex = value(form, "robots_index") || "index";
 
   const payload: Record<string, string> = {

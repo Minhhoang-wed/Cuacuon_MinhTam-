@@ -14,6 +14,7 @@ import {
 import Link from "next/link";
 import { saveSeoSettings } from "@/lib/admin-actions";
 import { getAdminSeoSettings } from "@/lib/admin-data";
+import { SeoImageUpload } from "@/components/admin/seo-image-upload";
 
 export default async function AdminSeoPage({
   searchParams,
@@ -150,49 +151,12 @@ export default async function AdminSeoPage({
             </div>
           </div>
 
-          <div className="seo-preview-card">
-            <div className="seo-preview-label">
-              <Globe size={13} /> Xem trước khi gửi link qua Zalo / Facebook
-            </div>
-            <div className="seo-og-preview">
-              <div className="seo-og-image">
-                {seo.og_image_url ? (
-                  <img
-                    src={seo.og_image_url}
-                    alt="Preview"
-                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                  />
-                ) : (
-                  <>
-                    <Image size={28} style={{ opacity: 0.35 }} />
-                    <span>Ảnh đại diện Zalo</span>
-                  </>
-                )}
-              </div>
-              <div className="seo-og-copy">
-                <span className="seo-og-site">
-                  {seo.seo_canonical_base?.replace(/https?:\/\//, "") || "suachuacuacuonnhanh24h.com"}
-                </span>
-                <b>{seo.seo_site_name || "Cửa Cuốn Minh Tâm"}</b>
-                <p>{seo.seo_default_description || "Dịch vụ sửa chữa cửa cuốn 24/7 uy tín TP.HCM"}</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="admin-fields">
-            <label className="full">
-              <span>Đường dẫn ảnh đại diện (OG Image URL) — Kích thước khuyến nghị: 1200×630px</span>
-              <input
-                type="text"
-                name="og_image_url"
-                defaultValue={seo.og_image_url}
-                placeholder="VD: /og.png hoặc https://domain.com/anh-dai-dien.jpg"
-              />
-              <small style={{ color: "#64748b", fontSize: "12px" }}>
-                Ảnh này sẽ tự động xuất hiện làm ảnh bìa thumbnail khi bạn copy link gửi cho khách qua Zalo hoặc Facebook.
-              </small>
-            </label>
-          </div>
+          <SeoImageUpload
+            initialImageUrl={seo.og_image_url || "/og.png"}
+            siteName={seo.seo_site_name || "Cửa Cuốn Minh Tâm"}
+            siteUrl={seo.seo_canonical_base || "https://www.suachuacuacuonnhanh24h.com"}
+            description={seo.seo_default_description || "Dịch vụ sửa chữa cửa cuốn 24/7 uy tín TP.HCM"}
+          />
         </section>
 
         {/* ── 3. Trạng thái lập chỉ mục (Robots Index) ── */}
