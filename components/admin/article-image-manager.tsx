@@ -97,8 +97,8 @@ export function ArticleImageManager({
       alert("Vui lòng chọn tệp hình ảnh hợp lệ (JPG, PNG, WEBP).");
       return;
     }
-    if (file.size > 5 * 1024 * 1024) {
-      alert("Dung lượng ảnh tối đa là 5MB.");
+    if (file.size > 10 * 1024 * 1024) {
+      alert("Dung lượng ảnh tối đa là 10MB.");
       return;
     }
 
@@ -448,7 +448,7 @@ export function ArticleImageManager({
                   Bấm để chọn tệp hoặc kéo thả vào đây
                 </b>
                 <span style={{ fontSize: "12px", color: "#64748b" }}>
-                  Hỗ trợ JPG, PNG, WebP (Tối đa 5MB)
+                  Hỗ trợ JPG, PNG, WebP (Tối đa 10MB)
                 </span>
 
                 {selectedFile && (

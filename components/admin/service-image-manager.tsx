@@ -97,8 +97,8 @@ export function ServiceImageManager({
       alert("Vui lòng chọn tệp hình ảnh hợp lệ (JPG, PNG, WEBP).");
       return;
     }
-    if (file.size > 5 * 1024 * 1024) {
-      alert("Dung lượng ảnh không được vượt quá 5MB.");
+    if (file.size > 10 * 1024 * 1024) {
+      alert("Dung lượng ảnh không được vượt quá 10MB.");
       return;
     }
 
@@ -239,7 +239,7 @@ export function ServiceImageManager({
             </div>
             <div className="admin-dropzone-text">
               <b>Kéo thả hoặc bấm để chọn ảnh minh họa dịch vụ</b>
-              <p>Hỗ trợ định dạng JPG, PNG, WebP — Kích thước đề xuất 800x600px (Tối đa 5MB)</p>
+              <p>Hỗ trợ định dạng JPG, PNG, WebP — Kích thước đề xuất 800x600px (Tối đa 10MB)</p>
               <span className="admin-dropzone-btn">
                 <Upload size={14} /> Duyệt ảnh từ máy tính
               </span>

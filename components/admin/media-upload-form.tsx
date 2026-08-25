@@ -133,7 +133,7 @@ export function MediaUploadForm({ demo = false }: { demo?: boolean }) {
             Bấm để chọn ảnh từ máy tính hoặc kéo thả vào đây
           </b>
           <span style={{ fontSize: "13px", color: "#64748b" }}>
-            Hỗ trợ định dạng JPG, PNG, WebP · Tối đa 5MB mỗi ảnh
+            Hỗ trợ định dạng JPG, PNG, WebP · Tối đa 10MB mỗi ảnh
           </span>
         </div>
       </div>

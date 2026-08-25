@@ -12,10 +12,10 @@ const nextConfig: NextConfig = {
     ],
   },
   experimental: {
-    // Media library accepts 10 images x 5 MB; keep a small allowance for
+    // Media library accepts 10 images x 10 MB; keep a small allowance for
     // multipart metadata while still enforcing each file in the server action.
     serverActions: {
-      bodySizeLimit: "55mb",
+      bodySizeLimit: "120mb",
     },
   },
   turbopack: {

@@ -5,7 +5,7 @@ export const runtime = "nodejs";
 
 const allowedTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
 const MAX_FILES = 4;
-const MAX_FILE_SIZE = 5 * 1024 * 1024;
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
 
 function text(form: FormData, key: string) { const value = form.get(key); return typeof value === "string" ? value.trim() : ""; }
 function requestCode() { const date = new Date(); const stamp = `${String(date.getFullYear()).slice(-2)}${String(date.getMonth() + 1).padStart(2, "0")}${String(date.getDate()).padStart(2, "0")}`; return `AT-${stamp}-${crypto.randomUUID().slice(0, 6).toUpperCase()}`; }
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
     const images = form.getAll("images").filter((item): item is File => item instanceof File && item.size > 0);
     if (images.length > MAX_FILES) return NextResponse.json({ ok: false, message: `Chỉ nhận tối đa ${MAX_FILES} ảnh.` }, { status: 400 });
     for (const image of images) {
-      if (!allowedTypes.has(image.type) || image.size > MAX_FILE_SIZE) return NextResponse.json({ ok: false, message: "Ảnh phải là JPG, PNG hoặc WebP và không quá 5MB." }, { status: 400 });
+      if (!allowedTypes.has(image.type) || image.size > MAX_FILE_SIZE) return NextResponse.json({ ok: false, message: "Ảnh phải là JPG, PNG hoặc WebP và không quá 10MB." }, { status: 400 });
     }
 
     const code = requestCode();

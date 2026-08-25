@@ -30,8 +30,8 @@ export async function uploadObject(file: File, folder: string, token: string): P
   const config = getSupabaseConfig();
   if (!config) throw new Error("Supabase chưa được cấu hình.");
   const allowed = new Set(["image/jpeg", "image/png", "image/webp"]);
-  if (!allowed.has(file.type) || file.size > 5 * 1024 * 1024) {
-    throw new Error("Ảnh phải là JPG, PNG hoặc WebP và không quá 5MB.");
+  if (!allowed.has(file.type) || file.size > 10 * 1024 * 1024) {
+    throw new Error("Ảnh phải là JPG, PNG hoặc WebP và không quá 10MB.");
   }
   const safe = file.name
     .normalize("NFD")

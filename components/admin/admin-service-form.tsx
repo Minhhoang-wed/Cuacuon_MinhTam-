@@ -127,7 +127,7 @@ export function AdminServiceForm({ service }: { service?: AdminServiceRow | null
         </div>
 
         <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", padding: "12px 14px", borderRadius: "8px", fontSize: "13px", color: "#166534", lineHeight: 1.5, marginBottom: "16px" }}>
-          💡 <strong>Tỷ lệ ảnh chuẩn đẹp nhất:</strong> Tỷ lệ <strong>16:10 hoặc 4:3</strong> (Kích thước đề xuất: <strong>800 × 500 px</strong> hoặc <strong>1200 × 750 px</strong>, dung lượng dưới 5MB). Hệ thống đã tự động định dạng khung chuẩn cố định, ảnh tải lên sẽ luôn hiển thị đầy đủ, không bị méo hay vỡ khung trên mọi thiết bị.
+          💡 <strong>Tỷ lệ ảnh chuẩn đẹp nhất:</strong> Tỷ lệ <strong>16:10 hoặc 4:3</strong> (Kích thước đề xuất: <strong>800 × 500 px</strong> hoặc <strong>1200 × 750 px</strong>, dung lượng dưới 10MB). Hệ thống đã tự động định dạng khung chuẩn cố định, ảnh tải lên sẽ luôn hiển thị đầy đủ, không bị méo hay vỡ khung trên mọi thiết bị.
         </div>
 
         <div style={{ marginBottom: "20px" }}>

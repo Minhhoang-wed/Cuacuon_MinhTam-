@@ -35,7 +35,7 @@ export default async function AdminMediaPage({
         <div>
           <ImagePlus size={32} />
           <h2>Tải ảnh lên kho</h2>
-          <p>Hỗ trợ định dạng JPG, PNG, WebP · Dung lượng tối đa 5MB/ảnh · Có thể chọn tối đa 10 ảnh cùng lúc.</p>
+          <p>Hỗ trợ định dạng JPG, PNG, WebP · Dung lượng tối đa 10MB/ảnh · Có thể chọn tối đa 10 ảnh cùng lúc.</p>
         </div>
 
         <MediaUploadForm demo={demo} />

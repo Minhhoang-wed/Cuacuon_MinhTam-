@@ -29,8 +29,8 @@ export function SeoImageUpload({
         alert("Vui lòng chọn file hình ảnh (JPG, PNG, WebP)!");
         return;
       }
-      if (file.size > 5 * 1024 * 1024) {
-        alert("Dung lượng ảnh tối đa là 5MB!");
+      if (file.size > 10 * 1024 * 1024) {
+        alert("Dung lượng ảnh tối đa là 10MB!");
         return;
       }
       setFileName(file.name);
@@ -48,8 +48,8 @@ export function SeoImageUpload({
         alert("Vui lòng chọn file hình ảnh (JPG, PNG, WebP)!");
         return;
       }
-      if (file.size > 5 * 1024 * 1024) {
-        alert("Dung lượng ảnh tối đa là 5MB!");
+      if (file.size > 10 * 1024 * 1024) {
+        alert("Dung lượng ảnh tối đa là 10MB!");
         return;
       }
       if (fileInputRef.current) {
@@ -160,7 +160,7 @@ export function SeoImageUpload({
             {hasNewFile ? `Đã chọn: ${fileName}` : "Bấm để tải ảnh lên từ máy tính hoặc kéo thả vào đây"}
           </p>
           <span style={{ fontSize: "12.5px", color: "#64748b" }}>
-            Hỗ trợ file JPG, PNG, WEBP (Dung lượng tối đa 5MB · Kích thước đẹp nhất: 1200×630px)
+            Hỗ trợ file JPG, PNG, WEBP (Dung lượng tối đa 10MB · Kích thước đẹp nhất: 1200×630px)
           </span>
         </div>
 
