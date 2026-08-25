@@ -316,12 +316,15 @@ type DbServicePriceItem = {
 };
 
 export async function getServicePricing(): Promise<CatalogServicePriceCategory[]> {
+  const sortCategories = (cats: CatalogServicePriceCategory[]) =>
+    [...cats].sort((a, b) => a.categoryTitle.localeCompare(b.categoryTitle, "vi", { numeric: true }));
+
   if (!getSupabaseConfig()) {
-    return servicePriceCategories as unknown as CatalogServicePriceCategory[];
+    return sortCategories(servicePriceCategories as unknown as CatalogServicePriceCategory[]);
   }
   try {
     const rows = await supabaseFetch<DbServicePriceItem[]>(
-      "/rest/v1/service_price_items?select=*&is_active=eq.true&order=sort_order.asc,created_at.asc",
+      "/rest/v1/service_price_items?select=*&is_active=eq.true&order=category_name.asc,sort_order.asc,created_at.asc",
       { next: { revalidate: 300, tags: ["service-pricing"] } }
     );
     if (rows && rows.length > 0) {
@@ -335,15 +338,17 @@ export async function getServicePricing(): Promise<CatalogServicePriceCategory[]
           warranty: row.warranty,
         });
       }
-      return Object.entries(grouped).map(([categoryTitle, items]) => ({
-        categoryTitle,
-        items,
-      }));
+      return sortCategories(
+        Object.entries(grouped).map(([categoryTitle, items]) => ({
+          categoryTitle,
+          items,
+        }))
+      );
     }
   } catch (error) {
     console.error("Lỗi khi tải bảng giá dịch vụ từ Supabase:", error);
   }
-  return servicePriceCategories as unknown as CatalogServicePriceCategory[];
+  return sortCategories(servicePriceCategories as unknown as CatalogServicePriceCategory[]);
 }
 
 // -------------------------------------------------------------
