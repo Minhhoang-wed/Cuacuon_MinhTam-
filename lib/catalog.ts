@@ -315,6 +315,11 @@ type DbServicePriceItem = {
   is_active: boolean;
 };
 
+function getCategorySortNumber(title: string): number {
+  const match = title.trim().match(/^(\d+)/);
+  return match ? parseInt(match[1], 10) : 9999;
+}
+
 export async function getServicePricing(): Promise<CatalogServicePriceCategory[]> {
   if (!getSupabaseConfig()) {
     return servicePriceCategories as unknown as CatalogServicePriceCategory[];
@@ -325,7 +330,7 @@ export async function getServicePricing(): Promise<CatalogServicePriceCategory[]
       { next: { revalidate: 300, tags: ["service-pricing"] } }
     );
     if (rows && rows.length > 0) {
-      const grouped: Record<string, Array<{ id?: string; name: string; price: string; warranty: string }>> = {};
+      const grouped: Record<string, Array<{ id?: string; name: string; price: string; warranty: string; sort_order?: number }>> = {};
       for (const row of rows) {
         if (!grouped[row.category_name]) grouped[row.category_name] = [];
         grouped[row.category_name].push({
@@ -333,12 +338,20 @@ export async function getServicePricing(): Promise<CatalogServicePriceCategory[]
           name: row.item_name,
           price: row.price,
           warranty: row.warranty,
+          sort_order: row.sort_order,
         });
       }
-      return Object.entries(grouped).map(([categoryTitle, items]) => ({
-        categoryTitle,
-        items,
-      }));
+      return Object.entries(grouped)
+        .map(([categoryTitle, items]) => ({
+          categoryTitle,
+          items: items.sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0)),
+        }))
+        .sort((a, b) => {
+          const numA = getCategorySortNumber(a.categoryTitle);
+          const numB = getCategorySortNumber(b.categoryTitle);
+          if (numA !== numB) return numA - numB;
+          return a.categoryTitle.localeCompare(b.categoryTitle, "vi", { numeric: true });
+        });
     }
   } catch (error) {
     console.error("Lỗi khi tải bảng giá dịch vụ từ Supabase:", error);

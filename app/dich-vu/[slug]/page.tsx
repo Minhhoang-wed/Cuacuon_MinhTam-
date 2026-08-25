@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ArrowLeft, CheckCircle2, MessageCircle, Phone } from "lucide-react";
+import { ArrowLeft, MessageCircle, Phone } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CtaBand } from "@/components/cta-band";
@@ -110,41 +110,6 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
           </div>
         </div>
       </section>
-      {((service.symptoms && service.symptoms.length > 0) || (service.process && service.process.length > 0)) && (
-        <section className="section" style={{ background: "#ffffff" }}>
-          <div className="container" style={{ maxWidth: "1000px" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "48px" }}>
-              {service.symptoms && service.symptoms.length > 0 && (
-                <div>
-                  <h2 style={{ fontSize: "24px", fontWeight: "700", color: "#0a2540", margin: "0 0 18px" }}>
-                    Dấu hiệu thường gặp
-                  </h2>
-                  <ul className="check-list">
-                    {service.symptoms.map((item) => (
-                      <li key={item}><CheckCircle2 /> {item}</li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              {service.process && service.process.length > 0 && (
-                <div>
-                  <h2 style={{ fontSize: "24px", fontWeight: "700", color: "#0a2540", margin: "0 0 18px" }}>
-                    Quy trình xử lý
-                  </h2>
-                  <ol className="number-list">
-                    {service.process.map((item, index) => (
-                      <li key={item}>
-                        <b>{String(index + 1).padStart(2, "0")}</b>
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              )}
-            </div>
-          </div>
-        </section>
-      )}
       <CtaBand compact />
     </>
   );

@@ -99,7 +99,14 @@ export default async function ServicesPage() {
 
           {/* Các Bảng giá chi tiết theo danh mục từ CMS */}
           <div className="repair-price-tables-grid">
-            {servicePriceCategories.map((cat) => (
+            {[...servicePriceCategories]
+              .sort((a, b) => {
+                const numA = parseInt(a.categoryTitle.trim().match(/^(\d+)/)?.[1] || "9999", 10);
+                const numB = parseInt(b.categoryTitle.trim().match(/^(\d+)/)?.[1] || "9999", 10);
+                if (numA !== numB) return numA - numB;
+                return a.categoryTitle.localeCompare(b.categoryTitle, "vi", { numeric: true });
+              })
+              .map((cat) => (
               <div className="repair-price-category-card" key={cat.categoryTitle}>
                 <div className="repair-price-category-header">
                   <h3 style={{ color: "#ffffff", margin: 0 }}>{cat.categoryTitle}</h3>
