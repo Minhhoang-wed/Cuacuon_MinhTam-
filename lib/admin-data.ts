@@ -1,5 +1,5 @@
 import { getAdminAccessToken } from "@/lib/admin-auth";
-import { getCategories, getHomepageContent, getProducts, getSiteSettings, getProjects as getPublicProjects, getServices as getPublicServices, getArticles as getPublicArticles, getStoreBranches as getPublicStoreBranches, getServiceDistricts as getPublicServiceDistricts, getServicePricing as getPublicServicePricing } from "@/lib/catalog";
+import { getCategories, getHomepageContent, getAboutContent, getProducts, getSiteSettings, getProjects as getPublicProjects, getServices as getPublicServices, getArticles as getPublicArticles, getStoreBranches as getPublicStoreBranches, getServiceDistricts as getPublicServiceDistricts, getServicePricing as getPublicServicePricing } from "@/lib/catalog";
 import { getSupabaseConfig, supabaseFetch } from "@/lib/supabase-rest";
 import type {
   AdminCategoryRow,
@@ -296,41 +296,145 @@ export async function getAdminServiceRequest(id: string): Promise<AdminServiceRe
 
 export async function getAdminMedia() { if (!getSupabaseConfig()) return []; const token = await getAdminAccessToken(); return supabaseFetch<MediaRow[]>("/rest/v1/media_assets?select=*&order=created_at.desc&limit=100", { cache: "no-store" }, token); }
 export async function getAdminSettings() {
+  const [site, branches] = await Promise.all([
+    getSiteSettings(),
+    getAdminStoreBranches(),
+  ]);
+  const defaultB1Name = branches[0]?.branch_name || site.branch1Name || "Cơ sở 1 (Trụ sở Quận 10)";
+  const defaultB1Addr = branches[0]?.address || site.branch1Address || site.address || "361 Lý Thường Kiệt, P. Tân Hòa, Quận 10, TP.HCM";
+  const defaultB2Name = branches[1]?.branch_name || site.branch2Name || "Cơ sở 2 (Chi nhánh Quận 6)";
+  const defaultB2Addr = branches[1]?.address || site.branch2Address || "617 Phạm Văn Chí, P. Bình Tiên, Quận 6, TP.HCM";
+
   if (!getSupabaseConfig()) {
-    const x = await getSiteSettings();
     return {
-      company_name: x.name,
-      short_name: x.shortName,
-      site_description: x.description,
-      hotline: x.hotline,
-      zalo_url: x.zaloHref,
-      email: x.email,
-      address: x.address,
-      facebook_url: x.facebookHref,
-      messenger_url: x.messengerHref,
-      maps_url: x.mapsHref,
-      business_hours: x.hours,
-      service_area: x.serviceArea,
+      company_name: site.name,
+      short_name: site.shortName,
+      site_description: site.description,
+      hotline: site.hotline,
+      zalo_url: site.zaloHref,
+      email: site.email,
+      address: site.address,
+      branch_1_name: defaultB1Name,
+      branch_1_address: defaultB1Addr,
+      branch_2_name: defaultB2Name,
+      branch_2_address: defaultB2Addr,
+      facebook_url: site.facebookHref,
+      messenger_url: site.messengerHref,
+      maps_url: site.mapsHref,
+      business_hours: site.hours,
+      service_area: site.serviceArea,
+    };
+  }
+
+  try {
+    const token = await getAdminAccessToken();
+    const rows = await supabaseFetch<Array<Record<string, string | null>>>(
+      "/rest/v1/site_settings?id=eq.main&select=*&limit=1",
+      { cache: "no-store" },
+      token
+    ).catch(() => []);
+    const row = rows[0] || {};
+    const rawHotline = row.hotline || "";
+    const hotline = (rawHotline && !rawHotline.includes("0909") && !rawHotline.includes("0901")) ? rawHotline : "0327 359 368";
+    const rawZalo = row.zalo_url || "";
+    const zalo_url = (rawZalo && !rawZalo.includes("0909") && !rawZalo.includes("0901")) ? rawZalo : "https://zalo.me/0327359368";
+    return {
+      ...row,
+      hotline,
+      zalo_url,
+      branch_1_name: row.branch_1_name || defaultB1Name,
+      branch_1_address: row.branch_1_address || defaultB1Addr,
+      branch_2_name: row.branch_2_name || defaultB2Name,
+      branch_2_address: row.branch_2_address || defaultB2Addr,
+    };
+  } catch {
+    return {
+      company_name: site.name,
+      short_name: site.shortName,
+      site_description: site.description,
+      hotline: site.hotline,
+      zalo_url: site.zaloHref,
+      email: site.email,
+      address: site.address,
+      branch_1_name: defaultB1Name,
+      branch_1_address: defaultB1Addr,
+      branch_2_name: defaultB2Name,
+      branch_2_address: defaultB2Addr,
+      facebook_url: site.facebookHref,
+      messenger_url: site.messengerHref,
+      maps_url: site.mapsHref,
+      business_hours: site.hours,
+      service_area: site.serviceArea,
+    };
+  }
+}
+export async function getAdminHomepage() { if (!getSupabaseConfig()) { const x = await getHomepageContent(); return { hero_eyebrow: x.heroEyebrow, hero_title: x.heroTitle, hero_emphasis: x.heroEmphasis, hero_description: x.heroDescription, hero_cta_label: x.heroCtaLabel, intro_title: x.introTitle, intro_text: x.introText }; } const token = await getAdminAccessToken(); const rows = await supabaseFetch<Array<Record<string,string | null>>>("/rest/v1/homepage_content?id=eq.main&select=*&limit=1", { cache: "no-store" }, token); return rows[0] || {}; }
+
+export async function getAdminAboutContent() {
+  if (!getSupabaseConfig()) {
+    const x = await getAboutContent();
+    return {
+      hero_title: x.heroTitle,
+      hero_description: x.heroDescription,
+      hero_image: x.heroImage,
+      philosophy_kicker: x.philosophyKicker,
+      philosophy_title: x.philosophyTitle,
+      philosophy_text_1: x.philosophyText1,
+      philosophy_text_2: x.philosophyText2,
+      image_1_url: x.image1Url,
+      image_2_url: x.image2Url,
+      values_heading: x.valuesHeading,
+      value_1_title: x.value1Title,
+      value_1_text: x.value1Text,
+      value_2_title: x.value2Title,
+      value_2_text: x.value2Text,
+      value_3_title: x.value3Title,
+      value_3_text: x.value3Text,
+      process_heading: x.processHeading,
+      process_step_1: x.processStep1,
+      process_step_2: x.processStep2,
+      process_step_3: x.processStep3,
+      process_step_4: x.processStep4,
+      process_step_5: x.processStep5,
     };
   }
   const token = await getAdminAccessToken();
-  const rows = await supabaseFetch<Array<Record<string, string | null>>>(
-    "/rest/v1/site_settings?id=eq.main&select=*&limit=1",
-    { cache: "no-store" },
-    token
-  );
-  const row = rows[0] || {};
-  const rawHotline = row.hotline || "";
-  const hotline = (rawHotline && !rawHotline.includes("0909") && !rawHotline.includes("0901")) ? rawHotline : "0327 359 368";
-  const rawZalo = row.zalo_url || "";
-  const zalo_url = (rawZalo && !rawZalo.includes("0909") && !rawZalo.includes("0901")) ? rawZalo : "https://zalo.me/0327359368";
+  try {
+    const rows = await supabaseFetch<Array<Record<string, string | null>>>(
+      "/rest/v1/about_content?id=eq.main&select=*&limit=1",
+      { cache: "no-store" },
+      token
+    ).catch(() => []);
+    if (rows && rows[0]) return rows[0];
+  } catch (error) {
+    console.warn("Chưa có bảng about_content, sử dụng dữ liệu mặc định.");
+  }
+  const x = await getAboutContent();
   return {
-    ...row,
-    hotline,
-    zalo_url,
+    hero_title: x.heroTitle,
+    hero_description: x.heroDescription,
+    hero_image: x.heroImage,
+    philosophy_kicker: x.philosophyKicker,
+    philosophy_title: x.philosophyTitle,
+    philosophy_text_1: x.philosophyText1,
+    philosophy_text_2: x.philosophyText2,
+    image_1_url: x.image1Url,
+    image_2_url: x.image2Url,
+    values_heading: x.valuesHeading,
+    value_1_title: x.value1Title,
+    value_1_text: x.value1Text,
+    value_2_title: x.value2Title,
+    value_2_text: x.value2Text,
+    value_3_title: x.value3Title,
+    value_3_text: x.value3Text,
+    process_heading: x.processHeading,
+    process_step_1: x.processStep1,
+    process_step_2: x.processStep2,
+    process_step_3: x.processStep3,
+    process_step_4: x.processStep4,
+    process_step_5: x.processStep5,
   };
 }
-export async function getAdminHomepage() { if (!getSupabaseConfig()) { const x = await getHomepageContent(); return { hero_eyebrow: x.heroEyebrow, hero_title: x.heroTitle, hero_emphasis: x.heroEmphasis, hero_description: x.heroDescription, hero_cta_label: x.heroCtaLabel, intro_title: x.introTitle, intro_text: x.introText }; } const token = await getAdminAccessToken(); const rows = await supabaseFetch<Array<Record<string,string | null>>>("/rest/v1/homepage_content?id=eq.main&select=*&limit=1", { cache: "no-store" }, token); return rows[0] || {}; }
 
 export async function getAdminOverview() {
   if (!getSupabaseConfig()) {

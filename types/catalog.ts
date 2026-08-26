@@ -138,8 +138,12 @@ export type ManagedSiteConfig = {
   mapsHref: string;
   serviceArea: string;
   baseUrl: string;
-  facebookHref: string;
-  messengerHref: string;
+  branch1Name?: string;
+  branch1Address?: string;
+  branch2Name?: string;
+  branch2Address?: string;
+  facebookHref?: string;
+  messengerHref?: string;
   seoTitleTemplate?: string;
   seoKeywords?: string;
   seoCanonicalBase?: string;
@@ -167,4 +171,29 @@ export type HomepageContent = {
   heroCtaLabel: string;
   introTitle: string;
   introText: string;
+};
+
+export type AboutPageContent = {
+  heroTitle: string;
+  heroDescription: string;
+  heroImage: string;
+  philosophyKicker: string;
+  philosophyTitle: string;
+  philosophyText1: string;
+  philosophyText2: string;
+  image1Url?: string;
+  image2Url?: string;
+  valuesHeading: string;
+  value1Title: string;
+  value1Text: string;
+  value2Title: string;
+  value2Text: string;
+  value3Title: string;
+  value3Text: string;
+  processHeading: string;
+  processStep1: string;
+  processStep2: string;
+  processStep3: string;
+  processStep4: string;
+  processStep5: string;
 };

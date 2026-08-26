@@ -5,6 +5,7 @@ import {
   Building2,
   ExternalLink,
   FolderTree,
+  FileText,
   Home,
   ImageIcon,
   LayoutDashboard,
@@ -60,6 +61,7 @@ const navGroups: NavGroup[] = [
     title: "Hệ thống & Cấu hình",
     items: [
       { href: "/admin/homepage", label: "Nội dung Trang chủ", icon: Home },
+      { href: "/admin/about", label: "Trang Giới thiệu", icon: FileText },
       { href: "/admin/media", label: "Thư viện hình ảnh", icon: ImageIcon },
       { href: "/admin/settings", label: "Cấu hình website", icon: Settings },
     ],

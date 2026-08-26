@@ -2,9 +2,20 @@ import { ArrowRight, Clock3, Mail, MapPin, MessageCircle, Phone, ShieldCheck } f
 import Link from "next/link";
 import { PublicLogo } from "@/components/public-logo";
 import { directStores } from "@/data/public-home";
-import type { ManagedSiteConfig } from "@/lib/catalog";
+import type { CatalogStoreBranch, ManagedSiteConfig } from "@/lib/catalog";
 
-export function SiteFooter({ site }: { site: ManagedSiteConfig }) {
+export function SiteFooter({ site, branches = [] }: { site: ManagedSiteConfig; branches?: CatalogStoreBranch[] }) {
+  const displayBranches = branches.length > 0 ? branches : directStores.map((s) => ({
+    id: s.branch,
+    branchName: s.branch,
+    address: s.address,
+    hotline: site.hotline,
+    note: s.note,
+    badge: (s as unknown as { badge?: string }).badge || "Cửa hàng trực tiếp",
+    sortOrder: 0,
+    isActive: true,
+  }));
+
   return (
     <footer className="footer-maison">
       <div className="container footer-maison-grid">
@@ -54,32 +65,69 @@ export function SiteFooter({ site }: { site: ManagedSiteConfig }) {
               <strong className="footer-hotline-number">{site.hotline}</strong>
             </a>
 
-            {/* 2 Chi nhánh trực tiếp */}
-            {directStores.map((store, idx) => (
-              <a
-                key={idx}
-                href={site.mapsHref || "https://maps.google.com"}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  display: "flex",
-                  alignItems: "flex-start",
-                  gap: "9px",
-                  textDecoration: "none",
-                  color: "inherit",
-                }}
-              >
-                <MapPin size={16} style={{ flexShrink: 0, marginTop: "2px", color: "var(--lovable-gold, #f59e0b)" }} />
-                <span>
-                  <strong style={{ color: "#ffffff", display: "block", fontSize: "12.5px", marginBottom: "2px" }}>
-                    {store.branch}
-                  </strong>
-                  <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.78)", lineHeight: 1.45, display: "block" }}>
-                    {store.address}
+            {/* Cơ sở 1 */}
+            {(() => {
+              const b1Name = site.branch1Name || (displayBranches[0]?.branchName) || "Cơ sở 1 (Trụ sở Quận 10)";
+              const b1Addr = site.branch1Address || (displayBranches[0]?.address) || "361 Lý Thường Kiệt, P. Tân Hòa, Quận 10, TP.HCM";
+              const b1MapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b1Addr)}`;
+              return (
+                <a
+                  href={b1MapUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  title={`Mở bản đồ Google Maps chỉ đường tới ${b1Name}`}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "9px",
+                    textDecoration: "none",
+                    color: "inherit",
+                  }}
+                >
+                  <MapPin size={16} style={{ flexShrink: 0, marginTop: "2px", color: "var(--lovable-gold, #f59e0b)" }} />
+                  <span>
+                    <strong style={{ color: "#ffffff", display: "block", fontSize: "12.5px", marginBottom: "2px" }}>
+                      {b1Name}
+                    </strong>
+                    <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.78)", lineHeight: 1.45, display: "block" }}>
+                      {b1Addr}
+                    </span>
                   </span>
-                </span>
-              </a>
-            ))}
+                </a>
+              );
+            })()}
+
+            {/* Cơ sở 2 */}
+            {(() => {
+              const b2Name = site.branch2Name || (displayBranches[1]?.branchName) || "Cơ sở 2 (Chi nhánh Quận 6)";
+              const b2Addr = site.branch2Address || (displayBranches[1]?.address) || "617 Phạm Văn Chí, P. Bình Tiên, Quận 6, TP.HCM";
+              const b2MapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b2Addr)}`;
+              return (
+                <a
+                  href={b2MapUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  title={`Mở bản đồ Google Maps chỉ đường tới ${b2Name}`}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "9px",
+                    textDecoration: "none",
+                    color: "inherit",
+                  }}
+                >
+                  <MapPin size={16} style={{ flexShrink: 0, marginTop: "2px", color: "var(--lovable-gold, #f59e0b)" }} />
+                  <span>
+                    <strong style={{ color: "#ffffff", display: "block", fontSize: "12.5px", marginBottom: "2px" }}>
+                      {b2Name}
+                    </strong>
+                    <span style={{ fontSize: "12px", color: "rgba(255,255,255,0.78)", lineHeight: 1.45, display: "block" }}>
+                      {b2Addr}
+                    </span>
+                  </span>
+                </a>
+              );
+            })()}
 
             <a href={`mailto:${site.email}`}>
               <Mail size={16} />

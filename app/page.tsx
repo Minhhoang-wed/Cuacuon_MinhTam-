@@ -108,6 +108,11 @@ export default async function HomePage() {
         hotlineHref={site.hotlineHref}
         hotline={site.hotline}
         zaloHref={site.zaloHref}
+        eyebrow={homepage.heroEyebrow}
+        title={homepage.heroTitle}
+        emphasis={homepage.heroEmphasis}
+        description={homepage.heroDescription}
+        ctaLabel={homepage.heroCtaLabel}
       />
 
       <section className="repair-section repair-trust-section" id="vi-sao-chon-minh-tam">
@@ -176,14 +181,19 @@ export default async function HomePage() {
                     </Link>
                   </h3>
                   <p>{service.summary}</p>
-                  <div className="repair-service-price-stack">
-                    <b className="service-price">{service.price}</b>
-                    {service.warranty && (
-                      <>
-                        <span className="service-divider">|</span>
-                        <span className="service-warranty">{service.warranty}</span>
-                      </>
-                    )}
+                  <div className="repair-service-footer">
+                    <div className="repair-service-price-stack">
+                      <b className="service-price">{service.price}</b>
+                      {service.warranty && (
+                        <>
+                          <span className="service-divider">|</span>
+                          <span className="service-warranty">{service.warranty}</span>
+                        </>
+                      )}
+                    </div>
+                    <Link href={`/dich-vu/${service.slug}`} className="repair-service-btn">
+                      Chi tiết <ArrowRight size={13} />
+                    </Link>
                   </div>
                 </div>
               </article>

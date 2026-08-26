@@ -7,3 +7,4 @@ export * from "./branches";
 export * from "./settings";
 export * from "./requests";
 export * from "./media";
+export * from "./about";

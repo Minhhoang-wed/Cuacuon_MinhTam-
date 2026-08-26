@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "@cloudimage/360-view/css";
 import "./globals.css";
 import { SiteShell } from "@/components/site-shell";
-import { getSiteSettings } from "@/lib/catalog";
+import { getSiteSettings, getStoreBranches } from "@/lib/catalog";
 
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getSiteSettings();
@@ -63,11 +63,13 @@ export async function generateMetadata(): Promise<Metadata> {
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#0b2a3c" };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const site = await getSiteSettings();
+  const [site, branches] = await Promise.all([getSiteSettings(), getStoreBranches()]);
   return (
     <html lang="vi" data-scroll-behavior="smooth">
       <body>
-        <SiteShell site={site}>{children}</SiteShell>
+        <SiteShell site={site} branches={branches}>
+          {children}
+        </SiteShell>
       </body>
     </html>
   );

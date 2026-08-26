@@ -67,14 +67,19 @@ export default async function ServicesPage() {
                     </Link>
                   </h3>
                   <p>{service.summary}</p>
-                  <div className="repair-service-price-stack">
-                    <b className="service-price">{service.price}</b>
-                    {service.warranty && (
-                      <>
-                        <span className="service-divider">|</span>
-                        <span className="service-warranty">{service.warranty}</span>
-                      </>
-                    )}
+                  <div className="repair-service-footer">
+                    <div className="repair-service-price-stack">
+                      <b className="service-price">{service.price}</b>
+                      {service.warranty && (
+                        <>
+                          <span className="service-divider">|</span>
+                          <span className="service-warranty">{service.warranty}</span>
+                        </>
+                      )}
+                    </div>
+                    <Link href={`/dich-vu/${service.slug}`} className="repair-service-btn">
+                      Chi tiết <ArrowRight size={13} />
+                    </Link>
                   </div>
                 </div>
               </article>

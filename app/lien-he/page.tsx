@@ -3,7 +3,7 @@ import { ArrowRight, CheckCircle2, Clock3, Mail, MapPin, MessageCircle, Phone, S
 import { Breadcrumb } from "@/components/breadcrumb";
 import { PageHero } from "@/components/page-hero";
 import { directStores } from "@/data/public-home";
-import { getSiteSettings } from "@/lib/catalog";
+import { getSiteSettings, getStoreBranches } from "@/lib/catalog";
 
 export const metadata: Metadata = {
   title: "Liên hệ & Tư vấn qua Zalo / Hotline",
@@ -12,7 +12,17 @@ export const metadata: Metadata = {
 };
 
 export default async function ContactPage() {
-  const site = await getSiteSettings();
+  const [site, branches] = await Promise.all([getSiteSettings(), getStoreBranches()]);
+  const displayBranches = branches.length > 0 ? branches : directStores.map((s) => ({
+    id: s.branch,
+    branchName: s.branch,
+    address: s.address,
+    hotline: site.hotline,
+    note: s.note,
+    badge: (s as unknown as { badge?: string }).badge || "Cửa hàng trực tiếp",
+    sortOrder: 0,
+    isActive: true,
+  }));
 
   return (
     <>
@@ -131,21 +141,57 @@ export default async function ContactPage() {
               </a>
 
               <div style={{ display: "flex", flexDirection: "column", gap: "14px", marginTop: "24px", paddingTop: "20px", borderTop: "1px solid var(--border-color)" }}>
-                {directStores.map((store, idx) => (
-                  <a
-                    key={idx}
-                    href={site.mapsHref || "https://maps.google.com"}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{ display: "flex", alignItems: "flex-start", gap: "12px", color: "var(--text-body)", textDecoration: "none", fontSize: "14px" }}
-                  >
-                    <MapPin size={18} color="var(--accent-color)" style={{ flexShrink: 0, marginTop: "2px" }} />
-                    <span>
-                      <strong style={{ display: "block", color: "var(--text-title, #0f172a)", marginBottom: "2px" }}>{store.branch}</strong>
-                      <span style={{ color: "#64748b", fontSize: "13.5px" }}>{store.address}</span>
-                    </span>
-                  </a>
-                ))}
+                {/* Cơ sở 1 */}
+                {(() => {
+                  const b1Name = site.branch1Name || (displayBranches[0]?.branchName) || "Cơ sở 1 (Trụ sở Quận 10)";
+                  const b1Addr = site.branch1Address || (displayBranches[0]?.address) || "361 Lý Thường Kiệt, P. Tân Hòa, Quận 10, TP.HCM";
+                  const b1MapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b1Addr)}`;
+                  return (
+                    <a
+                      href={b1MapUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      title={`Mở Google Maps chỉ đường tới ${b1Name}`}
+                      style={{ display: "flex", alignItems: "flex-start", gap: "12px", color: "var(--text-body)", textDecoration: "none", fontSize: "14px" }}
+                    >
+                      <MapPin size={18} color="var(--accent-color)" style={{ flexShrink: 0, marginTop: "2px" }} />
+                      <span>
+                        <strong style={{ display: "block", color: "var(--text-title, #0f172a)", marginBottom: "2px" }}>
+                          {b1Name}
+                        </strong>
+                        <span style={{ color: "#64748b", fontSize: "13.5px" }}>
+                          {b1Addr}
+                        </span>
+                      </span>
+                    </a>
+                  );
+                })()}
+
+                {/* Cơ sở 2 */}
+                {(() => {
+                  const b2Name = site.branch2Name || (displayBranches[1]?.branchName) || "Cơ sở 2 (Chi nhánh Quận 6)";
+                  const b2Addr = site.branch2Address || (displayBranches[1]?.address) || "617 Phạm Văn Chí, P. Bình Tiên, Quận 6, TP.HCM";
+                  const b2MapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(b2Addr)}`;
+                  return (
+                    <a
+                      href={b2MapUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      title={`Mở Google Maps chỉ đường tới ${b2Name}`}
+                      style={{ display: "flex", alignItems: "flex-start", gap: "12px", color: "var(--text-body)", textDecoration: "none", fontSize: "14px" }}
+                    >
+                      <MapPin size={18} color="var(--accent-color)" style={{ flexShrink: 0, marginTop: "2px" }} />
+                      <span>
+                        <strong style={{ display: "block", color: "var(--text-title, #0f172a)", marginBottom: "2px" }}>
+                          {b2Name}
+                        </strong>
+                        <span style={{ color: "#64748b", fontSize: "13.5px" }}>
+                          {b2Addr}
+                        </span>
+                      </span>
+                    </a>
+                  );
+                })()}
                 <a
                   href={`mailto:${site.email}`}
                   style={{ display: "flex", alignItems: "center", gap: "12px", color: "var(--text-body)", textDecoration: "none", fontSize: "14px" }}
