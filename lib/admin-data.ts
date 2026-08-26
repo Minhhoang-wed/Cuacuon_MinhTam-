@@ -1,5 +1,5 @@
 import { getAdminAccessToken } from "@/lib/admin-auth";
-import { getCategories, getHomepageContent, getAboutContent, getProducts, getSiteSettings, getServices as getPublicServices, getArticles as getPublicArticles, getStoreBranches as getPublicStoreBranches, getServiceDistricts as getPublicServiceDistricts, getServicePricing as getPublicServicePricing } from "@/lib/catalog";
+import { getCategories, getHomepageContent, getAboutContent, getProducts, getSiteSettings, getProjects as getPublicProjects, getServices as getPublicServices, getArticles as getPublicArticles, getStoreBranches as getPublicStoreBranches, getServiceDistricts as getPublicServiceDistricts, getServicePricing as getPublicServicePricing } from "@/lib/catalog";
 import { getSupabaseConfig, supabaseFetch } from "@/lib/supabase-rest";
 import type {
   AdminCategoryRow,
@@ -41,11 +41,12 @@ export async function getAdminProjects(): Promise<AdminProjectRow[]> {
   if (!getSupabaseConfig()) return [];
   const token = await getAdminAccessToken();
   try {
-    return await supabaseFetch<AdminProjectRow[]>(
+    const rows = await supabaseFetch<AdminProjectRow[]>(
       "/rest/v1/projects?select=*,images:project_images(id,storage_path,alt_text,sort_order,is_primary)&order=updated_at.desc",
       { cache: "no-store" },
       token
     );
+    return rows || [];
   } catch (error) {
     console.error("Lỗi khi tải danh sách dự án từ Supabase:", error);
     return [];
@@ -175,7 +176,21 @@ export async function getAdminServiceDistricts(): Promise<AdminServiceDistrictRo
   try {
     const token = await getAdminAccessToken();
     const rows = await supabaseFetch<AdminServiceDistrictRow[]>("/rest/v1/service_districts?select=*&order=sort_order.asc,created_at.asc", { cache: "no-store" }, token);
-    if (rows && rows.length > 0) return rows;
+    if (rows && rows.length > 0) {
+      const hasHanoi = rows.some(
+        (r) =>
+          r.district_name.toLowerCase().includes("hà nội") ||
+          r.district_name.toLowerCase().includes("ha noi") ||
+          r.district_name.toLowerCase().includes("(hn)")
+      );
+      if (!hasHanoi) {
+        const hanoiDefaults: AdminServiceDistrictRow[] = fallback.filter((d) =>
+          d.district_name.includes("Hà Nội")
+        );
+        return [...rows, ...hanoiDefaults];
+      }
+      return rows;
+    }
   } catch (error) {
     console.warn("Chưa có bảng service_districts trong Supabase, dùng dữ liệu mặc định.");
   }

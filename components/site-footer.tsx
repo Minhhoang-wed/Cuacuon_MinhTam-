@@ -48,6 +48,7 @@ export function SiteFooter({ site, branches = [] }: { site: ManagedSiteConfig; b
           <h3>Khu Vực & Hướng Dẫn</h3>
           <div className="footer-maison-links">
             <Link href="/khu-vuc-phuc-vu">Khu vực phục vụ</Link>
+            <Link href="/du-an">Dự án thi công</Link>
             <Link href="/meo-kien-thuc">Mẹo & kiến thức</Link>
             <Link href="/tin-tuc">Bài viết hữu ích</Link>
             <Link href="/san-pham">Sản phẩm & phụ kiện</Link>

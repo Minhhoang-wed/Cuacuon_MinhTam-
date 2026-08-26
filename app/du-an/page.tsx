@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
-import { ArrowRight, Building2, MapPin } from "lucide-react";
+import { ArrowRight, CheckCircle2, Clock, MapPin, ShieldCheck, Wrench } from "lucide-react";
 import Link from "next/link";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { CtaBand } from "@/components/cta-band";
-import { DoorVisual } from "@/components/door-visual";
-import { PageHero } from "@/components/page-hero";
 import { getProjects, getSiteSettings } from "@/lib/catalog";
 
+export const revalidate = 300;
+
 export const metadata: Metadata = {
-  title: "Dự án đã thực hiện",
-  description: "Một số công trình sửa chữa, bảo trì và lắp đặt cửa cuốn tiêu biểu.",
+  title: "Dự án thi công cửa cuốn thực tế | Minh Tâm Door",
+  description:
+    "Tổng hợp hình ảnh các công trình sửa chữa, thay thế motor và lắp đặt cửa cuốn thực tế do Minh Tâm Door hoàn thiện bàn giao tại TP.HCM & Hà Nội.",
   alternates: { canonical: "/du-an" },
 };
 
@@ -18,60 +19,146 @@ export default async function ProjectsPage() {
 
   return (
     <>
-      <PageHero
-        eyebrow="CÔNG TRÌNH TIÊU BIỂU"
-        title="Dự Án Đã Thực Hiện"
-        description="Mỗi bộ cửa là một giải pháp an toàn và hoàn thiện chỉn chu cho không gian sống và kinh doanh của bạn."
-        image="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1600&q=82"
-      />
-
-      <div className="container">
+      <div className="container" style={{ paddingTop: 24 }}>
         <Breadcrumb
-          items={[{ name: "Dự án đã thực hiện", href: "/du-an" }]}
+          items={[{ name: "Dự án thi công", href: "/du-an" }]}
           baseUrl={site.seoCanonicalBase || site.baseUrl}
         />
       </div>
 
-      <section className="section">
+      <section className="repair-area-band" style={{ paddingTop: 20, paddingBottom: 80 }}>
         <div className="container">
+          <div className="repair-section-heading" style={{ marginBottom: 36 }}>
+            <span>Hồ sơ năng lực & Công trình</span>
+            <h2>Các dự án tiêu biểu đã bàn giao ({projects.length})</h2>
+            <p>Minh Tâm Door cam kết chất lượng vật tư chính hãng 100%, thi công an toàn và bảo hành dài hạn.</p>
+          </div>
+
           {projects.length > 0 ? (
-            <div className="project-grid">
+            <div className="direct-stores-grid" style={{ gap: 28 }}>
               {projects.map((project) => (
-                <article className="project-card" key={project.slug}>
-                  {project.images?.[0]?.url ? (
-                    <div style={{ width: "100%", height: 260, position: "relative", overflow: "hidden", borderRadius: 12, marginBottom: 20 }}>
-                      <img
-                        src={project.images[0].url}
-                        alt={project.images[0].altText || project.name}
-                        style={{ width: "100%", height: "100%", objectFit: "cover", transition: "transform 0.5s ease" }}
-                      />
+                <article
+                  className="direct-store-card"
+                  key={project.id || project.slug}
+                  style={{
+                    padding: 0,
+                    overflow: "hidden",
+                    display: "flex",
+                    flexDirection: "column",
+                    borderRadius: 0,
+                    border: "1px solid #e2e8f0",
+                  }}
+                >
+                  {/* Ảnh dự án */}
+                  <div style={{ position: "relative", width: "100%", height: 250, overflow: "hidden", background: "#0a2540", borderRadius: 0 }}>
+                    <img
+                      src={project.images?.[0]?.url || "/images/home-hero-daylight.jpg"}
+                      alt={project.images?.[0]?.altText || project.name}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        transition: "transform 0.4s ease",
+                      }}
+                      loading="lazy"
+                    />
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: 14,
+                        left: 14,
+                        background: "rgba(10, 37, 64, 0.85)",
+                        backdropFilter: "blur(6px)",
+                        color: "#ffffff",
+                        padding: "4px 10px",
+                        borderRadius: 0,
+                        fontSize: 12,
+                        fontWeight: 700,
+                        letterSpacing: "0.02em",
+                      }}
+                    >
+                      {project.category || "Công trình thực tế"}
                     </div>
-                  ) : (
-                    <DoorVisual label={project.category} kind="project" accent={project.accent} />
-                  )}
-                  <div>
-                    <span className="product-category">{project.category}</span>
-                    <h2>{project.name}</h2>
-                    <p className="project-location">
-                      <MapPin size={14} /> {project.location}
+                  </div>
+
+                  {/* Nội dung card */}
+                  <div style={{ padding: "24px 26px", display: "flex", flexDirection: "column", flex: 1, gap: 12 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#0f5fd7", fontSize: 13, fontWeight: 600 }}>
+                      <MapPin size={15} />
+                      <span>{project.location}</span>
+                    </div>
+
+                    <h3
+                      style={{
+                        margin: 0,
+                        fontSize: 18,
+                        fontWeight: 700,
+                        fontFamily: "var(--font-heading), 'Be Vietnam Pro', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+                        color: "#0a2540",
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      <Link
+                        href={`/du-an/${project.slug}`}
+                        style={{ color: "inherit", textDecoration: "none" }}
+                      >
+                        {project.name}
+                      </Link>
+                    </h3>
+
+                    <p style={{ margin: 0, fontSize: 14, color: "#64748b", lineHeight: 1.6, flex: 1 }}>
+                      {project.summary}
                     </p>
-                    <p>{project.summary}</p>
-                    <Link href={`/du-an/${project.slug}`} className="text-link">
-                      Xem câu chuyện dự án <ArrowRight size={17} />
-                    </Link>
+
+                    <div
+                      style={{
+                        marginTop: 10,
+                        paddingTop: 16,
+                        borderTop: "1px dashed #e2e8f0",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        flexWrap: "wrap",
+                        gap: 12,
+                      }}
+                    >
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12.5, color: "#16a34a", fontWeight: 600 }}>
+                        <CheckCircle2 size={16} /> {project.result || "Đã nghiệm thu"}
+                      </span>
+
+                      <Link
+                        href={`/du-an/${project.slug}`}
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 6,
+                          color: "#0f5fd7",
+                          fontSize: 13.5,
+                          fontWeight: 700,
+                          textDecoration: "none",
+                        }}
+                      >
+                        Chi tiết <ArrowRight size={15} />
+                      </Link>
+                    </div>
                   </div>
                 </article>
               ))}
             </div>
           ) : (
-            <div className="empty-state" style={{ padding: "48px 24px", background: "var(--bg-card)", borderRadius: "12px", textAlign: "center" }}>
-              <p style={{ margin: 0, color: "#78716c", fontSize: "15px" }}>
-                Danh sách dự án đang được cập nhật dữ liệu.
+            <div className="repair-area-panel" style={{ textAlign: "center", padding: "60px 24px" }}>
+              <Wrench size={40} style={{ color: "#0f5fd7", margin: "0 auto 16px" }} />
+              <h3 style={{ margin: "0 0 8px", color: "#0a2540", fontSize: 18, fontWeight: 700 }}>
+                Hồ sơ dự án đang được cập nhật
+              </h3>
+              <p style={{ margin: 0, color: "#64748b", fontSize: 14 }}>
+                Quý khách có thể liên hệ trực tiếp hotline {site.hotline} để nhận tư vấn và xem catalogue công trình mẫu.
               </p>
             </div>
           )}
         </div>
       </section>
+
       <CtaBand compact />
     </>
   );

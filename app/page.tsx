@@ -14,14 +14,13 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { CinematicHeroSlider } from "@/components/cinematic-hero-slider";
-import { FaqJsonLd, WebSiteJsonLd } from "@/components/structured-data";
+import { WebSiteJsonLd } from "@/components/structured-data";
 import {
   repairIssues,
   repairTips,
   trustItems,
 } from "@/data/public-home";
-import { serviceFaqs } from "@/data/faq";
-import { formatPrice, getArticles, getCategories, getHomepageContent, getProducts, getServices, getSiteSettings } from "@/lib/catalog";
+import { formatPrice, getArticles, getCategories, getHomepageContent, getProducts, getProjects, getServices, getSiteSettings } from "@/lib/catalog";
 import { publicAssetUrl } from "@/lib/supabase-rest";
 
 export const revalidate = 300;
@@ -57,13 +56,14 @@ const productFallbackImages = [
 ];
 
 export default async function HomePage() {
-  const [site, homepage, catalogProducts, categories, services, articles] = await Promise.all([
+  const [site, homepage, catalogProducts, categories, services, articles, projects] = await Promise.all([
     getSiteSettings(),
     getHomepageContent(),
     getProducts(),
     getCategories(),
     getServices(),
     getArticles(),
+    getProjects(),
   ]);
 
   const products = catalogProducts.slice(0, 8);
@@ -97,7 +97,6 @@ export default async function HomePage() {
         url={site.seoCanonicalBase || site.baseUrl}
         description={site.description}
       />
-      <FaqJsonLd items={serviceFaqs} />
 
       {/* SEO: H1 chính cho trang chủ — visually hidden nhưng semantic cho Google */}
       <h1 className="sr-only">
@@ -303,24 +302,136 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* FAQ — Câu hỏi thường gặp (matches FAQPage JSON-LD) */}
-      <section className="repair-section repair-faq-section" id="cau-hoi-thuong-gap">
-        <div className="container">
-          <div className="repair-section-heading">
-            <span>Câu hỏi thường gặp</span>
-            <h2>Khách hàng hay hỏi gì về dịch vụ sửa cửa cuốn?</h2>
-            <p>Giải đáp nhanh các thắc mắc phổ biến nhất về dịch vụ, chi phí, thời gian và bảo hành.</p>
+      {/* Dự Án Đã Thi Công Thực Tế */}
+      {projects.length > 0 && (
+        <section className="repair-section" style={{ background: "var(--bg-stone-subtle, #ede8df)", paddingTop: 50, paddingBottom: 60 }}>
+          <div className="container">
+            <div className="repair-section-heading">
+              <span>Hồ sơ năng lực & Công trình</span>
+              <h2>Dự án đã thi công hoàn thiện</h2>
+              <p>Tổng hợp các công trình sửa chữa, thay thế motor và lắp đặt cửa cuốn thực tế do Minh Tâm Door trực tiếp thực hiện.</p>
+            </div>
+
+            <div className="direct-stores-grid" style={{ gap: 28 }}>
+              {projects.slice(0, 4).map((project) => (
+                <article
+                  className="direct-store-card"
+                  key={project.id || project.slug}
+                  style={{
+                    padding: 0,
+                    overflow: "hidden",
+                    display: "flex",
+                    flexDirection: "column",
+                    borderRadius: 0,
+                    border: "1px solid #e2e8f0",
+                    background: "#ffffff",
+                  }}
+                >
+                  {/* Ảnh dự án */}
+                  <div style={{ position: "relative", width: "100%", height: 250, overflow: "hidden", background: "#0a2540", borderRadius: 0 }}>
+                    <img
+                      src={project.images?.[0]?.url || "/images/home-hero-daylight.jpg"}
+                      alt={project.images?.[0]?.altText || project.name}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                        transition: "transform 0.4s ease",
+                      }}
+                      loading="lazy"
+                    />
+                    <div
+                      style={{
+                        position: "absolute",
+                        top: 14,
+                        left: 14,
+                        background: "rgba(10, 37, 64, 0.85)",
+                        backdropFilter: "blur(6px)",
+                        color: "#ffffff",
+                        padding: "4px 10px",
+                        borderRadius: 0,
+                        fontSize: 12,
+                        fontWeight: 700,
+                        letterSpacing: "0.02em",
+                      }}
+                    >
+                      {project.category || "Công trình thực tế"}
+                    </div>
+                  </div>
+
+                  {/* Nội dung card */}
+                  <div style={{ padding: "24px 26px", display: "flex", flexDirection: "column", flex: 1, gap: 12 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#0f5fd7", fontSize: 13, fontWeight: 600 }}>
+                      <MapPin size={15} />
+                      <span>{project.location}</span>
+                    </div>
+
+                    <h3
+                      style={{
+                        margin: 0,
+                        fontSize: 18,
+                        fontWeight: 700,
+                        fontFamily: "var(--font-heading), 'Be Vietnam Pro', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+                        color: "#0a2540",
+                        lineHeight: 1.4,
+                      }}
+                    >
+                      <Link
+                        href={`/du-an/${project.slug}`}
+                        style={{ color: "inherit", textDecoration: "none" }}
+                      >
+                        {project.name}
+                      </Link>
+                    </h3>
+
+                    <p style={{ margin: 0, fontSize: 14, color: "#64748b", lineHeight: 1.6, flex: 1 }}>
+                      {project.summary}
+                    </p>
+
+                    <div
+                      style={{
+                        marginTop: 10,
+                        paddingTop: 16,
+                        borderTop: "1px dashed #e2e8f0",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        flexWrap: "wrap",
+                        gap: 12,
+                      }}
+                    >
+                      <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12.5, color: "#16a34a", fontWeight: 600 }}>
+                        <CheckCircle2 size={16} /> {project.result || "Đã nghiệm thu"}
+                      </span>
+
+                      <Link
+                        href={`/du-an/${project.slug}`}
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: 6,
+                          color: "#0f5fd7",
+                          fontSize: 13.5,
+                          fontWeight: 700,
+                          textDecoration: "none",
+                        }}
+                      >
+                        Chi tiết <ArrowRight size={15} />
+                      </Link>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <div className="repair-center-action" style={{ marginTop: 32 }}>
+              <Link href="/du-an" className="button button-primary">
+                Xem tất cả dự án thi công <ArrowRight size={16} />
+              </Link>
+            </div>
           </div>
-          <div className="faq-list">
-            {serviceFaqs.map((faq) => (
-              <details className="faq-item" key={faq.question}>
-                <summary>{faq.question}</summary>
-                <p>{faq.answer}</p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
     </>
   );
 }

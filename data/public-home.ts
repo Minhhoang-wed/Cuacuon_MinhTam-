@@ -280,6 +280,87 @@ export const serviceAreaPoints = [
     address: "55 Tỉnh Lộ 8, TT. Củ Chi, H. Củ Chi",
     note: "Đội kỹ thuật lưu động tận nơi · Có mặt sau 25 – 35 phút",
   },
+  // --- KHU VỰC TP. HÀ NỘI (Chỉ ghi quận huyện, không cần địa chỉ cụ thể) ---
+  {
+    district: "Quận Cầu Giấy (Hà Nội)",
+    address: "",
+    note: "Đội kỹ thuật túc trực 24/7 · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Quận Đống Đa (Hà Nội)",
+    address: "",
+    note: "Đội kỹ thuật túc trực 24/7 · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Quận Ba Đình (Hà Nội)",
+    address: "",
+    note: "Đội kỹ thuật túc trực 24/7 · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Quận Thanh Xuân (Hà Nội)",
+    address: "",
+    note: "Đội kỹ thuật túc trực 24/7 · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Quận Hoàn Kiếm (Hà Nội)",
+    address: "",
+    note: "Đội kỹ thuật túc trực 24/7 · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Quận Hai Bà Trưng (Hà Nội)",
+    address: "",
+    note: "Đội kỹ thuật túc trực 24/7 · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Quận Hoàng Mai (Hà Nội)",
+    address: "",
+    note: "Đội kỹ thuật túc trực 24/7 · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Quận Tây Hồ (Hà Nội)",
+    address: "",
+    note: "Đội kỹ thuật túc trực 24/7 · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Quận Long Biên (Hà Nội)",
+    address: "",
+    note: "Đội kỹ thuật túc trực 24/7 · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Quận Nam Từ Liêm (Hà Nội)",
+    address: "",
+    note: "Đội kỹ thuật túc trực 24/7 · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Quận Bắc Từ Liêm (Hà Nội)",
+    address: "",
+    note: "Đội kỹ thuật túc trực 24/7 · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Quận Hà Đông (Hà Nội)",
+    address: "",
+    note: "Đội kỹ thuật túc trực 24/7 · Có mặt sau 15 – 25 phút",
+  },
+  {
+    district: "Huyện Thanh Trì (Hà Nội)",
+    address: "",
+    note: "Đội kỹ thuật túc trực 24/7 · Có mặt sau 20 – 30 phút",
+  },
+  {
+    district: "Huyện Gia Lâm (Hà Nội)",
+    address: "",
+    note: "Đội kỹ thuật túc trực 24/7 · Có mặt sau 20 – 30 phút",
+  },
+  {
+    district: "Huyện Đông Anh (Hà Nội)",
+    address: "",
+    note: "Đội kỹ thuật túc trực 24/7 · Có mặt sau 20 – 30 phút",
+  },
+  {
+    district: "Huyện Hoài Đức (Hà Nội)",
+    address: "",
+    note: "Đội kỹ thuật túc trực 24/7 · Có mặt sau 20 – 30 phút",
+  },
 ] as const;
 
 export const repairTips = [
