@@ -37,17 +37,8 @@ export function AnalyticsDashboard({ initialData, children }: Props) {
   }, []);
 
   useEffect(() => {
-    if (period !== "today") {
-      fetchPeriod(period);
-    } else {
-      setData(initialData);
-    }
-  }, [period, initialData, fetchPeriod]);
-
-  // Auto-refresh today data every 45s
-  useEffect(() => {
-    if (period !== "today") return;
-    const interval = setInterval(() => fetchPeriod("today"), 45000);
+    fetchPeriod(period);
+    const interval = setInterval(() => fetchPeriod(period), 10000);
     return () => clearInterval(interval);
   }, [period, fetchPeriod]);
 

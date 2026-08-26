@@ -4,6 +4,7 @@ import { getAnalyticsSummary, getContentStats } from "@/lib/analytics-data";
 import type { AnalyticsSummary, ContentStat } from "@/lib/analytics-data";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export default async function AdminAnalyticsPage() {
   let summary: AnalyticsSummary;
