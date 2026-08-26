@@ -2,57 +2,115 @@
 
 import { useState } from "react";
 
-// ── 1. CLEAN STANDARD LINE CHART (Standard Line with crisp points and hover tooltip) ──
-interface LineChartProps {
-  data: number[];
-  labels: string[];
-  height?: number;
-  color?: string;
-  gradientId?: string;
-  title?: string;
-}
+// ── Fritsch-Carlson Monotone Cubic Spline (Guarantees smooth curves without overshoot/looping) ──
+function getMonotoneSplinePath(points: Array<{ x: number; y: number }>): string {
+  const n = points.length;
+  if (n === 0) return "";
+  if (n === 1) return `M ${points[0].x},${points[0].y}`;
+  if (n === 2) return `M ${points[0].x},${points[0].y} L ${points[1].x},${points[1].y}`;
 
-export function LineChart({
-  data,
-  labels,
-  height = 240,
-  color = "#10b981",
-  gradientId = "emeraldGrad",
-  title,
-}: LineChartProps) {
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-
-  if (data.length === 0) {
-    return (
-      <div className="analytics-chart-empty" style={{ height }}>
-        <span>Chưa có dữ liệu phân tích</span>
-      </div>
-    );
+  const dx: number[] = [];
+  const dy: number[] = [];
+  const delta: number[] = [];
+  for (let i = 0; i < n - 1; i++) {
+    const dX = points[i + 1].x - points[i].x;
+    const dY = points[i + 1].y - points[i].y;
+    dx.push(dX);
+    dy.push(dY);
+    delta.push(dX === 0 ? 0 : dY / dX);
   }
 
-  // Calculate scales
-  const maxRaw = Math.max(...data, 0);
-  // Round maxVal up to nice integer for clean grid lines
-  const maxVal = maxRaw <= 4 ? 5 : Math.ceil(maxRaw * 1.15);
+  const m: number[] = [delta[0]];
+  for (let i = 1; i < n - 1; i++) {
+    if (delta[i - 1] * delta[i] <= 0) {
+      m.push(0);
+    } else {
+      m.push((delta[i - 1] + delta[i]) / 2);
+    }
+  }
+  m.push(delta[n - 2]);
 
-  const padding = { top: 25, right: 25, bottom: 35, left: 45 };
+  for (let i = 0; i < n - 1; i++) {
+    if (delta[i] === 0) {
+      m[i] = 0;
+      m[i + 1] = 0;
+    } else {
+      const alpha = m[i] / delta[i];
+      const beta = m[i + 1] / delta[i];
+      const dist = alpha * alpha + beta * beta;
+      if (dist > 9) {
+        const tau = 3 / Math.sqrt(dist);
+        m[i] = tau * alpha * delta[i];
+        m[i + 1] = tau * beta * delta[i];
+      }
+    }
+  }
+
+  let path = `M ${points[0].x},${points[0].y}`;
+  for (let i = 0; i < n - 1; i++) {
+    const cp1x = points[i].x + dx[i] / 3;
+    const cp1y = points[i].y + (m[i] * dx[i]) / 3;
+    const cp2x = points[i + 1].x - dx[i] / 3;
+    const cp2y = points[i + 1].y - (m[i + 1] * dx[i]) / 3;
+    path += ` C ${cp1x.toFixed(1)},${cp1y.toFixed(1)} ${cp2x.toFixed(1)},${cp2y.toFixed(1)} ${points[i + 1].x.toFixed(1)},${points[i + 1].y.toFixed(1)}`;
+  }
+
+  return path;
+}
+
+// ── 1. DUAL-WAVE SITE TRAFFIC CHART (Matching User's Mockup: Total Visits vs Unique Visits) ──
+interface TrafficWaveChartProps {
+  viewsData: number[];
+  visitorsData: number[];
+  labels: string[];
+  title?: string;
+  subtitle?: string;
+  height?: number;
+}
+
+export function TrafficWaveChart({
+  viewsData,
+  visitorsData,
+  labels,
+  title = "SITE TRAFFIC",
+  subtitle = "NUMBERS OF VISITS",
+  height = 250,
+}: TrafficWaveChartProps) {
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+
+  const maxRaw = Math.max(...viewsData, ...visitorsData, 0);
+  const maxVal = maxRaw <= 4 ? 5 : Math.ceil(maxRaw * 1.25);
+
+  const padding = { top: 35, right: 25, bottom: 42, left: 45 };
   const chartWidth = 720;
   const chartH = height - padding.top - padding.bottom;
   const chartW = chartWidth - padding.left - padding.right;
 
-  const points = data.map((val, i) => ({
-    x: padding.left + (i / Math.max(data.length - 1, 1)) * chartW,
+  // Views line points (Teal / Green)
+  const viewsPoints = viewsData.map((val, i) => ({
+    x: padding.left + (i / Math.max(viewsData.length - 1, 1)) * chartW,
     y: padding.top + chartH - (val / maxVal) * chartH,
     val,
     label: labels[i] || `${i}h`,
     idx: i,
   }));
 
-  // Standard direct line path (crisp & accurate, no curvature overshoot)
-  const linePath = points.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
-  const lastPoint = points[points.length - 1];
-  const firstPoint = points[0];
-  const areaPath = `${linePath} L ${lastPoint.x.toFixed(1)},${padding.top + chartH} L ${firstPoint.x.toFixed(1)},${padding.top + chartH} Z`;
+  // Visitors line points (Orange / Amber)
+  const visitorsPoints = visitorsData.map((val, i) => ({
+    x: padding.left + (i / Math.max(visitorsData.length - 1, 1)) * chartW,
+    y: padding.top + chartH - (val / maxVal) * chartH,
+    val,
+    label: labels[i] || `${i}h`,
+    idx: i,
+  }));
+
+  const viewsCurve = getMonotoneSplinePath(viewsPoints);
+  const visitorsCurve = getMonotoneSplinePath(visitorsPoints);
+
+  // Area under views curve
+  const lastV = viewsPoints[viewsPoints.length - 1];
+  const firstV = viewsPoints[0];
+  const viewsArea = `${viewsCurve} L ${lastV.x.toFixed(1)},${padding.top + chartH} L ${firstV.x.toFixed(1)},${padding.top + chartH} Z`;
 
   // Grid steps (4 horizontal guides)
   const gridLines = 4;
@@ -64,157 +122,244 @@ export function LineChart({
     };
   });
 
-  const activePoint = hoveredIdx !== null ? points[hoveredIdx] : null;
+  const activeViewsPoint = hoveredIdx !== null ? viewsPoints[hoveredIdx] : null;
+  const activeVisitorsPoint = hoveredIdx !== null ? visitorsPoints[hoveredIdx] : null;
 
   return (
-    <div className="analytics-chart-container" style={{ position: "relative" }}>
-      {title && (
-        <div className="chart-header-row">
-          <h4 className="analytics-chart-title">{title}</h4>
-          {maxRaw > 0 && (
-            <span className="chart-total-pill">
-              Cao nhất: <b>{maxRaw} lượt</b>
-            </span>
-          )}
-        </div>
-      )}
+    <div className="site-traffic-wave-card">
+      {/* ── Header Title & Subtitle ── */}
+      <div className="traffic-wave-header">
+        <h3 className="traffic-main-title">{title}</h3>
+        <span className="traffic-sub-title">{subtitle}</span>
+      </div>
 
-      <svg
-        viewBox={`0 0 ${chartWidth} ${height}`}
-        className="analytics-line-chart"
-        preserveAspectRatio="none"
-        onMouseLeave={() => setHoveredIdx(null)}
-      >
-        <defs>
-          <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor={color} stopOpacity="0.28" />
-            <stop offset="60%" stopColor={color} stopOpacity="0.08" />
-            <stop offset="100%" stopColor={color} stopOpacity="0" />
-          </linearGradient>
-        </defs>
+      {/* ── SVG Dual-Wave Canvas ── */}
+      <div className="traffic-wave-canvas" style={{ position: "relative" }}>
+        <svg
+          viewBox={`0 0 ${chartWidth} ${height}`}
+          className="analytics-line-chart"
+          preserveAspectRatio="none"
+          onMouseLeave={() => setHoveredIdx(null)}
+        >
+          <defs>
+            {/* Teal Area Gradient */}
+            <linearGradient id="trafficTealAreaGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#2dd4bf" stopOpacity="0.22" />
+              <stop offset="60%" stopColor="#0d9488" stopOpacity="0.05" />
+              <stop offset="100%" stopColor="#0d9488" stopOpacity="0" />
+            </linearGradient>
 
-        {/* Horizontal grid lines */}
-        {gridSteps.map((g, idx) => (
-          <g key={idx}>
-            <line
-              x1={padding.left}
-              y1={g.y}
-              x2={chartWidth - padding.right}
-              y2={g.y}
-              stroke="#f1f5f9"
-              strokeDasharray="4 4"
-              strokeWidth="1"
-            />
-            <text
-              x={padding.left - 10}
-              y={g.y + 4}
-              textAnchor="end"
-              fill="#94a3b8"
-              fontSize="11"
-              fontWeight="500"
-            >
-              {g.val}
-            </text>
-          </g>
-        ))}
+            {/* Glowing filter */}
+            <filter id="trafficGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="3" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
 
-        {/* Shaded Area underneath the line */}
-        <path d={areaPath} fill={`url(#${gradientId})`} />
+          {/* Grid lines */}
+          {gridSteps.map((g, idx) => (
+            <g key={idx}>
+              <line
+                x1={padding.left}
+                y1={g.y}
+                x2={chartWidth - padding.right}
+                y2={g.y}
+                stroke="rgba(226, 232, 240, 0.7)"
+                strokeDasharray="3 3"
+                strokeWidth="1"
+              />
+              <text
+                x={padding.left - 10}
+                y={g.y + 4}
+                textAnchor="end"
+                fill="#94a3b8"
+                fontSize="10.5"
+                fontWeight="500"
+              >
+                {g.val}
+              </text>
+            </g>
+          ))}
 
-        {/* Crisp Line Stroke */}
-        <path
-          d={linePath}
-          fill="none"
-          stroke={color}
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
+          {/* Teal Shaded Area */}
+          <path d={viewsArea} fill="url(#trafficTealAreaGrad)" />
 
-        {/* Hover Crosshair Guide Line */}
-        {activePoint && (
-          <line
-            x1={activePoint.x}
-            y1={padding.top}
-            x2={activePoint.x}
-            y2={padding.top + chartH}
-            stroke={color}
-            strokeWidth="1.5"
-            strokeDasharray="3 3"
-            opacity="0.75"
+          {/* 1. Teal Line: Total Visits */}
+          <path
+            d={viewsCurve}
+            fill="none"
+            stroke="#2dd4bf"
+            strokeWidth="3"
+            strokeLinecap="round"
+            filter="url(#trafficGlow)"
           />
-        )}
 
-        {/* Interactive Point Nodes */}
-        {points.map((p, i) => {
-          const isHovered = hoveredIdx === i;
-          const hasValue = p.val > 0;
+          {/* 2. Orange Line: Unique Visits */}
+          <path
+            d={visitorsCurve}
+            fill="none"
+            stroke="#fb923c"
+            strokeWidth="3"
+            strokeLinecap="round"
+            filter="url(#trafficGlow)"
+          />
 
-          return (
-            <g
-              key={i}
-              className="chart-dot-node"
-              onMouseEnter={() => setHoveredIdx(i)}
-              style={{ cursor: "pointer" }}
-            >
-              {/* Invisible large touch target for easy hover */}
-              <circle cx={p.x} cy={p.y} r="12" fill="transparent" />
+          {/* Hover Crosshair Guide */}
+          {activeViewsPoint && (
+            <line
+              x1={activeViewsPoint.x}
+              y1={padding.top}
+              x2={activeViewsPoint.x}
+              y2={padding.top + chartH}
+              stroke="#94a3b8"
+              strokeWidth="1"
+              strokeDasharray="2 2"
+              opacity="0.8"
+            />
+          )}
 
-              {/* Visible dot (always visible on peaks, or on hover) */}
-              {(hasValue || isHovered) && (
-                <>
+          {/* Teal Points & Numbers (Total Visits) */}
+          {viewsPoints.map((p, i) => {
+            const hasData = p.val > 0;
+            const isHovered = hoveredIdx === i;
+
+            return (
+              <g
+                key={`v-${i}`}
+                onMouseEnter={() => setHoveredIdx(i)}
+                style={{ cursor: "pointer" }}
+              >
+                <circle cx={p.x} cy={p.y} r="12" fill="transparent" />
+
+                {/* Point Number floating above dot (as shown in user mockup) */}
+                {hasData && (
+                  <text
+                    x={p.x}
+                    y={p.y - 9}
+                    textAnchor="middle"
+                    fill="#0f766e"
+                    fontSize="11"
+                    fontWeight="700"
+                  >
+                    {p.val}
+                  </text>
+                )}
+
+                {/* Node dot */}
+                {(hasData || isHovered) && (
                   <circle
                     cx={p.x}
                     cy={p.y}
-                    r={isHovered ? 6 : 4}
+                    r={isHovered ? 5.5 : 4}
                     fill="#ffffff"
-                    stroke={color}
-                    strokeWidth={isHovered ? 3 : 2}
+                    stroke="#2dd4bf"
+                    strokeWidth={isHovered ? 3 : 2.5}
                   />
-                  {hasValue && (
-                    <circle cx={p.x} cy={p.y} r={isHovered ? 2.5 : 1.5} fill={color} />
-                  )}
-                </>
-              )}
-            </g>
-          );
-        })}
+                )}
+              </g>
+            );
+          })}
 
-        {/* X-axis Labels */}
-        {labels.map((label, i) => {
-          const showEvery = labels.length > 18 ? 3 : labels.length > 10 ? 2 : 1;
-          if (i % showEvery !== 0 && i !== labels.length - 1) return null;
-          const x = padding.left + (i / Math.max(labels.length - 1, 1)) * chartW;
+          {/* Orange Points & Numbers (Unique Visits) */}
+          {visitorsPoints.map((p, i) => {
+            const hasData = p.val > 0;
+            const isHovered = hoveredIdx === i;
 
-          return (
-            <text
-              key={i}
-              x={x}
-              y={height - 8}
-              textAnchor="middle"
-              fill="#64748b"
-              fontSize="11"
-              fontWeight="500"
-            >
-              {label}
-            </text>
-          );
-        })}
-      </svg>
+            return (
+              <g
+                key={`u-${i}`}
+                onMouseEnter={() => setHoveredIdx(i)}
+                style={{ cursor: "pointer" }}
+              >
+                <circle cx={p.x} cy={p.y} r="12" fill="transparent" />
 
-      {/* Floating Tooltip */}
-      {activePoint && (
-        <div
-          className="clean-line-tooltip"
-          style={{
-            left: `${(activePoint.x / chartWidth) * 100}%`,
-            top: `${(activePoint.y / height) * 100}%`,
-          }}
-        >
-          <span className="cl-time">{activePoint.label}</span>
-          <b className="cl-val">{activePoint.val} lượt xem</b>
+                {/* Point Number floating above dot */}
+                {hasData && (
+                  <text
+                    x={p.x}
+                    y={p.y - 8}
+                    textAnchor="middle"
+                    fill="#c2410c"
+                    fontSize="11"
+                    fontWeight="700"
+                  >
+                    {p.val}
+                  </text>
+                )}
+
+                {/* Node dot */}
+                {(hasData || isHovered) && (
+                  <circle
+                    cx={p.x}
+                    cy={p.y}
+                    r={isHovered ? 5.5 : 4}
+                    fill="#ffffff"
+                    stroke="#fb923c"
+                    strokeWidth={isHovered ? 3 : 2.5}
+                  />
+                )}
+              </g>
+            );
+          })}
+
+          {/* X-axis Timeline Labels */}
+          {labels.map((label, i) => {
+            const showEvery = labels.length > 18 ? 3 : labels.length > 10 ? 2 : 1;
+            if (i % showEvery !== 0 && i !== labels.length - 1) return null;
+            const x = padding.left + (i / Math.max(labels.length - 1, 1)) * chartW;
+
+            return (
+              <text
+                key={i}
+                x={x}
+                y={height - 10}
+                textAnchor="middle"
+                fill="#64748b"
+                fontSize="11.5"
+                fontWeight="600"
+              >
+                {label}
+              </text>
+            );
+          })}
+        </svg>
+
+        {/* Hover Tooltip Card */}
+        {activeViewsPoint && activeVisitorsPoint && (
+          <div
+            className="traffic-wave-tooltip"
+            style={{
+              left: `${(activeViewsPoint.x / chartWidth) * 100}%`,
+              top: `${(Math.min(activeViewsPoint.y, activeVisitorsPoint.y) / height) * 100}%`,
+            }}
+          >
+            <span className="tw-time">{activeViewsPoint.label}</span>
+            <div className="tw-row">
+              <span className="tw-dot teal" />
+              <span>Tổng xem: <b>{activeViewsPoint.val}</b></span>
+            </div>
+            <div className="tw-row">
+              <span className="tw-dot orange" />
+              <span>Khách thực: <b>{activeVisitorsPoint.val}</b></span>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* ── Legend below the chart (Matching User Mockup) ── */}
+      <div className="traffic-wave-legend">
+        <div className="legend-item">
+          <span className="legend-line teal" />
+          <span className="legend-label">Total Visits (Tổng lượt xem)</span>
         </div>
-      )}
+        <div className="legend-item">
+          <span className="legend-line orange" />
+          <span className="legend-label">Unique Visits (Khách độc quyền)</span>
+        </div>
+      </div>
     </div>
   );
 }

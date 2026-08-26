@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Eye, Users, PhoneCall, MessageSquareText, Calendar } from "lucide-react";
-import { LineChart, DonutChart, StatCard } from "./analytics-charts";
+import { TrafficWaveChart, DonutChart, StatCard } from "./analytics-charts";
 import { AnalyticsRealtimeStream, LiveOnlinePill } from "./analytics-realtime";
 import type { AnalyticsSummary } from "@/lib/analytics-data";
 
@@ -44,7 +44,8 @@ export function AnalyticsDashboard({ initialData, children }: Props) {
 
   // Chart data
   const hourlyLabels = Array.from({ length: 24 }, (_, i) => `${i}h`);
-  const hourlyData = data.hourly_views || Array(24).fill(0);
+  const hourlyViews = data.hourly_views || Array(24).fill(0);
+  const hourlyVisitors = data.hourly_visitors || Array(24).fill(0);
 
   const dailySeries = data.daily_series || [];
   const dailyLabels = dailySeries.map((d) => {
@@ -52,6 +53,7 @@ export function AnalyticsDashboard({ initialData, children }: Props) {
     return `${date.getDate()}/${date.getMonth() + 1}`;
   });
   const dailyViews = dailySeries.map((d) => d.views);
+  const dailyVisitors = dailySeries.map((d) => d.visitors);
 
   const deviceData = [
     { label: "Mobile", value: data.device_breakdown.mobile || 0, color: "#10b981" },
@@ -123,26 +125,26 @@ export function AnalyticsDashboard({ initialData, children }: Props) {
         />
       </section>
 
-      {/* ── 2. Middle Row: Hourly/Daily Traffic Chart (Left) + Live Activity Stream (Right) ── */}
+      {/* ── 2. Middle Row: Hourly/Daily Traffic Wave Chart (Left) + Live Activity Stream (Right) ── */}
       <section className="analytics-middle-grid">
         <div className="analytics-chart-panel">
           {period === "today" ? (
-            <LineChart
-              data={hourlyData}
+            <TrafficWaveChart
+              viewsData={hourlyViews}
+              visitorsData={hourlyVisitors}
               labels={hourlyLabels}
-              height={240}
-              title="Lưu Lượng Khách Truy Cập Theo Giờ (Hôm Nay)"
-              color="#10b981"
-              gradientId="hourlyEmeraldGrad"
+              title="SITE TRAFFIC (LƯU LƯỢNG TRUY CẬP)"
+              subtitle="Số lượt xem & Khách truy cập theo 24 giờ (Hôm nay)"
+              height={260}
             />
           ) : (
-            <LineChart
-              data={dailyViews}
+            <TrafficWaveChart
+              viewsData={dailyViews}
+              visitorsData={dailyVisitors}
               labels={dailyLabels}
-              height={240}
-              title={`Lượng Truy Cập Theo Ngày (${period === "7d" ? "7 Ngày" : "30 Ngày"} Qua)`}
-              color="#38bdf8"
-              gradientId="dailyBlueGrad"
+              title="SITE TRAFFIC (LƯU LƯỢNG TRUY CẬP)"
+              subtitle={`Số lượt xem & Khách truy cập (${period === "7d" ? "7 Ngày" : "30 Ngày"} Qua)`}
+              height={260}
             />
           )}
         </div>

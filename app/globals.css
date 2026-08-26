@@ -8757,56 +8757,94 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
 }
 
 /* ── Hourly Activity Widget ── */
-.chart-header-row {
+/* ── Site Traffic Wave Card (Matching Mockup) ── */
+.site-traffic-wave-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.traffic-wave-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 14px;
+}
+
+.traffic-main-title {
+  font-size: 15px;
+  font-weight: 750;
+  color: #0f172a;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.traffic-sub-title {
+  font-size: 11.5px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.traffic-wave-legend {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  justify-content: center;
+  gap: 24px;
+  padding-top: 10px;
+  border-top: 1px solid #f1f5f9;
+  margin-top: 4px;
   flex-wrap: wrap;
-  margin-bottom: 16px;
 }
 
-.analytics-chart-title {
-  font-size: 14px;
-  font-weight: 650;
-  color: #0f172a;
-  margin: 0;
-  letter-spacing: -0.01em;
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.chart-total-pill {
-  font-size: 11.5px;
-  color: #059669;
-  background: #ecfdf5;
-  padding: 3px 10px;
-  border-radius: 12px;
-  font-weight: 500;
+.legend-line {
+  width: 18px;
+  height: 3.5px;
+  border-radius: 2px;
 }
 
-.chart-total-pill b {
-  font-weight: 700;
+.legend-line.teal {
+  background: #2dd4bf;
 }
 
-.clean-line-tooltip {
+.legend-line.orange {
+  background: #fb923c;
+}
+
+.legend-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.traffic-wave-tooltip {
   position: absolute;
-  transform: translate(-50%, -125%);
+  transform: translate(-50%, -120%);
   background: #0f172a;
   color: #ffffff;
-  padding: 5px 10px;
-  border-radius: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
   font-size: 11px;
   white-space: nowrap;
   pointer-events: none;
   z-index: 25;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 1px;
+  gap: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   transition: left 0.08s ease, top 0.08s ease;
 }
 
-.clean-line-tooltip::after {
+.traffic-wave-tooltip::after {
   content: "";
   position: absolute;
   bottom: -4px;
@@ -8819,19 +8857,34 @@ body { color: var(--lovable-ink); font-family: "Be Vietnam Pro", system-ui, sans
   width: 0;
 }
 
-.cl-time {
+.tw-time {
   color: #94a3b8;
-  font-size: 10px;
+  font-size: 10.5px;
+  font-weight: 600;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 3px;
+  margin-bottom: 1px;
 }
 
-.cl-val {
-  color: #34d399;
-  font-weight: 700;
-  font-size: 11.5px;
+.tw-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
 }
 
-.chart-dot-node {
-  transition: transform 0.15s ease;
+.tw-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.tw-dot.teal {
+  background: #2dd4bf;
+}
+
+.tw-dot.orange {
+  background: #fb923c;
 }
 
 .analytics-line-chart {

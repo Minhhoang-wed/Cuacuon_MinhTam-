@@ -181,13 +181,16 @@ async function getTodayStats(accessToken: string) {
   const bounceSessions = new Set(pv.filter((r) => r.is_bounce).map((r) => r.session_id)).size;
 
   // Hourly distribution in Vietnam timezone (0h - 23h)
-  const hourly = Array(24).fill(0);
+  const hourlyViews = Array(24).fill(0);
+  const hourlyVisitorSets = Array.from({ length: 24 }, () => new Set<string>());
   for (const r of pv) {
     const h = getVietnamHour(r.created_at);
     if (h >= 0 && h < 24) {
-      hourly[h]++;
+      hourlyViews[h]++;
+      hourlyVisitorSets[h].add(r.visitor_id);
     }
   }
+  const hourlyVisitors = hourlyVisitorSets.map((s) => s.size);
 
   // Device breakdown
   const devices = { desktop: 0, mobile: 0, tablet: 0 };
@@ -236,10 +239,10 @@ async function getTodayStats(accessToken: string) {
     bounce_rate: uniqueSessions > 0 ? Math.round((bounceSessions / uniqueSessions) * 10000) / 100 : 0,
     device_breakdown: devices,
     cta_clicks: ctaClicks,
-    hourly_views: hourly,
+    hourly_views: hourlyViews,
+    hourly_visitors: hourlyVisitors,
     top_pages: topPages,
     top_referrers: topReferrers,
-    // Recent page views for live feed
     recent: pv.slice(0, 15).map((r) => ({
       path: r.page_path,
       device: r.device_type,

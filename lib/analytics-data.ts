@@ -13,6 +13,7 @@ export interface AnalyticsSummary {
   device_breakdown: { desktop: number; mobile: number; tablet: number };
   cta_clicks: Record<string, number>;
   hourly_views?: number[];
+  hourly_visitors?: number[];
   top_pages: Array<{ path: string; views: number; uniq: number }>;
   top_referrers: Array<{ source: string; cnt: number }>;
   daily_series?: Array<{ date: string; views: number; visitors: number; sessions: number }>;
@@ -104,13 +105,16 @@ export async function getAnalyticsSummary(period: string = "today"): Promise<Ana
     const uniqueSessions = new Set(pv.map((r) => r.session_id)).size;
     const bounceSessions = new Set(pv.filter((r) => r.is_bounce).map((r) => r.session_id)).size;
 
-    const hourly = Array(24).fill(0);
+    const hourlyViews = Array(24).fill(0);
+    const hourlyVisitorSets = Array.from({ length: 24 }, () => new Set<string>());
     for (const r of pv) {
       const h = getVietnamHour(r.created_at);
       if (h >= 0 && h < 24) {
-        hourly[h]++;
+        hourlyViews[h]++;
+        hourlyVisitorSets[h].add(r.visitor_id);
       }
     }
+    const hourlyVisitors = hourlyVisitorSets.map((s) => s.size);
 
     const devices = { desktop: 0, mobile: 0, tablet: 0 };
     for (const r of pv) {
@@ -155,7 +159,8 @@ export async function getAnalyticsSummary(period: string = "today"): Promise<Ana
       bounce_rate: uniqueSessions > 0 ? Math.round((bounceSessions / uniqueSessions) * 10000) / 100 : 0,
       device_breakdown: devices,
       cta_clicks: ctaClicks,
-      hourly_views: hourly,
+      hourly_views: hourlyViews,
+      hourly_visitors: hourlyVisitors,
       top_pages: topPages,
       top_referrers: topReferrers,
       recent: pv.slice(0, 15).map((r) => ({
