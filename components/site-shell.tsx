@@ -1,6 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { AnalyticsTracker } from "@/components/analytics-tracker";
 import { MobileActions } from "@/components/mobile-actions";
 import { SiteFooter } from "@/components/site-footer";
 import { SiteHeader } from "@/components/site-header";
@@ -26,6 +27,7 @@ export function SiteShell({
       <main id="main-content">{children}</main>
       <SiteFooter site={site} branches={branches} />
       <MobileActions site={site} />
+      <AnalyticsTracker />
     </div>
   );
 }

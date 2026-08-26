@@ -1,5 +1,6 @@
 import {
   ArrowUpRight,
+  BarChart3,
   Boxes,
   Building2,
   Clock3,
@@ -8,16 +9,27 @@ import {
   ImageIcon,
   MapPin,
   Newspaper,
+  PhoneCall,
   Plus,
+  Radio,
   ShieldCheck,
   Sparkles,
   Wrench,
 } from "lucide-react";
 import Link from "next/link";
 import { getAdminOverview, getAdminProducts, getAdminServices } from "@/lib/admin-data";
+import { getAnalyticsSummary } from "@/lib/analytics-data";
 import { publicAssetUrl } from "@/lib/supabase-rest";
 
 export default async function AdminDashboardPage() {
+  let analyticsSummary = { total_views: 0, unique_visitors: 0, cta_clicks: { hotline: 0, zalo: 0 } as Record<string, number> };
+  try {
+    const res = await getAnalyticsSummary("today");
+    if (res) analyticsSummary = res;
+  } catch {
+    // silent fallback
+  }
+
   const [overview, products, services] = await Promise.all([
     getAdminOverview(),
     getAdminProducts(),
@@ -122,6 +134,9 @@ export default async function AdminDashboardPage() {
       {/* 1. Quick Actions Strip */}
       <section className="admin-quick-actions">
         <div className="admin-quick-actions-buttons">
+          <Link href="/admin/analytics" className="button button-primary button-small" style={{ background: "#065f46" }}>
+            <BarChart3 size={14} /> Xem Real-time Analytics
+          </Link>
           <Link href="/admin/services/new" className="button button-ghost button-small">
             <Plus size={14} /> Thêm Dịch vụ
           </Link>
@@ -134,10 +149,30 @@ export default async function AdminDashboardPage() {
           <Link href="/admin/service-areas" className="button button-ghost button-small">
             <MapPin size={14} /> Quản lý Điểm trực
           </Link>
-          <Link href="/admin/media" className="button button-ghost button-small">
-            <ImageIcon size={14} /> Tải ảnh lên
-          </Link>
         </div>
+      </section>
+
+      {/* 1.5 Realtime Performance Mini Banner */}
+      <section className="admin-analytics-mini-banner">
+        <div className="mini-banner-left">
+          <div className="mini-pulse-wrap">
+            <span className="mini-pulse-dot" />
+            <Radio size={14} className="animate-pulse" />
+          </div>
+          <div className="mini-banner-text">
+            <b>Hiệu suất website hôm nay:</b>
+            <span>
+              <b>{analyticsSummary.total_views.toLocaleString("vi-VN")}</b> lượt xem (
+              <b>{analyticsSummary.unique_visitors.toLocaleString("vi-VN")}</b> khách) ·{" "}
+              <b style={{ color: "#10b981" }}>{analyticsSummary.cta_clicks.hotline || 0}</b> click gọi hotline ·{" "}
+              <b style={{ color: "#38bdf8" }}>{analyticsSummary.cta_clicks.zalo || 0}</b> chat Zalo
+            </span>
+          </div>
+        </div>
+        <Link href="/admin/analytics" className="mini-banner-cta">
+          <span>Chi tiết Analytics</span>
+          <ArrowUpRight size={14} />
+        </Link>
       </section>
 
       {/* 2. Stat Cards Grid */}
@@ -258,7 +293,7 @@ export default async function AdminDashboardPage() {
 
           <div style={{ display: "flex", flexDirection: "column", gap: "8px", flex: 1 }}>
             {products.slice(0, 4).map((product) => (
-                <div
+              <div
                 key={product.id}
                 style={{
                   display: "flex",

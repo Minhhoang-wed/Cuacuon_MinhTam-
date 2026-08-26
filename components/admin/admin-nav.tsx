@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  BarChart3,
   Boxes,
   Building2,
   ExternalLink,
@@ -69,7 +70,8 @@ const navGroups: NavGroup[] = [
   {
     title: "SEO & Hiệu suất",
     items: [
-      { href: "/admin/seo", label: "Quản trị SEO", icon: Search, badge: "NEW" },
+      { href: "/admin/analytics", label: "Analytics", icon: BarChart3, badge: "NEW" },
+      { href: "/admin/seo", label: "Quản trị SEO", icon: Search },
     ],
   },
 ];
