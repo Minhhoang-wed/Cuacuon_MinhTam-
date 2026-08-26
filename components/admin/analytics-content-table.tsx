@@ -49,16 +49,7 @@ export function AnalyticsContentTable({ initialData }: Props) {
     }
   }
 
-  // Fallback demo items if no DB data yet so admin sees beautiful structure
-  const rowsData = aggregated.size > 0
-    ? [...aggregated.values()]
-    : [
-        { content_type: "service", content_id: "sua-chua-cua-cuon-khan-cap-24-7", content_title: "Sửa chữa cửa cuốn khẩn cấp 24/7", stat_date: "2026-08-27", views: 542, unique_views: 418, clicks: 38, avg_duration: 145, avg_scroll: 78, total_views: 542, total_unique: 418, total_clicks: 38 },
-        { content_type: "product", content_id: "motor-amt-500", content_title: "Motor Cửa Cuốn Titadoor 600kg", stat_date: "2026-08-27", views: 310, unique_views: 245, clicks: 18, avg_duration: 180, avg_scroll: 82, total_views: 310, total_unique: 245, total_clicks: 18 },
-        { content_type: "service", content_id: "bao-tri-bao-duong-dinh-ky", content_title: "Bảo dưỡng & tra mỡ trục cửa định kỳ", stat_date: "2026-08-27", views: 240, unique_views: 198, clicks: 12, avg_duration: 110, avg_scroll: 65, total_views: 240, total_unique: 198, total_clicks: 12 },
-        { content_type: "article", content_id: "huong-dan-xu-ly-an-toan-khi-cua-cuon-bi-ket-nan", content_title: "Cách mở cửa cuốn khi mất điện lưới", stat_date: "2026-08-27", views: 188, unique_views: 162, clicks: 7, avg_duration: 210, avg_scroll: 90, total_views: 188, total_unique: 162, total_clicks: 7 },
-        { content_type: "product", content_id: "ups-safe-1000", content_title: "Bình lưu điện Safe 1000 chính hãng", stat_date: "2026-08-27", views: 154, unique_views: 120, clicks: 9, avg_duration: 95, avg_scroll: 60, total_views: 154, total_unique: 120, total_clicks: 9 },
-      ];
+  const rowsData = [...aggregated.values()];
 
   let filtered = rowsData;
   if (filter !== "all") {
@@ -133,51 +124,63 @@ export function AnalyticsContentTable({ initialData }: Props) {
             </tr>
           </thead>
           <tbody>
-            {filtered.slice(0, 10).map((row, idx) => {
-              const cfg = TYPE_CONFIG[row.content_type] || { label: "Nội dung", icon: null, color: "badge-gray" };
-              const targetUrl = row.content_type === "service"
-                ? `/dich-vu/${row.content_id}`
-                : row.content_type === "product"
-                ? `/san-pham/${row.content_id}`
-                : `/meo-kien-thuc/${row.content_id}`;
-              const pct = Math.round((row.total_views / maxViews) * 100);
+            {filtered.length === 0 ? (
+              <tr>
+                <td colSpan={6} style={{ textAlign: "center", padding: "40px 16px", color: "#94a3b8", fontSize: "13px" }}>
+                  Chưa có dữ liệu truy cập nào được ghi nhận. Hệ thống sẽ tự động cập nhật khi có khách truy cập website.
+                </td>
+              </tr>
+            ) : (
+              filtered.slice(0, 10).map((row, idx) => {
+                const cfg = TYPE_CONFIG[row.content_type] || { label: "Nội dung", icon: null, color: "badge-gray" };
+                const targetUrl = row.content_type === "service"
+                  ? `/dich-vu/${row.content_id}`
+                  : row.content_type === "product"
+                  ? `/san-pham/${row.content_id}`
+                  : `/meo-kien-thuc/${row.content_id}`;
+                const pct = Math.round((row.total_views / maxViews) * 100);
 
-              return (
-                <tr key={`${row.content_type}:${row.content_id}`}>
-                  <td>
-                    <span className={`rank-pill ${idx === 0 ? "gold" : idx === 1 ? "silver" : idx === 2 ? "bronze" : ""}`}>
-                      {idx + 1}
-                    </span>
-                  </td>
-                  <td>
-                    <div className="content-name-cell">
-                      <Link href={targetUrl} target="_blank" className="content-link">
-                        <span>{row.content_title || row.content_id}</span>
-                        <ArrowUpRight size={13} className="ext-icon" />
-                      </Link>
-                    </div>
-                  </td>
-                  <td>
-                    <span className={`type-tag ${cfg.color}`}>
-                      {cfg.icon}
-                      <span>{cfg.label}</span>
-                    </span>
-                  </td>
-                  <td className="num-cell">
-                    <b>{row.total_views.toLocaleString("vi-VN")}</b>
-                    <small>{row.total_unique} khách</small>
-                  </td>
-                  <td className="num-cell highlight-cta">
-                    <b>{row.total_clicks > 0 ? `${row.total_clicks} cuộc gọi` : "—"}</b>
-                  </td>
-                  <td>
-                    <div className="popularity-bar-wrap">
-                      <div className="popularity-bar" style={{ width: `${pct}%` }} />
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
+                return (
+                  <tr key={`${row.content_type}:${row.content_id}`}>
+                    <td>
+                      <span className={`rank-pill ${idx === 0 ? "gold" : idx === 1 ? "silver" : idx === 2 ? "bronze" : ""}`}>
+                        {idx + 1}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="content-name-cell">
+                        <Link href={targetUrl} target="_blank" className="content-link">
+                          <span>{row.content_title || row.content_id}</span>
+                          <ArrowUpRight size={13} className="ext-icon" />
+                        </Link>
+                      </div>
+                    </td>
+                    <td>
+                      <span className={`type-tag ${cfg.color}`}>
+                        {cfg.icon}
+                        <span>{cfg.label}</span>
+                      </span>
+                    </td>
+                    <td style={{ textAlign: "right" }}>
+                      <div className="num-box">
+                        <b>{row.total_views.toLocaleString("vi-VN")}</b>
+                        <small>{row.total_unique} khách</small>
+                      </div>
+                    </td>
+                    <td style={{ textAlign: "right" }}>
+                      <span className="cta-count-pill">
+                        {row.total_clicks > 0 ? `${row.total_clicks} cuộc gọi` : "0"}
+                      </span>
+                    </td>
+                    <td>
+                      <div className="popularity-bar-wrap">
+                        <div className="popularity-bar" style={{ width: `${pct}%` }} />
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
+            )}
           </tbody>
         </table>
       </div>

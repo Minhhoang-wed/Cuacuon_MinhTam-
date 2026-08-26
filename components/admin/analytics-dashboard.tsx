@@ -62,11 +62,10 @@ export function AnalyticsDashboard({ initialData, children }: Props) {
   });
   const dailyViews = dailySeries.map((d) => d.views);
 
-  const totalDeviceViews = (data.device_breakdown.mobile || 0) + (data.device_breakdown.desktop || 0) + (data.device_breakdown.tablet || 0);
   const deviceData = [
-    { label: "Mobile", value: data.device_breakdown.mobile || (totalDeviceViews === 0 ? 35 : 0), color: "#10b981" },
-    { label: "Desktop", value: data.device_breakdown.desktop || (totalDeviceViews === 0 ? 12 : 0), color: "#38bdf8" },
-    { label: "Tablet", value: data.device_breakdown.tablet || (totalDeviceViews === 0 ? 3 : 0), color: "#f59e0b" },
+    { label: "Mobile", value: data.device_breakdown.mobile || 0, color: "#10b981" },
+    { label: "Desktop", value: data.device_breakdown.desktop || 0, color: "#38bdf8" },
+    { label: "Tablet", value: data.device_breakdown.tablet || 0, color: "#f59e0b" },
   ];
 
   // CTA counts
@@ -97,13 +96,13 @@ export function AnalyticsDashboard({ initialData, children }: Props) {
         <LiveOnlinePill />
       </div>
 
-      {/* ── 1. 4 Luxury Stat Cards (Mockup Top Row) ── */}
+      {/* ── 1. 4 Luxury Stat Cards (Real DB Data) ── */}
       <section className="analytics-cards-grid">
         <StatCard
           icon={<Eye size={20} />}
           label="Tổng Lượt Xem"
           value={data.total_views || 0}
-          change="+1.38%"
+          change={data.total_views > 0 ? "Lượt xem" : undefined}
           changePositive={true}
           colorClass="emerald"
         />
@@ -111,7 +110,7 @@ export function AnalyticsDashboard({ initialData, children }: Props) {
           icon={<Users size={20} />}
           label="Khách Độc Quyền"
           value={data.unique_visitors || 0}
-          change="+6.97%"
+          change={data.unique_visitors > 0 ? "Khách thực" : undefined}
           changePositive={true}
           colorClass="teal"
         />
@@ -119,7 +118,7 @@ export function AnalyticsDashboard({ initialData, children }: Props) {
           icon={<PhoneCall size={20} />}
           label="Cuộc Gọi Hotline"
           value={`${hotlineClicks} Clicks`}
-          change="+18.38%"
+          change={hotlineClicks > 0 ? "Khách gọi" : undefined}
           changePositive={true}
           colorClass="blue"
         />
@@ -127,7 +126,7 @@ export function AnalyticsDashboard({ initialData, children }: Props) {
           icon={<MessageSquareText size={20} />}
           label="Tin Nhắn Zalo / Form"
           value={`${zaloClicks + formClicks} Clicks`}
-          change="+1.08%"
+          change={(zaloClicks + formClicks) > 0 ? "Tin nhắn" : undefined}
           changePositive={true}
           colorClass="purple"
         />
