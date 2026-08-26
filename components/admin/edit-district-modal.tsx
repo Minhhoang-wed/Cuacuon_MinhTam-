@@ -106,12 +106,11 @@ export function EditDistrictModal({ district }: { district: AdminServiceDistrict
                 </label>
 
                 <label>
-                  <span>Địa chỉ điểm chốt / Cột mốc *</span>
+                  <span>Địa chỉ điểm chốt / Cột mốc (Không bắt buộc)</span>
                   <input
                     name="address_landmark"
-                    required
                     defaultValue={district.address_landmark}
-                    placeholder="VD: 248 Quang Trung, P.10, Gò Vấp"
+                    placeholder="VD: 248 Quang Trung... (Để trống nếu không có địa chỉ cụ thể)"
                   />
                 </label>
 

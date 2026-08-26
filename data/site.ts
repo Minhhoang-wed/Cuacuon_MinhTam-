@@ -10,7 +10,7 @@ export const siteConfig = {
   address: "361 Lý Thường Kiệt, P. Tân Hòa, Quận 10, TP.HCM",
   hours: "Tiếp nhận 24/7",
   mapsHref: "https://maps.google.com/?q=Ho+Chi+Minh+City",
-  serviceArea: "Toàn bộ 24 Quận / Huyện TP.HCM & Khu vực lân cận",
+  serviceArea: "Toàn bộ 24 Quận / Huyện TP.HCM, Hà Nội & Khu vực lân cận",
   baseUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://www.suachuacuacuonnhanh24h.com",
 } as const;
 

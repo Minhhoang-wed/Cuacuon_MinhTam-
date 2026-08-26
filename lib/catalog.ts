@@ -174,11 +174,13 @@ export async function getProjects(
     const rows = await supabaseFetch<DbProject[]>(path, {
       next: { revalidate: 300, tags: ["projects"] },
     });
-    return rows.map(mapProject);
+    if (rows && rows.length > 0) {
+      return rows.map(mapProject);
+    }
   } catch (error) {
     console.error("Không thể tải danh sách dự án từ Supabase", error);
-    return [];
   }
+  return [];
 }
 
 export async function getProjectBySlug(slug: string): Promise<CatalogProject | null> {
@@ -191,7 +193,8 @@ export async function getProjectBySlug(slug: string): Promise<CatalogProject | n
       { next: { revalidate: 300, tags: ["projects", `project-${slug}`] } }
     );
     return rows[0] ? mapProject(rows[0]) : null;
-  } catch {
+  } catch (error) {
+    console.error("Lỗi khi tải chi tiết dự án từ Supabase:", error);
     return null;
   }
 }
@@ -315,6 +318,11 @@ type DbServicePriceItem = {
   is_active: boolean;
 };
 
+function getCategorySortNumber(title: string): number {
+  const match = title.trim().match(/^(\d+)/);
+  return match ? parseInt(match[1], 10) : 9999;
+}
+
 export async function getServicePricing(): Promise<CatalogServicePriceCategory[]> {
   const sortCategories = (cats: CatalogServicePriceCategory[]) =>
     [...cats].sort((a, b) => a.categoryTitle.localeCompare(b.categoryTitle, "vi", { numeric: true }));
@@ -328,7 +336,7 @@ export async function getServicePricing(): Promise<CatalogServicePriceCategory[]
       { next: { revalidate: 300, tags: ["service-pricing"] } }
     );
     if (rows && rows.length > 0) {
-      const grouped: Record<string, Array<{ id?: string; name: string; price: string; warranty: string }>> = {};
+      const grouped: Record<string, Array<{ id?: string; name: string; price: string; warranty: string; sort_order?: number }>> = {};
       for (const row of rows) {
         if (!grouped[row.category_name]) grouped[row.category_name] = [];
         grouped[row.category_name].push({
@@ -336,14 +344,20 @@ export async function getServicePricing(): Promise<CatalogServicePriceCategory[]
           name: row.item_name,
           price: row.price,
           warranty: row.warranty,
+          sort_order: row.sort_order,
         });
       }
-      return sortCategories(
-        Object.entries(grouped).map(([categoryTitle, items]) => ({
+      return Object.entries(grouped)
+        .map(([categoryTitle, items]) => ({
           categoryTitle,
-          items,
+          items: items.sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0)),
         }))
-      );
+        .sort((a, b) => {
+          const numA = getCategorySortNumber(a.categoryTitle);
+          const numB = getCategorySortNumber(b.categoryTitle);
+          if (numA !== numB) return numA - numB;
+          return a.categoryTitle.localeCompare(b.categoryTitle, "vi", { numeric: true });
+        });
     }
   } catch (error) {
     console.error("Lỗi khi tải bảng giá dịch vụ từ Supabase:", error);
@@ -443,7 +457,7 @@ export async function getServiceDistricts(): Promise<CatalogServiceDistrict[]> {
       { next: { revalidate: 300, tags: ["service-districts"] } }
     );
     if (rows && rows.length > 0) {
-      return rows.map((r) => ({
+      const items: CatalogServiceDistrict[] = rows.map((r) => ({
         id: r.id,
         districtName: r.district_name,
         addressLandmark: r.address_landmark,
@@ -453,6 +467,31 @@ export async function getServiceDistricts(): Promise<CatalogServiceDistrict[]> {
         sortOrder: r.sort_order || 0,
         isActive: r.is_active,
       }));
+
+      const hasHanoi = items.some(
+        (d) =>
+          d.districtName.toLowerCase().includes("hà nội") ||
+          d.districtName.toLowerCase().includes("ha noi") ||
+          d.districtName.toLowerCase().includes("(hn)")
+      );
+
+      if (!hasHanoi) {
+        const hanoiDefaults = serviceAreaPoints
+          .filter((p) => p.district.includes("Hà Nội"))
+          .map((p, idx) => ({
+            id: `static-hanoi-${idx}`,
+            districtName: p.district,
+            addressLandmark: p.address,
+            responseTime: "Có mặt sau 15 – 25 phút",
+            note: p.note || "Đội kỹ thuật túc trực 24/7",
+            isHotspot: idx < 4,
+            sortOrder: 200 + idx,
+            isActive: true,
+          }));
+        items.push(...hanoiDefaults);
+      }
+
+      return items;
     }
   } catch (error) {
     console.error("Lỗi khi tải quận huyện từ Supabase:", error);
@@ -600,6 +639,11 @@ export async function getSiteSettings(): Promise<ManagedSiteConfig> {
     const hotline = (rawHotline && !rawHotline.includes("0909") && !rawHotline.includes("0901")) ? rawHotline : fallback.hotline;
     const rawZalo = row.zalo_url || "";
     const zaloHref = (rawZalo && !rawZalo.includes("0909") && !rawZalo.includes("0901")) ? rawZalo : fallback.zaloHref;
+    const rawServiceArea = row.service_area || "";
+    const serviceArea = (rawServiceArea && (rawServiceArea.includes("Hà Nội") || rawServiceArea.includes("Hanoi") || rawServiceArea.includes("HN")))
+      ? rawServiceArea
+      : (rawServiceArea ? `${rawServiceArea.replace(/\s*và khu vực lân cận/gi, "")}, Hà Nội và khu vực lân cận` : fallback.serviceArea);
+
     return {
       ...fallback,
       name: row.company_name || fallback.name,
@@ -616,7 +660,7 @@ export async function getSiteSettings(): Promise<ManagedSiteConfig> {
       branch2Address: row.branch_2_address || "617 Phạm Văn Chí, P. Bình Tiên, Quận 6, TP.HCM",
       hours: row.business_hours || fallback.hours,
       mapsHref: row.maps_url || fallback.mapsHref,
-      serviceArea: row.service_area || fallback.serviceArea,
+      serviceArea,
       facebookHref: row.facebook_url || fallback.facebookHref,
       messengerHref: row.messenger_url || fallback.messengerHref,
       seoTitleTemplate: row.seo_title_template || fallback.seoTitleTemplate,

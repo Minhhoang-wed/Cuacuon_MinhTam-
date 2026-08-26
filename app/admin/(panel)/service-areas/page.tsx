@@ -289,16 +289,15 @@ export default async function AdminServiceAreasPage({
                 <input
                   name="district_name"
                   required
-                  placeholder="VD: Quận Gò Vấp, Bình Dương, Long An..."
+                  placeholder="VD: Quận Cầu Giấy (Hà Nội), Quận Gò Vấp..."
                 />
               </label>
 
               <label>
-                <span>Địa chỉ điểm chốt / Cột mốc *</span>
+                <span>Địa chỉ điểm chốt / Cột mốc (Không bắt buộc)</span>
                 <input
                   name="address_landmark"
-                  required
-                  placeholder="VD: 248 Quang Trung, P.10, Gò Vấp"
+                  placeholder="VD: 248 Quang Trung... (Để trống nếu chỉ cần ghi tên quận)"
                 />
               </label>
 

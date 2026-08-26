@@ -1,5 +1,6 @@
 "use client";
 
+import { MessageCircle, Phone } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface CinematicHeroSliderProps {
@@ -72,6 +73,25 @@ export function CinematicHeroSlider({
               {description ||
                 "Tiếp nhận mọi sự cố cửa cuốn kẹt nan, hỏng motor, lỗi remote, lệch ray, đứt lò xo... Kỹ thuật viên có mặt nhanh sau 15 – 30 phút tại tất cả các quận huyện TP.HCM."}
             </p>
+
+            <div className="cinematic-hero-actions">
+              <a
+                href={hotlineHref || `tel:${(hotline || "0327359368").replace(/\D/g, "")}`}
+                className="cinematic-btn-primary"
+              >
+                <Phone size={18} />
+                <span>Gọi ngay: <b>{hotline || "0327 359 368"}</b></span>
+              </a>
+              <a
+                href={zaloHref || "https://zalo.me/0327359368"}
+                target="_blank"
+                rel="noreferrer"
+                className="cinematic-btn-secondary"
+              >
+                <MessageCircle size={18} />
+                <span>Nhận báo giá qua Zalo</span>
+              </a>
+            </div>
           </div>
 
           {/* Dấu chấm chuyển slide (Subtle Dots) */}

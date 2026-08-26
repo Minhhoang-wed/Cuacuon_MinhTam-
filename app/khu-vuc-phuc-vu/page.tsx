@@ -7,9 +7,9 @@ import { getServiceDistricts, getSiteSettings, getStoreBranches } from "@/lib/ca
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "Khu vực phục vụ sửa cửa cuốn toàn TP.HCM | Minh Tâm Door",
+  title: "Hệ thống cửa hàng Tại TP.HCM và Hà Nội | Minh Tâm Door",
   description:
-    "2 chi nhánh cửa hàng trực tiếp tại Quận 10, Quận 6 và đội ngũ kỹ thuật viên túc trực tại tất cả các quận huyện TP.HCM. Có mặt nhanh chóng trong 15-30 phút.",
+    "Hệ thống cửa hàng trực tiếp và đội ngũ kỹ thuật viên túc trực tại tất cả các quận huyện TP.HCM và Hà Nội. Có mặt nhanh chóng trong 15-30 phút.",
   alternates: { canonical: "/khu-vuc-phuc-vu" },
 };
 
@@ -20,12 +20,27 @@ export default async function ServiceAreaPage() {
     getServiceDistricts(),
   ]);
 
+  // Phân chia theo TP. Hồ Chí Minh và TP. Hà Nội
+  const hanoiDistricts = serviceDistricts.filter(
+    (d) =>
+      d.districtName.toLowerCase().includes("hà nội") ||
+      d.districtName.toLowerCase().includes("ha noi") ||
+      d.districtName.toLowerCase().includes("(hn)")
+  );
+
+  const hcmDistricts = serviceDistricts.filter(
+    (d) =>
+      !d.districtName.toLowerCase().includes("hà nội") &&
+      !d.districtName.toLowerCase().includes("ha noi") &&
+      !d.districtName.toLowerCase().includes("(hn)")
+  );
+
   return (
     <>
       <PageHero
-        eyebrow="Phủ sóng toàn TP.HCM"
-        title="Hệ Thống Cửa Hàng & Mạng Lưới Kỹ Thuật Tận Nơi"
-        description="Minh Tâm Door sở hữu các cửa hàng trực tiếp và đội ngũ kỹ thuật viên thường trực tại tất cả các quận huyện TP.HCM, sẵn sàng có mặt nhanh sau 15 - 30 phút."
+        eyebrow="Phủ sóng TP.HCM & Hà Nội"
+        title="Hệ Thống Cửa Hàng Tại TP.HCM và Hà Nội"
+        description="Minh Tâm Door sở hữu các showroom trưng bày và mạng lưới kỹ thuật viên thường trực tại tất cả các quận huyện TP.HCM và Hà Nội, sẵn sàng có mặt nhanh sau 15 - 30 phút."
         image="/images/area-hero-banner.jpg"
         cardOverlay={true}
       />
@@ -73,30 +88,65 @@ export default async function ServiceAreaPage() {
             ))}
           </div>
 
-          <div className="repair-section-heading compact">
-            <span>Tiếp nhận nhanh 24/7</span>
-            <h2>Đội ngũ kỹ thuật túc trực tại các quận huyện ({serviceDistricts.length} điểm)</h2>
-            <p>Kỹ thuật viên tại chỗ có mặt sau 15 – 30 phút, quý khách ở bất kỳ quận nào cũng không phải chờ đợi lâu.</p>
+          {/* 1. MẠNG LƯỚI TP. HỒ CHÍ MINH */}
+          <div className="repair-section-heading compact" style={{ marginTop: "32px" }}>
+            <span>Phủ sóng TP. Hồ Chí Minh</span>
+            <h2>Đội ngũ kỹ thuật túc trực tại TP. Hồ Chí Minh ({hcmDistricts.length} điểm)</h2>
+            <p>Kỹ thuật viên tại chỗ có mặt sau 15 – 30 phút, quý khách ở bất kỳ quận huyện nào tại TP.HCM cũng không phải chờ đợi lâu.</p>
           </div>
 
           <div className="repair-area-panel">
             <div className="repair-area-panel-heading">
-              <span>Đội kỹ thuật lưu động 24/7</span>
+              <span>Đội kỹ thuật lưu động TP.HCM 24/7</span>
               <p>Kỹ thuật viên túc trực tại chỗ ở từng quận huyện · 15 - 30 phút có mặt tận nơi xử lý sự cố.</p>
             </div>
             <div className="repair-area-list">
-              {serviceDistricts.map((item) => (
+              {hcmDistricts.map((item) => (
                 <a href={site.hotlineHref} className="repair-area-row" key={item.id || item.districtName}>
                   <MapPin size={18} />
                   <span>
                     <b>{item.districtName}</b>
-                    <em>{item.addressLandmark}</em>
+                    {item.addressLandmark && item.addressLandmark.trim() ? (
+                      <em>{item.addressLandmark}</em>
+                    ) : null}
                     <small>{item.responseTime} {item.note ? `· ${item.note}` : ""}</small>
                   </span>
                 </a>
               ))}
             </div>
           </div>
+
+          {/* 2. MẠNG LƯỚI TP. HÀ NỘI */}
+          {hanoiDistricts.length > 0 && (
+            <>
+              <div className="repair-section-heading compact" style={{ marginTop: "56px" }}>
+                <span>Phủ sóng TP. Hà Nội</span>
+                <h2>Đội ngũ kỹ thuật túc trực tại TP. Hà Nội ({hanoiDistricts.length} quận huyện)</h2>
+                <p>Đội ngũ kỹ sư & thợ sửa cửa cuốn túc trực 24/7 tại các quận nội thành và ngoại thành Hà Nội, xử lý nhanh mọi sự cố khẩn cấp.</p>
+              </div>
+
+              <div className="repair-area-panel">
+                <div className="repair-area-panel-heading">
+                  <span>Đội kỹ thuật lưu động TP. Hà Nội 24/7</span>
+                  <p>Tiếp nhận yêu cầu cứu hộ & sửa chữa cửa cuốn tại các quận huyện Hà Nội · Có mặt sau 15 - 30 phút.</p>
+                </div>
+                <div className="repair-area-list">
+                  {hanoiDistricts.map((item) => (
+                    <a href={site.hotlineHref} className="repair-area-row" key={item.id || item.districtName}>
+                      <MapPin size={18} />
+                      <span>
+                        <b>{item.districtName.replace(/\s*\(Hà Nội\)/gi, "")}</b>
+                        {item.addressLandmark && item.addressLandmark.trim() ? (
+                          <em>{item.addressLandmark}</em>
+                        ) : null}
+                        <small>{item.responseTime} {item.note ? `· ${item.note}` : "· Túc trực 24/7"}</small>
+                      </span>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </section>
     </>

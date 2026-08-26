@@ -20,6 +20,7 @@ const navLinks = [
   { label: "Trang chủ", href: "/" },
   { label: "Sửa cửa cuốn", href: "/dich-vu" },
   { label: "Khu vực phục vụ", href: "/khu-vuc-phuc-vu" },
+  { label: "Dự án", href: "/du-an" },
   { label: "Mẹo & kiến thức", href: "/meo-kien-thuc" },
   { label: "Giới thiệu", href: "/ve-chung-toi" },
 ];
@@ -188,6 +189,13 @@ export function SiteHeader({ site }: { site: ManagedSiteConfig }) {
                 className={isActive("/khu-vuc-phuc-vu") ? "active" : ""}
               >
                 Khu vực phục vụ
+              </Link>
+              <Link
+                href="/du-an"
+                onClick={() => setOpen(false)}
+                className={isActive("/du-an") ? "active" : ""}
+              >
+                Dự án thi công
               </Link>
               <Link
                 href="/meo-kien-thuc"
