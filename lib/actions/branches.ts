@@ -73,14 +73,14 @@ export async function saveServiceDistrict(form: FormData) {
   const token = await getAdminAccessToken();
   const id = value(form, "id");
   const district_name = value(form, "district_name");
-  const address_landmark = value(form, "address_landmark");
+  const address_landmark = optional(form, "address_landmark") || "";
   const response_time = value(form, "response_time") || "Có mặt sau 15 – 25 phút";
   const note = optional(form, "note") || "Trạm trực kỹ thuật";
   const is_hotspot = form.get("is_hotspot") === "true" || form.get("is_hotspot") === "on";
   const sort_order = Number(value(form, "sort_order") || 0);
   const is_active = form.get("is_active") === "true" || form.get("is_active") === "on";
 
-  if (district_name.length < 2 || address_landmark.length < 2) throw new Error("Cần nhập tên quận huyện và địa chỉ điểm chốt.");
+  if (district_name.length < 2) throw new Error("Cần nhập tên quận huyện.");
 
   const payload = {
     district_name,

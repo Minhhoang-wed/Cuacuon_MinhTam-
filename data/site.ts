@@ -10,7 +10,7 @@ export const siteConfig = {
   address: "123 Đường Minh Họa, TP. Hồ Chí Minh",
   hours: "Tiếp nhận 24/7",
   mapsHref: "https://maps.google.com/?q=Ho+Chi+Minh+City",
-  serviceArea: "TP. Hồ Chí Minh và khu vực lân cận",
+  serviceArea: "TP. Hồ Chí Minh, Hà Nội và khu vực lân cận",
   baseUrl: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
 } as const;
 
