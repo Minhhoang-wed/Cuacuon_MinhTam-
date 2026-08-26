@@ -90,6 +90,12 @@ export async function POST(req: NextRequest) {
       return new NextResponse(null, { status: 204 });
     }
 
+    // ── Ignore tracking for logged-in Admin ──
+    const cookies = req.headers.get("cookie") || "";
+    if (cookies.includes("antam_admin_access")) {
+      return new NextResponse(null, { status: 204 });
+    }
+
     // ── Validate required fields ──
     if (!body.visitor_id || !body.session_id || !body.page_path) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });

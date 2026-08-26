@@ -86,8 +86,9 @@ export function AnalyticsTracker() {
 
   // ── Track Page View on Route Change ──
   useEffect(() => {
-    // Don't track admin pages
+    // Don't track admin pages or logged-in admin browsing public site
     if (!pathname || pathname.startsWith("/admin")) return;
+    if (typeof document !== "undefined" && document.cookie.includes("antam_admin_access")) return;
 
     let isMounted = true;
 
