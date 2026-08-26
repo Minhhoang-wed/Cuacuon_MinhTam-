@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Eye, Users, PhoneCall, MessageSquareText, Calendar } from "lucide-react";
-import { LineChart, DonutChart, StatCard } from "./analytics-charts";
+import { HourlyActivityChart, LineChart, DonutChart, StatCard } from "./analytics-charts";
 import { AnalyticsRealtimeStream, LiveOnlinePill } from "./analytics-realtime";
 import type { AnalyticsSummary } from "@/lib/analytics-data";
 
@@ -136,19 +136,17 @@ export function AnalyticsDashboard({ initialData, children }: Props) {
       <section className="analytics-middle-grid">
         <div className="analytics-chart-panel">
           {period === "today" ? (
-            <LineChart
+            <HourlyActivityChart
               data={hourlyData}
               labels={hourlyLabels}
-              height={260}
-              title="Hourly Khách Truy Cập (Theo 24 Giờ)"
-              color="#10b981"
-              gradientId="hourlyEmeraldGrad"
+              height={240}
+              title="Lưu Lượng Khách Truy Cập Theo Giờ (Hôm Nay)"
             />
           ) : (
             <LineChart
               data={dailyViews}
               labels={dailyLabels}
-              height={260}
+              height={240}
               title={`Lượng Truy Cập Theo Ngày (${period === "7d" ? "7 Ngày" : "30 Ngày"} Qua)`}
               color="#38bdf8"
               gradientId="dailyBlueGrad"

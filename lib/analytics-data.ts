@@ -38,6 +38,25 @@ export interface RealtimeData {
 
 // ── Server-side data fetching functions ──
 
+// ── Vietnam Timezone (UTC+7) Helpers ──
+function getVietnamTodayStartISO(): string {
+  const now = new Date();
+  const vnOffsetMs = 7 * 60 * 60 * 1000;
+  const vnNow = new Date(now.getTime() + vnOffsetMs);
+  const vnYear = vnNow.getUTCFullYear();
+  const vnMonth = vnNow.getUTCMonth();
+  const vnDate = vnNow.getUTCDate();
+  const vnMidnightUTC = new Date(Date.UTC(vnYear, vnMonth, vnDate, 0, 0, 0) - vnOffsetMs);
+  return vnMidnightUTC.toISOString();
+}
+
+function getVietnamHour(dateStr: string): number {
+  const d = new Date(dateStr);
+  const vnOffsetMs = 7 * 60 * 60 * 1000;
+  const vnDate = new Date(d.getTime() + vnOffsetMs);
+  return vnDate.getUTCHours();
+}
+
 /**
  * Get analytics summary for a period.
  * Calls the /api/analytics/stats endpoint internally via supabase REST.
@@ -47,12 +66,10 @@ export async function getAnalyticsSummary(period: string = "today"): Promise<Ana
   if (!session) throw new Error("Not authenticated");
   const accessToken = await getAdminAccessToken();
 
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
-  const todayISO = todayStart.toISOString();
+  const todayISO = getVietnamTodayStartISO();
 
   if (period === "today") {
-    // Query raw page views for today
+    // Query raw page views for today in Vietnam time
     const [pageViews, events] = await Promise.all([
       supabaseFetch<Array<{
         visitor_id: string;
@@ -89,8 +106,10 @@ export async function getAnalyticsSummary(period: string = "today"): Promise<Ana
 
     const hourly = Array(24).fill(0);
     for (const r of pv) {
-      const h = new Date(r.created_at).getHours();
-      hourly[h]++;
+      const h = getVietnamHour(r.created_at);
+      if (h >= 0 && h < 24) {
+        hourly[h]++;
+      }
     }
 
     const devices = { desktop: 0, mobile: 0, tablet: 0 };

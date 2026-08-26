@@ -123,11 +123,28 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// ── Today's stats: query raw tables directly ──
+// ── Vietnam Timezone (UTC+7) Helpers ──
+function getVietnamTodayStartISO(): string {
+  const now = new Date();
+  const vnOffsetMs = 7 * 60 * 60 * 1000;
+  const vnNow = new Date(now.getTime() + vnOffsetMs);
+  const vnYear = vnNow.getUTCFullYear();
+  const vnMonth = vnNow.getUTCMonth();
+  const vnDate = vnNow.getUTCDate();
+  const vnMidnightUTC = new Date(Date.UTC(vnYear, vnMonth, vnDate, 0, 0, 0) - vnOffsetMs);
+  return vnMidnightUTC.toISOString();
+}
+
+function getVietnamHour(dateStr: string): number {
+  const d = new Date(dateStr);
+  const vnOffsetMs = 7 * 60 * 60 * 1000;
+  const vnDate = new Date(d.getTime() + vnOffsetMs);
+  return vnDate.getUTCHours();
+}
+
+// ── Today's stats: query raw tables directly in Vietnam time ──
 async function getTodayStats(accessToken: string) {
-  const todayStart = new Date();
-  todayStart.setHours(0, 0, 0, 0);
-  const todayISO = todayStart.toISOString();
+  const todayISO = getVietnamTodayStartISO();
 
   const [pageViews, events] = await Promise.all([
     supabaseFetch<Array<{
@@ -163,11 +180,13 @@ async function getTodayStats(accessToken: string) {
   const uniqueSessions = new Set(pv.map((r) => r.session_id)).size;
   const bounceSessions = new Set(pv.filter((r) => r.is_bounce).map((r) => r.session_id)).size;
 
-  // Hourly distribution
+  // Hourly distribution in Vietnam timezone (0h - 23h)
   const hourly = Array(24).fill(0);
   for (const r of pv) {
-    const h = new Date(r.created_at).getHours();
-    hourly[h]++;
+    const h = getVietnamHour(r.created_at);
+    if (h >= 0 && h < 24) {
+      hourly[h]++;
+    }
   }
 
   // Device breakdown

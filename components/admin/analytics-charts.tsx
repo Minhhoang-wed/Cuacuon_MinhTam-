@@ -1,8 +1,146 @@
 "use client";
 
-// ── Pure SVG/CSS Charts for Luxury Analytics Dashboard ──
-// High-end aesthetic with curved lines, gradients, and glowing accents
+import { useState } from "react";
+import { BarChart3, LineChart as LineChartIcon, Flame, Clock } from "lucide-react";
 
+// ── 1. HOURLY ACTIVITY CHART (Vertical Column Bars + Smooth Curve Toggle) ──
+interface HourlyActivityChartProps {
+  data: number[];
+  labels: string[];
+  title?: string;
+  height?: number;
+}
+
+export function HourlyActivityChart({
+  data,
+  labels,
+  title = "Lưu lượng truy cập theo giờ",
+  height = 240,
+}: HourlyActivityChartProps) {
+  const [chartType, setChartType] = useState<"bar" | "line">("bar");
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+
+  const maxVal = Math.max(...data, 1);
+  const totalViews = data.reduce((s, v) => s + v, 0);
+
+  // Find peak hour
+  let peakIdx = 0;
+  let peakVal = 0;
+  data.forEach((v, i) => {
+    if (v > peakVal) {
+      peakVal = v;
+      peakIdx = i;
+    }
+  });
+
+  // Current hour in Vietnam (UTC+7)
+  const vnNowHour = new Date(Date.now() + 7 * 60 * 60 * 1000).getUTCHours();
+
+  return (
+    <div className="hourly-activity-widget">
+      {/* ── Widget Header with Meta & View Switcher ── */}
+      <div className="hourly-widget-header">
+        <div className="hourly-title-group">
+          <h4 className="hourly-title">{title}</h4>
+          <div className="hourly-meta-pills">
+            <span className="hourly-meta-pill now">
+              <Clock size={12} />
+              <span>Hiện tại: <b>{vnNowHour}h</b></span>
+            </span>
+            {peakVal > 0 && (
+              <span className="hourly-meta-pill peak">
+                <Flame size={12} />
+                <span>Cao điểm: <b>{peakIdx}h ({peakVal} lượt)</b></span>
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* View Switcher Toggle */}
+        <div className="hourly-view-switcher">
+          <button
+            className={`switcher-btn ${chartType === "bar" ? "active" : ""}`}
+            onClick={() => setChartType("bar")}
+            title="Xem dạng biểu đồ cột (dễ nhìn)"
+          >
+            <BarChart3 size={14} />
+            <span>Cột</span>
+          </button>
+          <button
+            className={`switcher-btn ${chartType === "line" ? "active" : ""}`}
+            onClick={() => setChartType("line")}
+            title="Xem dạng biểu đồ sóng"
+          >
+            <LineChartIcon size={14} />
+            <span>Sóng</span>
+          </button>
+        </div>
+      </div>
+
+      {/* ── View 1: Super Clear Vertical Column Bar Chart (Default) ── */}
+      {chartType === "bar" ? (
+        <div className="hourly-bars-container" style={{ height }}>
+          {data.map((val, idx) => {
+            const pct = Math.max((val / maxVal) * 85, val > 0 ? 12 : 3);
+            const isCurrent = idx === vnNowHour;
+            const hasData = val > 0;
+
+            return (
+              <div
+                key={idx}
+                className={`hourly-col-item ${isCurrent ? "is-current" : ""} ${hasData ? "has-data" : ""}`}
+                onMouseEnter={() => setHoveredIdx(idx)}
+                onMouseLeave={() => setHoveredIdx(null)}
+              >
+                {/* Tooltip on hover */}
+                {hoveredIdx === idx && (
+                  <div className="hourly-tooltip">
+                    <span className="tt-time">{idx.toString().padStart(2, "0")}:00 - {idx.toString().padStart(2, "0")}:59</span>
+                    <b className="tt-val">{val} lượt xem</b>
+                  </div>
+                )}
+
+                {/* Number on top if has data */}
+                <span className="col-top-count">{val > 0 ? val : ""}</span>
+
+                {/* Vertical Bar track and fill */}
+                <div className="col-track">
+                  <div
+                    className="col-fill"
+                    style={{
+                      height: `${pct}%`,
+                      background: isCurrent
+                        ? "linear-gradient(180deg, #10b981 0%, #059669 100%)"
+                        : hasData
+                        ? "linear-gradient(180deg, #34d399 0%, #10b981 100%)"
+                        : "#f1f5f9",
+                    }}
+                  />
+                </div>
+
+                {/* Bottom Hour Label */}
+                <span className={`col-label ${isCurrent ? "now-label" : ""}`}>
+                  {idx % 2 === 0 ? `${idx}h` : ""}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        /* ── View 2: Smooth Curved Line Chart ── */
+        <LineChart
+          data={data}
+          labels={labels}
+          height={height}
+          color="#10b981"
+          gradientId="emeraldHourlyGrad"
+        />
+      )}
+    </div>
+  );
+}
+
+// ── 2. PURE SVG LINE CHART (For 7-day and 30-day trends) ──
 interface LineChartProps {
   data: number[];
   labels: string[];
@@ -39,7 +177,6 @@ export function LineChart({
     y: padding.top + chartH - (val / maxVal) * chartH,
   }));
 
-  // Create smooth curved path (bezier interpolation)
   const curvePath = points.reduce((acc, p, i, a) => {
     if (i === 0) return `M ${p.x},${p.y}`;
     const prev = a[i - 1];
@@ -54,7 +191,6 @@ export function LineChart({
   const firstPoint = points[0];
   const areaPath = `${curvePath} L ${lastPoint.x},${padding.top + chartH} L ${firstPoint.x},${padding.top + chartH} Z`;
 
-  // Grid lines (3 horizontal guides)
   const gridLines = 3;
   const gridSteps = Array.from({ length: gridLines + 1 }, (_, i) => ({
     y: padding.top + (i / gridLines) * chartH,
@@ -80,7 +216,6 @@ export function LineChart({
           </filter>
         </defs>
 
-        {/* Horizontal grid lines */}
         {gridSteps.map((g) => (
           <g key={g.val}>
             <line
@@ -97,20 +232,9 @@ export function LineChart({
           </g>
         ))}
 
-        {/* Area with vertical gradient */}
         <path d={areaPath} fill={`url(#${gradientId})`} />
+        <path d={curvePath} fill="none" stroke={color} strokeWidth="3" strokeLinecap="round" filter="url(#glow)" />
 
-        {/* Smooth glowing line */}
-        <path
-          d={curvePath}
-          fill="none"
-          stroke={color}
-          strokeWidth="3"
-          strokeLinecap="round"
-          filter="url(#glow)"
-        />
-
-        {/* Data point dots */}
         {points.map((p, i) => (
           <g key={i} className="chart-dot-group">
             <circle cx={p.x} cy={p.y} r="4" fill="#ffffff" stroke={color} strokeWidth="2.5" />
@@ -118,7 +242,6 @@ export function LineChart({
           </g>
         ))}
 
-        {/* X-axis time labels */}
         {labels.map((label, i) => {
           const showEvery = labels.length > 18 ? 3 : labels.length > 10 ? 2 : 1;
           if (i % showEvery !== 0 && i !== labels.length - 1) return null;
@@ -134,56 +257,7 @@ export function LineChart({
   );
 }
 
-// ── Bar Chart ──
-interface BarChartProps {
-  data: Array<{ label: string; value: number; color?: string }>;
-  height?: number;
-  title?: string;
-}
-
-export function BarChart({ data, height = 180, title }: BarChartProps) {
-  if (data.length === 0) {
-    return (
-      <div className="analytics-chart-empty" style={{ height }}>
-        <span>Chưa có dữ liệu</span>
-      </div>
-    );
-  }
-
-  const maxVal = Math.max(...data.map((d) => d.value), 1);
-
-  return (
-    <div className="analytics-bar-chart">
-      {title && <h4 className="analytics-chart-title">{title}</h4>}
-      <div className="analytics-bars" style={{ height }}>
-        {data.map((item, i) => {
-          const pct = (item.value / maxVal) * 100;
-          return (
-            <div key={i} className="analytics-bar-item">
-              <div className="analytics-bar-meta">
-                <span className="analytics-bar-label" title={item.label}>
-                  {item.label}
-                </span>
-                <span className="analytics-bar-value">{item.value.toLocaleString("vi-VN")}</span>
-              </div>
-              <div className="analytics-bar-track">
-                <div
-                  className="analytics-bar-fill"
-                  style={{
-                    width: `${pct}%`,
-                    background: item.color || "var(--chart-primary, #10b981)",
-                  }}
-                />
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-// ── Donut Chart (Device Breakdown) ──
+// ── 3. DONUT CHART (Device Breakdown) ──
 interface DonutChartProps {
   data: Array<{ label: string; value: number; color: string }>;
   size?: number;
@@ -195,7 +269,7 @@ export function DonutChart({ data, size = 160, title }: DonutChartProps) {
   if (total === 0) {
     return (
       <div className="analytics-chart-empty" style={{ height: size }}>
-        <span>Chưa có dữ liệu</span>
+        <span>Chưa có dữ liệu thiết bị</span>
       </div>
     );
   }
@@ -263,7 +337,7 @@ export function DonutChart({ data, size = 160, title }: DonutChartProps) {
   );
 }
 
-// ── Luxury Stat Card ──
+// ── 4. LUXURY STAT CARD ──
 interface StatCardProps {
   icon: React.ReactNode;
   label: string;
@@ -277,7 +351,7 @@ export function StatCard({
   icon,
   label,
   value,
-  change = "+12.5%",
+  change,
   changePositive = true,
   colorClass = "emerald",
 }: StatCardProps) {
@@ -289,7 +363,7 @@ export function StatCard({
         <div className="card-icon-bubble">{icon}</div>
         {change && (
           <span className={`card-trend-pill ${changePositive ? "up" : "down"}`}>
-            {changePositive ? "↗" : "↘"} {change}
+            {change}
           </span>
         )}
       </div>
