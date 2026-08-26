@@ -3,27 +3,58 @@
 import { useState } from "react";
 import { BarChart3, Waves, TrendingUp, Flame, Clock } from "lucide-react";
 
-// ── Smooth Spline Curve Algorithm (Catmull-Rom to Cubic Bezier) ──
-function getSmoothSplinePath(points: Array<{ x: number; y: number }>, tension = 0.28): string {
-  if (points.length === 0) return "";
-  if (points.length === 1) return `M ${points[0].x},${points[0].y}`;
-  if (points.length === 2) return `M ${points[0].x},${points[0].y} L ${points[1].x},${points[1].y}`;
+// ── Fritsch-Carlson Monotone Cubic Spline Algorithm (D3.js / Vercel standard) ──
+// Mathematically guarantees monotonicity: NO undershoot below 0, NO runaway loops, silky smooth curves.
+function getMonotoneSplinePath(points: Array<{ x: number; y: number }>): string {
+  const n = points.length;
+  if (n === 0) return "";
+  if (n === 1) return `M ${points[0].x},${points[0].y}`;
+  if (n === 2) return `M ${points[0].x},${points[0].y} L ${points[1].x},${points[1].y}`;
+
+  const dx: number[] = [];
+  const dy: number[] = [];
+  const delta: number[] = [];
+  for (let i = 0; i < n - 1; i++) {
+    const dX = points[i + 1].x - points[i].x;
+    const dY = points[i + 1].y - points[i].y;
+    dx.push(dX);
+    dy.push(dY);
+    delta.push(dX === 0 ? 0 : dY / dX);
+  }
+
+  const m: number[] = [delta[0]];
+  for (let i = 1; i < n - 1; i++) {
+    if (delta[i - 1] * delta[i] <= 0) {
+      m.push(0);
+    } else {
+      m.push((delta[i - 1] + delta[i]) / 2);
+    }
+  }
+  m.push(delta[n - 2]);
+
+  for (let i = 0; i < n - 1; i++) {
+    if (delta[i] === 0) {
+      m[i] = 0;
+      m[i + 1] = 0;
+    } else {
+      const alpha = m[i] / delta[i];
+      const beta = m[i + 1] / delta[i];
+      const dist = alpha * alpha + beta * beta;
+      if (dist > 9) {
+        const tau = 3 / Math.sqrt(dist);
+        m[i] = tau * alpha * delta[i];
+        m[i + 1] = tau * beta * delta[i];
+      }
+    }
+  }
 
   let path = `M ${points[0].x},${points[0].y}`;
-
-  for (let i = 0; i < points.length - 1; i++) {
-    const p0 = i > 0 ? points[i - 1] : points[i];
-    const p1 = points[i];
-    const p2 = points[i + 1];
-    const p3 = i < points.length - 2 ? points[i + 2] : p2;
-
-    const cp1x = p1.x + (p2.x - p0.x) * tension;
-    const cp1y = p1.y + (p2.y - p0.y) * tension;
-
-    const cp2x = p2.x + (p3.x - p1.x) * tension;
-    const cp2y = p2.y + (p3.y - p1.y) * tension;
-
-    path += ` C ${cp1x},${cp1y} ${cp2x},${cp2y} ${p2.x},${p2.y}`;
+  for (let i = 0; i < n - 1; i++) {
+    const cp1x = points[i].x + dx[i] / 3;
+    const cp1y = points[i].y + (m[i] * dx[i]) / 3;
+    const cp2x = points[i + 1].x - dx[i] / 3;
+    const cp2y = points[i + 1].y - (m[i + 1] * dx[i]) / 3;
+    path += ` C ${cp1x},${cp1y} ${cp2x},${cp2y} ${points[i + 1].x},${points[i + 1].y}`;
   }
 
   return path;
@@ -216,7 +247,7 @@ function NeonWaveChart({
     idx: i,
   }));
 
-  const curvePath = getSmoothSplinePath(points, 0.26);
+  const curvePath = getMonotoneSplinePath(points);
   const lastPoint = points[points.length - 1];
   const firstPoint = points[0];
   const areaPath = `${curvePath} L ${lastPoint.x},${padding.top + chartH} L ${firstPoint.x},${padding.top + chartH} Z`;
@@ -467,7 +498,7 @@ export function LineChart({
     idx: i,
   }));
 
-  const curvePath = getSmoothSplinePath(points, 0.28);
+  const curvePath = getMonotoneSplinePath(points);
   const lastPoint = points[points.length - 1];
   const firstPoint = points[0];
   const areaPath = `${curvePath} L ${lastPoint.x},${padding.top + chartH} L ${firstPoint.x},${padding.top + chartH} Z`;
