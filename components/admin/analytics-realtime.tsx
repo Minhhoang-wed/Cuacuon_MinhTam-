@@ -28,7 +28,7 @@ function timeAgo(dateStr: string, _now: number): string {
 }
 
 function pathLabel(path: string): { category: string; title: string } {
-  if (path === "/") return { category: "Trang chủ", title: "Cửa Cuốn An Tâm" };
+  if (path === "/") return { category: "Trang chủ", title: "Cửa Cuốn Minh Tâm" };
   const segments = path.split("/").filter(Boolean);
   const labels: Record<string, string> = {
     "san-pham": "Sản phẩm",

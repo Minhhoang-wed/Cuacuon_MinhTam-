@@ -238,7 +238,7 @@ export async function getAdminArticles(): Promise<AdminArticleRow[]> {
       content: a.content,
       image_url: null,
       read_time: a.readTime,
-      author: "Kỹ Thuật Viên An Tâm",
+      author: "Kỹ Thuật Viên Minh Tâm",
       is_featured: idx === 0,
       status: "published",
       sort_order: idx,

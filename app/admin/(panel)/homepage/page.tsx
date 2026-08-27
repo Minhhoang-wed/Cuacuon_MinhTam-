@@ -50,7 +50,7 @@ export default async function AdminHomepagePage({
               <input
                 name="hero_eyebrow"
                 defaultValue={content.hero_eyebrow || ""}
-                placeholder="VD: CỬA CUỐN AN TÂM 24H · UY TÍN TẠI TP.HCM"
+                placeholder="VD: CỬA CUỐN MINH TÂM 24H · UY TÍN TẠI TP.HCM"
               />
             </label>
 

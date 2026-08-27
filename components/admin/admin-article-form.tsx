@@ -77,8 +77,8 @@ export function AdminArticleForm({ article }: { article?: AdminArticleRow | null
               <span>Tác giả</span>
               <input
                 name="author"
-                defaultValue={article?.author || "Kỹ Thuật Viên An Tâm"}
-                placeholder="VD: Kỹ Thuật Viên An Tâm"
+                defaultValue={article?.author || "Kỹ Thuật Viên Minh Tâm"}
+                placeholder="VD: Kỹ Thuật Viên Minh Tâm"
               />
             </label>
           </div>

@@ -69,16 +69,20 @@ interface TrafficWaveChartProps {
 }
 
 export function TrafficWaveChart({
-  viewsData,
-  visitorsData,
-  labels,
+  viewsData = [],
+  visitorsData = [],
+  labels = [],
   title = "SITE TRAFFIC",
   subtitle = "NUMBERS OF VISITS",
   height = 250,
 }: TrafficWaveChartProps) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
-  const maxRaw = Math.max(...viewsData, ...visitorsData, 0);
+  const safeViews = viewsData.length > 0 ? viewsData : [0, 0];
+  const safeVisitors = visitorsData.length > 0 ? visitorsData : [0, 0];
+  const safeLabels = labels.length > 0 ? labels : ["-", "-"];
+
+  const maxRaw = Math.max(...safeViews, ...safeVisitors, 0);
   const maxVal = maxRaw <= 4 ? 5 : Math.ceil(maxRaw * 1.25);
 
   const padding = { top: 35, right: 25, bottom: 42, left: 45 };
@@ -87,20 +91,20 @@ export function TrafficWaveChart({
   const chartW = chartWidth - padding.left - padding.right;
 
   // Views line points (Teal / Green)
-  const viewsPoints = viewsData.map((val, i) => ({
-    x: padding.left + (i / Math.max(viewsData.length - 1, 1)) * chartW,
+  const viewsPoints = safeViews.map((val, i) => ({
+    x: padding.left + (i / Math.max(safeViews.length - 1, 1)) * chartW,
     y: padding.top + chartH - (val / maxVal) * chartH,
     val,
-    label: labels[i] || `${i}h`,
+    label: safeLabels[i] || `${i}`,
     idx: i,
   }));
 
   // Visitors line points (Orange / Amber)
-  const visitorsPoints = visitorsData.map((val, i) => ({
-    x: padding.left + (i / Math.max(visitorsData.length - 1, 1)) * chartW,
+  const visitorsPoints = safeVisitors.map((val, i) => ({
+    x: padding.left + (i / Math.max(safeVisitors.length - 1, 1)) * chartW,
     y: padding.top + chartH - (val / maxVal) * chartH,
     val,
-    label: labels[i] || `${i}h`,
+    label: safeLabels[i] || `${i}`,
     idx: i,
   }));
 
@@ -110,7 +114,9 @@ export function TrafficWaveChart({
   // Area under views curve
   const lastV = viewsPoints[viewsPoints.length - 1];
   const firstV = viewsPoints[0];
-  const viewsArea = `${viewsCurve} L ${lastV.x.toFixed(1)},${padding.top + chartH} L ${firstV.x.toFixed(1)},${padding.top + chartH} Z`;
+  const viewsArea = lastV && firstV && viewsCurve
+    ? `${viewsCurve} L ${lastV.x.toFixed(1)},${padding.top + chartH} L ${firstV.x.toFixed(1)},${padding.top + chartH} Z`
+    : "";
 
   // Grid steps (4 horizontal guides)
   const gridLines = 4;
@@ -371,12 +377,16 @@ interface DonutChartProps {
   title?: string;
 }
 
-export function DonutChart({ data, size = 160, title }: DonutChartProps) {
-  const total = data.reduce((s, d) => s + d.value, 0);
+export function DonutChart({ data = [], size = 160, title }: DonutChartProps) {
+  const safeData = Array.isArray(data) ? data : [];
+  const total = safeData.reduce((s, d) => s + (d?.value || 0), 0);
   if (total === 0) {
     return (
-      <div className="analytics-chart-empty" style={{ height: size }}>
-        <span>Chưa có dữ liệu thiết bị</span>
+      <div className="analytics-donut-wrap">
+        {title && <h4 className="analytics-chart-title">{title}</h4>}
+        <div className="analytics-chart-empty" style={{ height: size }}>
+          <span>Chưa có dữ liệu thiết bị</span>
+        </div>
       </div>
     );
   }

@@ -48,7 +48,7 @@ export async function saveArticle(form: FormData) {
     content: JSON.stringify(content.length > 0 ? content : [value(form, "content")]),
     image_url: imageUrl,
     read_time: value(form, "read_time") || "3 phút",
-    author: value(form, "author") || "Kỹ Thuật Viên An Tâm",
+    author: value(form, "author") || "Kỹ Thuật Viên Minh Tâm",
     is_featured: form.get("is_featured") === "true" || form.get("is_featured") === "on",
     status: value(form, "status") || "published",
     sort_order: Number(value(form, "sort_order") || 0),

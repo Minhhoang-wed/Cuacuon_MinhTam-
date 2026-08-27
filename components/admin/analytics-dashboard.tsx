@@ -44,21 +44,22 @@ export function AnalyticsDashboard({ initialData, children }: Props) {
 
   // Chart data
   const hourlyLabels = Array.from({ length: 24 }, (_, i) => `${i}h`);
-  const hourlyViews = data.hourly_views || Array(24).fill(0);
-  const hourlyVisitors = data.hourly_visitors || Array(24).fill(0);
+  const hourlyViews = data?.hourly_views || Array(24).fill(0);
+  const hourlyVisitors = data?.hourly_visitors || Array(24).fill(0);
 
-  const dailySeries = data.daily_series || [];
+  const dailySeries = data?.daily_series || [];
   const dailyLabels = dailySeries.map((d) => {
+    if (!d?.date) return "";
     const date = new Date(d.date);
     return `${date.getDate()}/${date.getMonth() + 1}`;
   });
-  const dailyViews = dailySeries.map((d) => d.views);
-  const dailyVisitors = dailySeries.map((d) => d.visitors);
+  const dailyViews = dailySeries.map((d) => d?.views || 0);
+  const dailyVisitors = dailySeries.map((d) => d?.visitors || 0);
 
   const deviceData = [
-    { label: "Mobile", value: data.device_breakdown.mobile || 0, color: "#10b981" },
-    { label: "Desktop", value: data.device_breakdown.desktop || 0, color: "#38bdf8" },
-    { label: "Tablet", value: data.device_breakdown.tablet || 0, color: "#f59e0b" },
+    { label: "Mobile", value: data?.device_breakdown?.mobile || 0, color: "#10b981" },
+    { label: "Desktop", value: data?.device_breakdown?.desktop || 0, color: "#38bdf8" },
+    { label: "Tablet", value: data?.device_breakdown?.tablet || 0, color: "#f59e0b" },
   ];
 
   // CTA counts

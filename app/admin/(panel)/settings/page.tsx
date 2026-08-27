@@ -54,7 +54,7 @@ export default async function AdminSettingsPage({
               <input
                 name="company_name"
                 defaultValue={settings.company_name || ""}
-                placeholder="VD: Cửa Cuốn An Tâm 24H"
+                placeholder="VD: Cửa Cuốn Minh Tâm 24H"
               />
             </label>
 
@@ -63,7 +63,7 @@ export default async function AdminSettingsPage({
               <input
                 name="short_name"
                 defaultValue={settings.short_name || ""}
-                placeholder="VD: An Tâm Door"
+                placeholder="VD: Minh Tâm Door"
               />
             </label>
 

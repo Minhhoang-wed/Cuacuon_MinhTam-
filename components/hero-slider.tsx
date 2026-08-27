@@ -60,7 +60,7 @@ export function HeroSlider({
                 >
                   <img
                     src={imgSrc}
-                    alt={`Cửa Cuốn An Tâm Banner ${index + 1}`}
+                    alt={`Cửa Cuốn Minh Tâm Banner ${index + 1}`}
                     className="hero-slide-image"
                   />
                 </div>

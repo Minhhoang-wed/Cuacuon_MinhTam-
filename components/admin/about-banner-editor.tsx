@@ -373,7 +373,7 @@ export function AboutBannerEditor({
           {/* Chữ mô phỏng trang thực tế */}
           {showOverlayText && (
             <div className="banner-text-mockup">
-              <span className="banner-eyebrow-tag">Giới thiệu · Cửa Cuốn An Tâm</span>
+              <span className="banner-eyebrow-tag">Giới thiệu · Cửa Cuốn Minh Tâm</span>
               <h2 className="banner-mock-title">{defaultTitle}</h2>
               <p className="banner-mock-desc">{defaultDescription}</p>
             </div>
