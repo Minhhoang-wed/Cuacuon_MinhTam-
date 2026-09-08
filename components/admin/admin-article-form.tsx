@@ -2,6 +2,7 @@ import { ImagePlus, Newspaper, Save } from "lucide-react";
 import { saveArticle } from "@/lib/admin-actions";
 import type { AdminArticleRow } from "@/lib/admin-data";
 import { ArticleImageManager } from "@/components/admin/article-image-manager";
+import { AdminArticleEditor } from "@/components/admin/admin-article-editor";
 
 const defaultCategories = [
   "Cẩm nang sử dụng",
@@ -12,7 +13,11 @@ const defaultCategories = [
 ];
 
 export function AdminArticleForm({ article }: { article?: AdminArticleRow | null }) {
-  const defaultContent = Array.isArray(article?.content) ? article.content.join("\n\n") : "";
+  const defaultContent = Array.isArray(article?.content)
+    ? article.content.join("\n\n")
+    : typeof article?.content === "string"
+    ? article.content
+    : "";
 
   return (
     <form action={saveArticle} className="admin-form">
@@ -84,26 +89,38 @@ export function AdminArticleForm({ article }: { article?: AdminArticleRow | null
           </div>
 
           <label>
-            <span>Đoạn tóm tắt (Excerpt) *</span>
+            <span style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "6px" }}>
+              <span>Đoạn tóm tắt (Excerpt) *</span>
+              <small style={{ color: "#64748b", fontWeight: 400, fontSize: "12px" }}>
+                Hiển thị ở đầu bài (Sapo) và khi chia sẻ liên kết
+              </small>
+            </span>
             <textarea
               name="excerpt"
               required
-              rows={3}
+              rows={6}
               defaultValue={article?.excerpt || ""}
               placeholder="Đoạn văn ngắn xuất hiện ở trang danh sách tin tức và chia sẻ trên mạng xã hội..."
+              style={{
+                minHeight: "150px",
+                lineHeight: "1.7",
+                fontSize: "14.5px",
+                padding: "14px 16px",
+                resize: "vertical",
+                width: "100%",
+                borderRadius: "8px",
+                border: "1.5px solid #d0d8e4",
+                fontFamily: "inherit",
+              }}
             />
           </label>
 
-          <label>
-            <span>Nội dung chi tiết (Phân tách các đoạn bằng 2 lần xuống dòng) *</span>
-            <textarea
-              name="content"
-              required
-              rows={12}
-              defaultValue={defaultContent}
-              placeholder={`Đoạn văn thứ nhất...\n\nĐoạn văn thứ hai...\n\nĐoạn văn thứ ba...`}
-            />
-          </label>
+          <div style={{ marginTop: "4px" }}>
+            <span style={{ display: "block", fontSize: "14px", fontWeight: 600, color: "#334155", marginBottom: "8px" }}>
+              Nội dung chi tiết bài viết (Hỗ trợ Khung bảng giá, Chữ in đậm, Tiêu đề mục) *
+            </span>
+            <AdminArticleEditor key={article?.id || "new"} defaultValue={defaultContent} name="content" />
+          </div>
         </div>
       </section>
 
