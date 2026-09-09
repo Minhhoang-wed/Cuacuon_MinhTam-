@@ -178,17 +178,56 @@ export function ArticleImageManager({
       <input type="hidden" name="image_url" value={finalImageUrlValue} />
       <input type="hidden" name="clear_image" value={isCleared ? "true" : "false"} />
 
-      <div className="sim-layout">
-        {/* Left Side: Preview Frame & Controls */}
-        <div className="sim-preview-pane">
-          <div className="sim-pane-header">
-            <span className="sim-label">Xem trước ảnh bài viết</span>
+      <div
+        className="sim-layout"
+        style={{
+          display: "flex",
+          gap: "16px",
+          alignItems: "flex-start",
+          flexWrap: "wrap",
+        }}
+      >
+        {/* Left Side: Compact Preview Frame & Actions */}
+        <div
+          className="sim-preview-pane"
+          style={{
+            width: "320px",
+            maxWidth: "100%",
+            flexShrink: 0,
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "0 2px",
+            }}
+          >
+            <span style={{ fontSize: "12.5px", fontWeight: 700, color: "#475569", textTransform: "uppercase", letterSpacing: "0.03em" }}>
+              Xem trước ảnh bìa
+            </span>
             {activeDisplayUrl && (
               <button
                 type="button"
-                className="sim-btn-clear"
                 onClick={handleClearImage}
                 title="Gỡ bỏ ảnh bìa này"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "4px",
+                  border: "none",
+                  background: "transparent",
+                  color: "#dc2626",
+                  fontSize: "12px",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  padding: "2px 6px",
+                  borderRadius: "4px",
+                }}
               >
                 <Trash2 size={13} />
                 <span>Gỡ ảnh</span>
@@ -197,18 +236,18 @@ export function ArticleImageManager({
           </div>
 
           <div
-            className={`sim-display-frame aspect-${aspectRatio.replace("/", "-")}`}
             style={{
               position: "relative",
               width: "100%",
+              height: "185px",
               borderRadius: "10px",
               overflow: "hidden",
               background: "#0f172a",
+              border: "1px solid #cbd5e1",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              minHeight: "220px",
-              boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.1)",
+              boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
             }}
           >
             {activeDisplayUrl ? (
@@ -229,57 +268,47 @@ export function ArticleImageManager({
                   display: "flex",
                   flexDirection: "column",
                   alignItems: "center",
-                  gap: "10px",
+                  gap: "8px",
                   color: "#94a3b8",
-                  padding: "30px 20px",
+                  padding: "16px",
                   textAlign: "center",
                 }}
               >
-                <div
-                  style={{
-                    width: "56px",
-                    height: "56px",
-                    borderRadius: "14px",
-                    background: "rgba(255,255,255,0.06)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "#38bdf8",
-                  }}
-                >
-                  <Newspaper size={28} />
-                </div>
-                <span style={{ fontSize: "14px", fontWeight: 600, color: "#cbd5e1" }}>
-                  Chưa có ảnh bài viết
+                <Newspaper size={30} color="#64748b" />
+                <span style={{ fontSize: "13px", fontWeight: 600, color: "#94a3b8" }}>
+                  Chưa chọn ảnh bìa
                 </span>
-                <p style={{ margin: 0, fontSize: "12px", color: "#64748b", maxWidth: "240px" }}>
-                  Tải ảnh mới từ máy, chọn ảnh mẫu hoặc dán đường dẫn ảnh bên phải.
+                <p style={{ margin: 0, fontSize: "11.5px", color: "#64748b", maxWidth: "200px" }}>
+                  Tải ảnh từ máy hoặc chọn ảnh mẫu bên cạnh
                 </p>
               </div>
             )}
 
-            {/* Badge type overlay */}
+            {/* Badge overlay on thumbnail */}
             {activeDisplayUrl && (
               <div
                 style={{
                   position: "absolute",
-                  bottom: "10px",
-                  left: "10px",
-                  background: "rgba(15, 23, 42, 0.75)",
-                  backdropFilter: "blur(6px)",
-                  padding: "4px 8px",
-                  borderRadius: "6px",
+                  bottom: "6px",
+                  left: "6px",
+                  right: "6px",
+                  background: "rgba(15, 23, 42, 0.8)",
+                  backdropFilter: "blur(4px)",
+                  padding: "3px 8px",
+                  borderRadius: "5px",
                   fontSize: "11px",
                   color: "#e2e8f0",
                   display: "flex",
                   alignItems: "center",
                   gap: "5px",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
                 }}
               >
                 <Sparkles size={11} color="#38bdf8" />
-                <span>
+                <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {selectedFile
-                    ? `Tệp mới: ${selectedFile.name}`
+                    ? selectedFile.name
                     : selectedPresetUrl
                     ? "Ảnh mẫu Preset"
                     : customUrl
@@ -290,37 +319,79 @@ export function ArticleImageManager({
             )}
           </div>
 
-          {/* Quick Adjustment Tools */}
+          {/* Quick Adjustment Tools: Underneath Thumbnail */}
           {activeDisplayUrl && (
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "space-between",
-                gap: "8px",
-                marginTop: "12px",
-                padding: "8px 12px",
+                gap: "6px",
+                padding: "6px 8px",
                 background: "#f8fafc",
                 borderRadius: "8px",
                 border: "1px solid #e2e8f0",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                <span style={{ fontSize: "12px", fontWeight: 600, color: "#64748b" }}>Tỷ lệ:</span>
+              <button
+                type="button"
+                onClick={() => setFitMode(fitMode === "cover" ? "contain" : "cover")}
+                title={fitMode === "cover" ? "Chuyển sang hiển thị vừa vặn (Contain)" : "Chuyển sang tràn khung (Cover)"}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "4px",
+                  padding: "3px 8px",
+                  borderRadius: "5px",
+                  border: "1px solid #cbd5e1",
+                  background: "#ffffff",
+                  fontSize: "11.5px",
+                  fontWeight: 500,
+                  color: "#334155",
+                  cursor: "pointer",
+                }}
+              >
+                <Crop size={12} />
+                <span>{fitMode === "cover" ? "Tràn khung" : "Vừa vặn"}</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleRotate}
+                title="Xoay 90°"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "4px",
+                  padding: "3px 8px",
+                  borderRadius: "5px",
+                  border: "1px solid #cbd5e1",
+                  background: "#ffffff",
+                  fontSize: "11.5px",
+                  fontWeight: 500,
+                  color: "#334155",
+                  cursor: "pointer",
+                }}
+              >
+                <RotateCw size={12} />
+                <span>{rotation}°</span>
+              </button>
+
+              <div style={{ display: "flex", gap: "3px" }}>
                 {(["16/9", "4/3", "1/1"] as const).map((ratio) => (
                   <button
                     key={ratio}
                     type="button"
                     onClick={() => setAspectRatio(ratio)}
                     style={{
-                      padding: "2px 8px",
-                      fontSize: "11.5px",
+                      padding: "3px 6px",
+                      fontSize: "11px",
                       fontWeight: aspectRatio === ratio ? 700 : 500,
                       borderRadius: "4px",
                       border: "1px solid",
                       borderColor: aspectRatio === ratio ? "#2563eb" : "#cbd5e1",
                       background: aspectRatio === ratio ? "#eff6ff" : "#ffffff",
-                      color: aspectRatio === ratio ? "#1d4ed8" : "#475569",
+                      color: aspectRatio === ratio ? "#1d4ed8" : "#64748b",
                       cursor: "pointer",
                     }}
                   >
@@ -328,87 +399,102 @@ export function ArticleImageManager({
                   </button>
                 ))}
               </div>
-
-              <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                <button
-                  type="button"
-                  onClick={() => setFitMode(fitMode === "cover" ? "contain" : "cover")}
-                  title={fitMode === "cover" ? "Chuyển sang hiển thị trọn vẹn (Contain)" : "Chuyển sang tràn khung (Cover)"}
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "4px",
-                    padding: "4px 8px",
-                    borderRadius: "5px",
-                    border: "1px solid #cbd5e1",
-                    background: "#ffffff",
-                    fontSize: "12px",
-                    color: "#334155",
-                    cursor: "pointer",
-                  }}
-                >
-                  <Crop size={12} />
-                  <span>{fitMode === "cover" ? "Tràn khung" : "Vừa vặn"}</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={handleRotate}
-                  title="Xoay góc 90°"
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: "4px",
-                    padding: "4px 8px",
-                    borderRadius: "5px",
-                    border: "1px solid #cbd5e1",
-                    background: "#ffffff",
-                    fontSize: "12px",
-                    color: "#334155",
-                    cursor: "pointer",
-                  }}
-                >
-                  <RotateCw size={12} />
-                  <span>{rotation}°</span>
-                </button>
-              </div>
             </div>
           )}
         </div>
 
-        {/* Right Side: Tab Options for Image Source */}
-        <div className="sim-options-pane">
+        {/* Right Side: Options Pane (Takes remaining width) */}
+        <div
+          className="sim-options-pane"
+          style={{
+            flex: 1,
+            minWidth: "280px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "8px",
+            background: "#ffffff",
+            border: "1px solid #e2e8f0",
+            borderRadius: "10px",
+            padding: "10px 12px",
+          }}
+        >
           {/* Navigation Tabs */}
-          <div className="sim-tabs">
+          <div
+            className="sim-tabs"
+            style={{
+              display: "flex",
+              gap: "6px",
+              background: "#f1f5f9",
+              padding: "4px",
+              borderRadius: "8px",
+              flexWrap: "wrap",
+            }}
+          >
             <button
               type="button"
               className={`sim-tab ${activeTab === "upload" ? "active" : ""}`}
               onClick={() => setActiveTab("upload")}
+              style={{
+                padding: "4px 10px",
+                borderRadius: "6px",
+                border: "1px solid",
+                borderColor: activeTab === "upload" ? "#cbd5e1" : "transparent",
+                background: activeTab === "upload" ? "#ffffff" : "transparent",
+                color: activeTab === "upload" ? "#0f5fd7" : "#64748b",
+                fontWeight: 600,
+                fontSize: "12px",
+                cursor: "pointer",
+                boxShadow: activeTab === "upload" ? "0 1px 3px rgba(0,0,0,0.06)" : "none",
+                transition: "all 0.15s ease",
+              }}
             >
-              <Upload size={14} />
-              <span>Tải ảnh từ máy</span>
+              Tải ảnh từ máy
             </button>
 
             <button
               type="button"
               className={`sim-tab ${activeTab === "presets" ? "active" : ""}`}
               onClick={() => setActiveTab("presets")}
+              style={{
+                padding: "4px 10px",
+                borderRadius: "6px",
+                border: "1px solid",
+                borderColor: activeTab === "presets" ? "#cbd5e1" : "transparent",
+                background: activeTab === "presets" ? "#ffffff" : "transparent",
+                color: activeTab === "presets" ? "#0f5fd7" : "#64748b",
+                fontWeight: 600,
+                fontSize: "12px",
+                cursor: "pointer",
+                boxShadow: activeTab === "presets" ? "0 1px 3px rgba(0,0,0,0.06)" : "none",
+                transition: "all 0.15s ease",
+              }}
             >
-              <Sparkles size={14} />
-              <span>Ảnh mẫu có sẵn ({ARTICLE_PRESET_IMAGES.length})</span>
+              Ảnh mẫu có sẵn ({ARTICLE_PRESET_IMAGES.length})
             </button>
 
             <button
               type="button"
               className={`sim-tab ${activeTab === "url" ? "active" : ""}`}
               onClick={() => setActiveTab("url")}
+              style={{
+                padding: "4px 10px",
+                borderRadius: "6px",
+                border: "1px solid",
+                borderColor: activeTab === "url" ? "#cbd5e1" : "transparent",
+                background: activeTab === "url" ? "#ffffff" : "transparent",
+                color: activeTab === "url" ? "#0f5fd7" : "#64748b",
+                fontWeight: 600,
+                fontSize: "12px",
+                cursor: "pointer",
+                boxShadow: activeTab === "url" ? "0 1px 3px rgba(0,0,0,0.06)" : "none",
+                transition: "all 0.15s ease",
+              }}
             >
-              <Link2 size={14} />
-              <span>Đường dẫn URL / Media</span>
+              Đường dẫn URL / Media
             </button>
           </div>
 
-          {/* Tab 1: Upload File */}
+          {/* Tab 1: Upload Dropzone (Compact & horizontal) */}
           {activeTab === "upload" && (
             <div className="sim-tab-content">
               <div
@@ -420,73 +506,77 @@ export function ArticleImageManager({
                   handleFileChange(e.dataTransfer.files);
                 }}
                 style={{
-                  border: "2px dashed #cbd5e1",
-                  borderRadius: "10px",
-                  padding: "24px 16px",
-                  textAlign: "center",
+                  border: "1.5px dashed #cbd5e1",
+                  borderRadius: "8px",
+                  padding: "18px 20px",
                   background: "#f8fafc",
                   cursor: "pointer",
-                  transition: "all 0.2s",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "14px",
+                  transition: "all 0.15s ease",
+                  minHeight: "115px",
                 }}
               >
                 <div
                   style={{
-                    width: "44px",
-                    height: "44px",
+                    width: "42px",
+                    height: "42px",
                     borderRadius: "12px",
                     background: "#e0f2fe",
                     color: "#0284c7",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    margin: "0 auto 10px",
+                    flexShrink: 0,
                   }}
                 >
                   <ImagePlus size={22} />
                 </div>
-                <b style={{ fontSize: "14px", color: "#0f172a", display: "block", marginBottom: "4px" }}>
-                  Bấm để chọn tệp hoặc kéo thả vào đây
-                </b>
-                <span style={{ fontSize: "12px", color: "#64748b" }}>
-                  Hỗ trợ JPG, PNG, WebP (Tối đa 10MB)
-                </span>
-
-                {selectedFile && (
-                  <div
-                    style={{
-                      marginTop: "14px",
-                      padding: "8px 12px",
-                      borderRadius: "6px",
-                      background: "#f0fdf4",
-                      border: "1px solid #bbf7d0",
-                      color: "#15803d",
-                      fontSize: "12.5px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "6px",
-                      fontWeight: 600,
-                    }}
-                  >
-                    <Check size={14} />
-                    <span>Đã chọn: {selectedFile.name} ({(selectedFile.size / 1024).toFixed(0)} KB)</span>
-                  </div>
-                )}
+                <div style={{ flex: 1, textAlign: "left" }}>
+                  <b style={{ fontSize: "13.5px", color: "#0f172a", display: "block", marginBottom: "3px" }}>
+                    Bấm để chọn tệp hoặc kéo thả ảnh vào đây
+                  </b>
+                  <span style={{ fontSize: "12px", color: "#64748b" }}>
+                    Hỗ trợ định dạng JPG, PNG, WebP (Dung lượng tối đa 10MB)
+                  </span>
+                </div>
               </div>
+
+              {selectedFile && (
+                <div
+                  style={{
+                    marginTop: "8px",
+                    padding: "6px 10px",
+                    borderRadius: "6px",
+                    background: "#f0fdf4",
+                    border: "1px solid #bbf7d0",
+                    color: "#15803d",
+                    fontSize: "12px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "6px",
+                    fontWeight: 600,
+                  }}
+                >
+                  <Check size={14} />
+                  <span>Đã chọn tệp: {selectedFile.name} ({(selectedFile.size / 1024).toFixed(0)} KB)</span>
+                </div>
+              )}
             </div>
           )}
 
-          {/* Tab 2: Presets */}
+          {/* Tab 2: Presets (Compact grid) */}
           {activeTab === "presets" && (
             <div className="sim-tab-content">
               <div
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(130px, 1fr))",
-                  gap: "10px",
-                  maxHeight: "260px",
+                  gridTemplateColumns: "repeat(auto-fill, minmax(105px, 1fr))",
+                  gap: "8px",
+                  maxHeight: "140px",
                   overflowY: "auto",
-                  paddingRight: "4px",
+                  paddingRight: "2px",
                 }}
               >
                 {ARTICLE_PRESET_IMAGES.map((preset) => {
@@ -497,7 +587,7 @@ export function ArticleImageManager({
                       onClick={() => handleSelectPreset(preset.url)}
                       style={{
                         position: "relative",
-                        borderRadius: "8px",
+                        borderRadius: "6px",
                         overflow: "hidden",
                         border: isSelected ? "2px solid #2563eb" : "1px solid #e2e8f0",
                         cursor: "pointer",
@@ -505,7 +595,7 @@ export function ArticleImageManager({
                         transition: "all 0.15s ease",
                       }}
                     >
-                      <div style={{ width: "100%", height: "70px", position: "relative" }}>
+                      <div style={{ width: "100%", height: "46px", position: "relative" }}>
                         <img
                           src={preset.url}
                           alt={preset.title}
@@ -515,28 +605,25 @@ export function ArticleImageManager({
                           <div
                             style={{
                               position: "absolute",
-                              top: "4px",
-                              right: "4px",
+                              top: "2px",
+                              right: "2px",
                               background: "#2563eb",
                               color: "#fff",
                               borderRadius: "50%",
-                              width: "18px",
-                              height: "18px",
+                              width: "15px",
+                              height: "15px",
                               display: "flex",
                               alignItems: "center",
                               justifyContent: "center",
                             }}
                           >
-                            <Check size={12} />
+                            <Check size={9} />
                           </div>
                         )}
                       </div>
-                      <div style={{ padding: "6px 8px", background: "#fff" }}>
-                        <span style={{ fontSize: "11px", fontWeight: 600, color: "#1e293b", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
+                      <div style={{ padding: "3px 5px", background: "#fff" }}>
+                        <span style={{ fontSize: "10px", fontWeight: 600, color: "#1e293b", display: "-webkit-box", WebkitLineClamp: 1, WebkitBoxOrient: "vertical", overflow: "hidden" }}>
                           {preset.title}
-                        </span>
-                        <span style={{ fontSize: "10px", color: "#64748b" }}>
-                          {preset.category}
                         </span>
                       </div>
                     </div>
@@ -549,26 +636,21 @@ export function ArticleImageManager({
           {/* Tab 3: Custom URL */}
           {activeTab === "url" && (
             <div className="sim-tab-content">
-              <label style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                <span style={{ fontSize: "13px", fontWeight: 600, color: "#334155" }}>
-                  Nhập URL ảnh trực tiếp hoặc đường dẫn từ Storage
-                </span>
-                <input
-                  type="text"
-                  value={customUrl}
-                  onChange={(e) => handleCustomUrlChange(e.target.value)}
-                  placeholder="VD: https://... hoặc articles/ten-anh.jpg"
-                  style={{
-                    width: "100%",
-                    padding: "9px 12px",
-                    borderRadius: "8px",
-                    border: "1px solid #cbd5e1",
-                    fontSize: "13.5px",
-                  }}
-                />
-              </label>
-              <small style={{ color: "#64748b", fontSize: "12px", display: "block", marginTop: "6px" }}>
-                Có thể dán đường dẫn ảnh từ trang <b>Quản lý Media</b> hoặc ảnh online chất lượng cao.
+              <input
+                type="text"
+                value={customUrl}
+                onChange={(e) => handleCustomUrlChange(e.target.value)}
+                placeholder="Dán URL ảnh hoặc đường dẫn (VD: https://... hoặc articles/anh.jpg)"
+                style={{
+                  width: "100%",
+                  padding: "7px 10px",
+                  borderRadius: "6px",
+                  border: "1px solid #cbd5e1",
+                  fontSize: "12px",
+                }}
+              />
+              <small style={{ color: "#64748b", fontSize: "11px", display: "block", marginTop: "3px" }}>
+                Có thể dán đường dẫn ảnh từ <b>Quản lý Media</b> hoặc liên kết ảnh online.
               </small>
             </div>
           )}

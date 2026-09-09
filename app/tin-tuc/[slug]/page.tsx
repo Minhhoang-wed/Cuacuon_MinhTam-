@@ -6,6 +6,7 @@ import { Breadcrumb } from "@/components/breadcrumb";
 import { CtaBand } from "@/components/cta-band";
 import { getArticleBySlug, getArticles, getSiteSettings } from "@/lib/catalog";
 import { publicAssetUrl } from "@/lib/supabase-rest";
+import { ArticleContentRenderer } from "@/components/article-content-renderer";
 
 export async function generateStaticParams() {
   const list = await getArticles();
@@ -195,13 +196,7 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
         )}
 
         {/* Article Body Content */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "18px", fontSize: "16.5px", lineHeight: "1.85", color: "#334155" }}>
-          {item.content.map((paragraph, index) => (
-            <p key={index} style={{ margin: 0, wordBreak: "break-word", overflowWrap: "break-word" }}>
-              {paragraph}
-            </p>
-          ))}
-        </div>
+        <ArticleContentRenderer content={item.content} />
 
         {/* Safety Notice Callout */}
         <div
