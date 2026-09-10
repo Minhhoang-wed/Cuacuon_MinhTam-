@@ -7,6 +7,7 @@ import { CtaBand } from "@/components/cta-band";
 import { getArticleBySlug, getArticles, getSiteSettings } from "@/lib/catalog";
 import { publicAssetUrl } from "@/lib/supabase-rest";
 import { ArticleContentRenderer } from "@/components/article-content-renderer";
+import { ArticleNearbyTechs, ArticleNearbyTechsMobile } from "@/components/article-nearby-techs";
 
 export async function generateStaticParams() {
   const list = await getArticles();
@@ -84,6 +85,12 @@ export default async function ArticleDetailPage({ params }: { params: Promise<{ 
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
+      {/* ── Sticky Nearby Techs Bar (Unified Desktop & Mobile, follows on scroll) ── */}
+      <ArticleNearbyTechs
+        hotline={site.hotline}
+        zaloUrl={site.zaloHref}
       />
 
       {/* ── Minimalist Single-Column Article Reader ── */}
