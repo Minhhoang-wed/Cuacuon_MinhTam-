@@ -1,8 +1,23 @@
 import type { Metadata, Viewport } from "next";
+import { Plus_Jakarta_Sans, Be_Vietnam_Pro } from "next/font/google";
 import "@cloudimage/360-view/css";
 import "./globals.css";
 import { SiteShell } from "@/components/site-shell";
 import { getSiteSettings, getStoreBranches } from "@/lib/catalog";
+
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-plus-jakarta",
+  display: "swap",
+});
+
+const beVietnam = Be_Vietnam_Pro({
+  subsets: ["latin", "vietnamese"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-be-vietnam",
+  display: "swap",
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getSiteSettings();
@@ -66,7 +81,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
   const [site, branches] = await Promise.all([getSiteSettings(), getStoreBranches()]);
   return (
     <html lang="vi" data-scroll-behavior="smooth">
-      <body>
+      <body className={`${plusJakarta.variable} ${beVietnam.variable}`}>
         <SiteShell site={site} branches={branches}>
           {children}
         </SiteShell>

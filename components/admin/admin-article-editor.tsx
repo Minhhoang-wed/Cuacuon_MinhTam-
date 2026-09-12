@@ -35,6 +35,7 @@ import {
   normalizeArticleContentToHtml,
 } from "@/components/article-content-renderer";
 import { ARTICLE_PRESET_IMAGES } from "@/components/admin/article-image-manager";
+import { ArticleNearbyTechs } from "@/components/article-nearby-techs";
 
 // Curated text colors for articles
 const TEXT_COLORS = [
@@ -1941,6 +1942,7 @@ export function AdminArticleEditor({
             <span>Xem trước bài viết thực tế sẽ xuất hiện trên website:</span>
           </div>
           <div className="editor-preview-canvas">
+            <ArticleNearbyTechs />
             {previewHtml ? (
               <ArticleContentRenderer content={previewHtml} />
             ) : (
